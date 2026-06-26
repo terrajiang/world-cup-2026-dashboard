@@ -21,6 +21,7 @@
     <nav class="tabs" aria-label="Dashboard views">
       <button class="tab active" data-tab="standings">Standings & Scores</button>
       <button class="tab" data-tab="schedule">Game Log</button>
+      <button class="tab" data-tab="rules">Rules</button>
       <button class="tab" data-tab="players">Player Stats</button>
       <button class="tab" data-tab="tree">Match Tree</button>
       <button class="tab" data-tab="image">Image</button>
@@ -29,13 +30,17 @@
     <main>
       <section class="panel active" id="standingsPanel">
         <div class="toolbar">
-          <div class="search-wrap">
-            <label for="matchLookup">Match lookup</label>
-            <input id="matchLookup" type="search" placeholder="Team or date" />
+          <div class="lookup-controls" aria-label="Match result lookup filters">
+            <label>
+              Country
+              <select id="countryLookup"></select>
+            </label>
+            <label>
+              Date
+              <select id="dateLookup"></select>
+            </label>
           </div>
         </div>
-
-        <p class="source-note" id="sourceNote"></p>
 
         <div class="layout no-score-editor">
           <section>
@@ -51,7 +56,7 @@
             <section class="match-lookup">
               <div class="section-title">
                 <h2>Match Result Lookup</h2>
-                <span>Search by team or date</span>
+                <span>Filter by country or date</span>
               </div>
               <div class="match-list compact" id="matchLookupResults"></div>
             </section>
@@ -71,9 +76,42 @@
       <section class="panel" id="schedulePanel">
         <div class="section-title">
           <h2>Game Log</h2>
-          <span>Past results and future dates</span>
+          <span>Group results and knockout dates in PST</span>
         </div>
         <div class="match-list timeline" id="scheduleList"></div>
+      </section>
+
+      <section class="panel" id="rulesPanel">
+        <div class="rules-grid">
+          <article class="rules-card">
+            <h2>Group Stage</h2>
+            <ul>
+              <li>48 teams are split into 12 groups of 4.</li>
+              <li>Each team plays the other 3 teams in its group once.</li>
+              <li>A win is 3 points, a draw is 1 point, and a loss is 0 points.</li>
+              <li>The top 2 teams in every group advance.</li>
+              <li>The 8 best third-place teams also advance.</li>
+            </ul>
+          </article>
+          <article class="rules-card">
+            <h2>Tiebreakers</h2>
+            <ul>
+              <li>Teams are ranked first by points.</li>
+              <li>If tied, goal difference is checked next.</li>
+              <li>If still tied, goals scored is checked next.</li>
+              <li>If teams are still level, head-to-head and fair-play rules can decide it.</li>
+            </ul>
+          </article>
+          <article class="rules-card">
+            <h2>Knockout Stage</h2>
+            <ul>
+              <li>32 teams enter a single-elimination bracket.</li>
+              <li>If a knockout match is tied after 90 minutes, extra time is played.</li>
+              <li>If it is still tied after extra time, penalties decide the winner.</li>
+              <li>Winners move on; losers are out, except semifinal losers play the third-place game.</li>
+            </ul>
+          </article>
+        </div>
       </section>
 
       <section class="panel" id="playersPanel">

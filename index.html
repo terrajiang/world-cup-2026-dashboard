@@ -22,6 +22,7 @@
       <button class="tab active" data-tab="standings">Standings & Scores</button>
       <button class="tab" data-tab="schedule">Game Log</button>
       <button class="tab" data-tab="rules">Rules</button>
+      <button class="tab" data-tab="history">Top 4 History</button>
       <button class="tab" data-tab="players">Player Stats</button>
       <button class="tab" data-tab="tree">Match Tree</button>
       <button class="tab" data-tab="image">Image</button>
@@ -112,6 +113,35 @@
             </ul>
           </article>
         </div>
+      </section>
+
+      <section class="panel" id="historyPanel">
+        <div class="history-head">
+          <div>
+            <h2>World Cup Top 4 History</h2>
+            <p>Men's FIFA World Cup top-four finishers by year, plus the selected 2026 participant's top-four result.</p>
+          </div>
+          <label>
+            Country
+            <select id="historyCountry"></select>
+          </label>
+        </div>
+        <div class="history-table-wrap">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Year</th>
+                <th>Champion</th>
+                <th>Runner-up</th>
+                <th>Third</th>
+                <th>Fourth</th>
+                <th id="historyQueryHead">Selected country</th>
+              </tr>
+            </thead>
+            <tbody id="historyBody"></tbody>
+          </table>
+        </div>
+        <div class="history-counts" id="historyCounts"></div>
       </section>
 
       <section class="panel" id="playersPanel">

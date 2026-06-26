@@ -488,6 +488,88 @@ tr.eliminated {
   padding-left: 20px;
 }
 
+.history-head {
+  align-items: end;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.history-head p {
+  color: var(--muted);
+  line-height: 1.45;
+  margin: 6px 0 0;
+  max-width: 760px;
+}
+
+.history-head label {
+  display: grid;
+  gap: 6px;
+}
+
+.history-head select {
+  min-width: 240px;
+}
+
+.history-table-wrap {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: auto;
+}
+
+.history-table th {
+  background: var(--teal);
+  color: white;
+  position: sticky;
+  top: 0;
+}
+
+.history-table td,
+.history-table th {
+  min-width: 140px;
+}
+
+.history-table td:first-child,
+.history-table th:first-child {
+  min-width: 82px;
+}
+
+.history-hit {
+  background: var(--green-soft);
+  color: var(--green);
+  font-weight: 800;
+}
+
+.history-counts {
+  margin-top: 18px;
+}
+
+.history-counts h3 {
+  color: var(--teal);
+  font-size: 16px;
+  margin: 0 0 10px;
+}
+
+.count-grid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
+}
+
+.count-grid span {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  padding: 10px 12px;
+}
+
+.count-grid strong {
+  color: var(--ink);
+  float: right;
+}
+
 .tree-head {
   align-items: center;
 }
@@ -756,7 +838,8 @@ tr.eliminated {
   .section-title,
   .tree-head,
   .stats-head,
-  .image-head {
+  .image-head,
+  .history-head {
     align-items: start;
     flex-direction: column;
     gap: 12px;
@@ -793,6 +876,10 @@ tr.eliminated {
   }
 
   .rules-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .count-grid {
     grid-template-columns: 1fr;
   }
 

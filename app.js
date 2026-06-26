@@ -4,6 +4,7 @@ const tabs = document.querySelectorAll(".tab");
 const standingsPanel = document.querySelector("#standingsPanel");
 const schedulePanel = document.querySelector("#schedulePanel");
 const rulesPanel = document.querySelector("#rulesPanel");
+const historyPanel = document.querySelector("#historyPanel");
 const treePanel = document.querySelector("#treePanel");
 const playersPanel = document.querySelector("#playersPanel");
 const imagePanel = document.querySelector("#imagePanel");
@@ -11,6 +12,7 @@ const refreshBtn = document.querySelector("#refreshBtn");
 const generateImageBtn = document.querySelector("#generateImageBtn");
 const countryLookup = document.querySelector("#countryLookup");
 const dateLookup = document.querySelector("#dateLookup");
+const historyCountry = document.querySelector("#historyCountry");
 const playerSearch = document.querySelector("#playerSearch");
 const toast = document.querySelector("#toast");
 const TEAM_FLAGS = {
@@ -65,6 +67,36 @@ const TEAM_FLAGS = {
 };
 const FEATURED_PLAYERS = new Set(["Kylian Mbappé", "Lionel Messi", "Cristiano Ronaldo", "Erling Haaland"]);
 const PST_SLOTS = ["9:00 AM PST", "11:00 AM PST", "1:00 PM PST", "3:00 PM PST", "5:00 PM PST", "7:00 PM PST"];
+const HISTORY_TOP_FOUR = [
+  { year: 1930, champion: "Uruguay", runnerUp: "Argentina", third: "United States", fourth: "Yugoslavia" },
+  { year: 1934, champion: "Italy", runnerUp: "Czechoslovakia", third: "Germany", fourth: "Austria" },
+  { year: 1938, champion: "Italy", runnerUp: "Hungary", third: "Brazil", fourth: "Sweden" },
+  { year: 1950, champion: "Uruguay", runnerUp: "Brazil", third: "Sweden", fourth: "Spain" },
+  { year: 1954, champion: "West Germany", runnerUp: "Hungary", third: "Austria", fourth: "Uruguay" },
+  { year: 1958, champion: "Brazil", runnerUp: "Sweden", third: "France", fourth: "West Germany" },
+  { year: 1962, champion: "Brazil", runnerUp: "Czechoslovakia", third: "Chile", fourth: "Yugoslavia" },
+  { year: 1966, champion: "England", runnerUp: "West Germany", third: "Portugal", fourth: "Soviet Union" },
+  { year: 1970, champion: "Brazil", runnerUp: "Italy", third: "West Germany", fourth: "Uruguay" },
+  { year: 1974, champion: "West Germany", runnerUp: "Netherlands", third: "Poland", fourth: "Brazil" },
+  { year: 1978, champion: "Argentina", runnerUp: "Netherlands", third: "Brazil", fourth: "Italy" },
+  { year: 1982, champion: "Italy", runnerUp: "West Germany", third: "Poland", fourth: "France" },
+  { year: 1986, champion: "Argentina", runnerUp: "West Germany", third: "France", fourth: "Belgium" },
+  { year: 1990, champion: "West Germany", runnerUp: "Argentina", third: "Italy", fourth: "England" },
+  { year: 1994, champion: "Brazil", runnerUp: "Italy", third: "Sweden", fourth: "Bulgaria" },
+  { year: 1998, champion: "France", runnerUp: "Brazil", third: "Croatia", fourth: "Netherlands" },
+  { year: 2002, champion: "Brazil", runnerUp: "Germany", third: "Türkiye", fourth: "South Korea" },
+  { year: 2006, champion: "Italy", runnerUp: "France", third: "Germany", fourth: "Portugal" },
+  { year: 2010, champion: "Spain", runnerUp: "Netherlands", third: "Germany", fourth: "Uruguay" },
+  { year: 2014, champion: "Germany", runnerUp: "Argentina", third: "Netherlands", fourth: "Brazil" },
+  { year: 2018, champion: "France", runnerUp: "Croatia", third: "Belgium", fourth: "England" },
+  { year: 2022, champion: "Argentina", runnerUp: "France", third: "Croatia", fourth: "Morocco" },
+];
+const HISTORY_FINISHES = [
+  ["champion", "Champion"],
+  ["runnerUp", "Runner-up"],
+  ["third", "Third"],
+  ["fourth", "Fourth"],
+];
 
 function showToast(message) {
   toast.textContent = message;
@@ -118,6 +150,15 @@ function statusLabel(status) {
 function teamLabel(team) {
   const flag = TEAM_FLAGS[team];
   return `${flag ? `<span class="flag" aria-hidden="true">${flag}</span>` : ""}<span>${team}</span>`;
+}
+
+function normalizeCountry(country) {
+  const aliases = {
+    "West Germany": "Germany",
+    Czechoslovakia: "Czechia",
+    Turkey: "Türkiye",
+  };
+  return aliases[country] || country;
 }
 
 function pstTime(match, collection) {
@@ -176,6 +217,56 @@ function renderLookupControls() {
     .join("")}`;
   countryLookup.value = selectedCountry;
   dateLookup.value = selectedDate;
+}
+
+function renderHistoryControls() {
+  const selected = historyCountry.value;
+  historyCountry.innerHTML = `<option value="">All countries</option>${countryOptions()
+    .map((team) => `<option value="${team}">${TEAM_FLAGS[team] ? `${TEAM_FLAGS[team]} ` : ""}${team}</option>`)
+    .join("")}`;
+  historyCountry.value = selected;
+}
+
+function selectedCountryFinish(row, selected) {
+  if (!selected) return "Choose a country";
+  const finish = HISTORY_FINISHES.find(([key]) => normalizeCountry(row[key]) === selected);
+  return finish ? finish[1] : "Outside top 4";
+}
+
+function historyCountryCell(country) {
+  return teamLabel(normalizeCountry(country));
+}
+
+function renderHistory() {
+  const selected = historyCountry.value;
+  document.querySelector("#historyQueryHead").textContent = selected ? `${selected} finish` : "Selected country";
+  document.querySelector("#historyBody").innerHTML = HISTORY_TOP_FOUR.map(
+    (row) => `
+      <tr>
+        <td>${row.year}</td>
+        <td>${historyCountryCell(row.champion)}</td>
+        <td>${historyCountryCell(row.runnerUp)}</td>
+        <td>${historyCountryCell(row.third)}</td>
+        <td>${historyCountryCell(row.fourth)}</td>
+        <td class="${selected && selectedCountryFinish(row, selected) !== "Outside top 4" ? "history-hit" : ""}">${selectedCountryFinish(row, selected)}</td>
+      </tr>
+    `,
+  ).join("");
+
+  const counts = {};
+  HISTORY_TOP_FOUR.forEach((row) => {
+    HISTORY_FINISHES.forEach(([key]) => {
+      const country = normalizeCountry(row[key]);
+      counts[country] = (counts[country] || 0) + 1;
+    });
+  });
+  const sortedCounts = Object.entries(counts).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  document.querySelector("#historyCounts").innerHTML = `
+    <h3>Total Top 4 Counts</h3>
+    <div class="count-grid">
+      ${sortedCounts.map(([country, count]) => `<span>${teamLabel(country)} <strong>${count}</strong></span>`).join("")}
+    </div>
+  `;
 }
 
 function renderGroups() {
@@ -579,9 +670,11 @@ function renderPlayerStats() {
 function render() {
   renderMeta();
   renderLookupControls();
+  renderHistoryControls();
   renderGroups();
   renderMatchLookup();
   renderSchedule();
+  renderHistory();
   renderMatches();
   renderBracket();
   renderPlayerStats();
@@ -599,6 +692,7 @@ tabs.forEach((tab) => {
     standingsPanel.classList.toggle("active", tab.dataset.tab === "standings");
     schedulePanel.classList.toggle("active", tab.dataset.tab === "schedule");
     rulesPanel.classList.toggle("active", tab.dataset.tab === "rules");
+    historyPanel.classList.toggle("active", tab.dataset.tab === "history");
     playersPanel.classList.toggle("active", tab.dataset.tab === "players");
     treePanel.classList.toggle("active", tab.dataset.tab === "tree");
     imagePanel.classList.toggle("active", tab.dataset.tab === "image");
@@ -640,6 +734,7 @@ generateImageBtn.addEventListener("click", async () => {
 
 countryLookup.addEventListener("change", renderMatchLookup);
 dateLookup.addEventListener("change", renderMatchLookup);
+historyCountry.addEventListener("change", renderHistory);
 playerSearch.addEventListener("input", renderPlayerStats);
 window.addEventListener("resize", drawBracketConnectors);
 document.querySelector("#bracket").addEventListener("scroll", drawBracketConnectors);

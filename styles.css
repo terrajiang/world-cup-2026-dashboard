@@ -621,11 +621,42 @@ tr.eliminated {
   grid-template-columns: repeat(3, minmax(240px, 1fr));
 }
 
+.terms-card,
 .rules-card {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 18px;
+}
+
+.terms-card {
+  margin-bottom: 16px;
+}
+
+.terms-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(4, minmax(190px, 1fr));
+}
+
+.terms-grid div {
+  background: #f7f2e8;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 11px;
+}
+
+.terms-grid strong {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.terms-grid span {
+  color: var(--muted);
+  display: block;
+  font-size: 13px;
+  line-height: 1.35;
 }
 
 .rules-card ul {
@@ -1172,6 +1203,7 @@ td.stage-quarterfinal {
     grid-template-columns: 1fr;
   }
 
+  .terms-grid,
   .rules-detail-grid {
     grid-template-columns: 1fr;
   }

@@ -131,18 +131,31 @@ def apply_verified_overrides(data):
 
 
 def parse_guardian_live_score(text, home, away):
-    patterns = [
+    full_time_patterns = [
+        rf"(?:FULL TIME|Full-time!?|Full time):?\s*{re.escape(home)}\s+(\d+)\s*[-–]\s*(\d+)\s+{re.escape(away)}",
+        rf"(?:FULL TIME|Full-time!?|Full time):?\s*{re.escape(away)}\s+(\d+)\s*[-–]\s*(\d+)\s+{re.escape(home)}",
+    ]
+    for pattern in full_time_patterns:
+        match = re.search(pattern, text, flags=re.I)
+        if not match:
+            continue
+        first, second = map(int, match.groups())
+        if re.search(rf"{re.escape(home)}\s+\d+\s*[-–]\s*\d+\s+{re.escape(away)}", match.group(0), flags=re.I):
+            return first, second, "FT"
+        return second, first, "FT"
+
+    score_patterns = [
         rf"{re.escape(home)}\s+(\d+)\s*[-–]\s*(\d+)\s+{re.escape(away)}",
         rf"{re.escape(away)}\s+(\d+)\s*[-–]\s*(\d+)\s+{re.escape(home)}",
     ]
-    for pattern in patterns:
+    for pattern in score_patterns:
         match = re.search(pattern, text, flags=re.I)
         if not match:
             continue
         first, second = map(int, match.groups())
         if pattern.startswith(re.escape(home)):
-            return first, second
-        return second, first
+            return first, second, "Live"
+        return second, first, "Live"
     return None
 
 
@@ -159,11 +172,10 @@ def apply_live_score_updates(data):
             text = strip_html(fetch_text(LIVE_MATCH_SOURCES[key]))
         except (urllib.error.URLError, TimeoutError):
             continue
-        score = parse_guardian_live_score(text, match["home"], match["away"])
-        if not score:
+        parsed = parse_guardian_live_score(text, match["home"], match["away"])
+        if not parsed:
             continue
-        match["homeScore"], match["awayScore"] = score
-        match["status"] = "Live"
+        match["homeScore"], match["awayScore"], match["status"] = parsed
         changed += 1
     return changed
 

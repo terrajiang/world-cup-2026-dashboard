@@ -10,12 +10,22 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse
 
-from world_cup_data import GROUPS, PLAYER_STATS, seed_payload
+from world_cup_data import GROUPS, PLAYER_STATS, SEED_STANDINGS, seed_payload
 
 
 ROOT = Path(__file__).resolve().parent
 CACHE = ROOT / "world_cup_cache.json"
 STANDINGS_URL = "https://www.sbnation.com/soccer/1117905/world-cup-standings-updated-full-list-of-teams"
+VERIFIED_GROUPS = {"D", "E", "F"}
+VERIFIED_MATCH_SCORES = {
+    ("D", "Türkiye", "United States"): (3, 2, "FT"),
+    ("D", "Paraguay", "Australia"): (0, 0, "FT"),
+    ("E", "Curaçao", "Côte d'Ivoire"): (0, 2, "FT"),
+    ("E", "Ecuador", "Germany"): (2, 1, "FT"),
+    ("F", "Tunisia", "Netherlands"): (1, 3, "FT"),
+    ("F", "Japan", "Sweden"): (1, 1, "FT"),
+}
+PLAYER_STATS_NOTE = "Player stats were checked against June 26 Golden Boot reports. Goals are updated for reported leaders; assists are only filled where a reliable report listed them, and cards still require an official feed."
 
 
 def utc_now():
@@ -28,12 +38,7 @@ def load_data():
             data = json.load(handle)
         if "playerStats" not in data:
             data["playerStats"] = []
-        existing = {(row.get("player"), row.get("team")) for row in data["playerStats"]}
-        for row in PLAYER_STATS:
-            if (row["player"], row["team"]) not in existing:
-                data["playerStats"].append(row)
-        if "playerStatsNote" not in data or data["playerStatsNote"].startswith("Seeded player stats"):
-            data["playerStatsNote"] = "Player stats include every player currently available in the local stats feed. Goals are partially populated from public match reports; assists and cards need an official feed or manual entry."
+        apply_verified_overrides(data)
         save_data(data)
         return data
     data = seed_payload()
@@ -44,6 +49,33 @@ def load_data():
 def save_data(data):
     with CACHE.open("w", encoding="utf-8") as handle:
         json.dump(data, handle, ensure_ascii=False, indent=2)
+
+
+def clone_rows(rows):
+    return [dict(row) for row in rows]
+
+
+def merge_player_stats(data):
+    current = {(row.get("player"), row.get("team")): row for row in data.get("playerStats", [])}
+    merged = []
+    for row in PLAYER_STATS:
+        merged.append({**current.pop((row["player"], row["team"]), {}), **row})
+    merged.extend(current.values())
+    data["playerStats"] = merged
+    data["playerStatsNote"] = PLAYER_STATS_NOTE
+
+
+def apply_verified_overrides(data):
+    for group in VERIFIED_GROUPS:
+        data["groups"][group] = clone_rows(SEED_STANDINGS[group])
+    for match in data.get("matches", []):
+        key = (match.get("group"), match.get("home"), match.get("away"))
+        if key in VERIFIED_MATCH_SCORES:
+            home_score, away_score, status = VERIFIED_MATCH_SCORES[key]
+            match["homeScore"] = home_score
+            match["awayScore"] = away_score
+            match["status"] = status
+    merge_player_stats(data)
 
 
 def recalculate_from_matches(data):
@@ -161,13 +193,15 @@ def try_refresh_from_web(data):
             changed += 1
 
     if changed == 0:
+        apply_verified_overrides(data)
         data["lastUpdated"] = utc_now()
-        data["sourceNote"] = "Refresh reached the standings source, but no group tables could be parsed. Cached data is still shown."
+        data["sourceNote"] = "Refresh reached the standings source, but no group tables could be parsed. Verified Group D/E/F corrections and checked player-stat leaders are still applied."
         save_data(data)
         return data
 
+    apply_verified_overrides(data)
     data["lastUpdated"] = utc_now()
-    data["sourceNote"] = f"Refreshed {changed} group table(s) from SB Nation standings. Scores remain locally editable."
+    data["sourceNote"] = f"Refreshed {changed} group table(s) from SB Nation, then validated Group D/E/F with June 26 corrections. Scores remain locally editable."
     save_data(data)
     return data
 

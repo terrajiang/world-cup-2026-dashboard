@@ -216,11 +216,18 @@ function slotHtml(slot) {
   return slot.filled ? teamLabel(slot.text) : slot.text;
 }
 
-function cardHtml(match, side = "") {
+function connectorClass(side, roundIndex, matchIndex, roundSize) {
+  if (side !== "left" && side !== "right") return "";
+  const parity = matchIndex % 2 === 0 ? "upper" : "lower";
+  const edge = roundIndex === roundSize - 1 ? "to-final" : "to-next";
+  return `${edge} ${parity}`;
+}
+
+function cardHtml(match, side = "", roundIndex = 0, matchIndex = 0, roundSize = 0) {
   const home = resolveSlot(match.home);
   const away = resolveSlot(match.away);
   return `
-    <article class="tree-card ${side}">
+    <article class="tree-card ${side} ${connectorClass(side, roundIndex, matchIndex, roundSize)}">
       <div class="tree-slot">${match.slot} · ${formatDate(match.date)}</div>
       <div class="tree-pair">
         <div class="tree-team ${home.filled ? "filled" : "pending"}">${slotHtml(home)}</div>
@@ -240,7 +247,7 @@ function renderTreeSide(label, roundGroups, side) {
             (group) => `
               <section class="round-column ${side}">
                 <div class="round-heading">${group.title}</div>
-                ${group.matches.map((match) => cardHtml(match, side)).join("")}
+                ${group.matches.map((match, matchIndex) => cardHtml(match, side, roundGroups.indexOf(group), matchIndex, group.matches.length)).join("")}
               </section>
             `,
           )

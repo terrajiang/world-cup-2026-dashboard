@@ -26,6 +26,8 @@ http://127.0.0.1:8080/
 
 ## Notes
 
+Disclaimer: this is a fan-made local dashboard, not an official FIFA product. The standings, projections, player stats, schedules, historical summaries, and generated images are provided for personal analysis and may contain assumptions or stale data. Verify against official FIFA sources before relying on the information publicly.
+
 The dashboard uses local seed data plus a public standings refresh attempt. Refresh writes `world_cup_dynamic_snapshot.json`, so `world_cup_data.py` can load the latest refreshed snapshot instead of falling back to the original seed. Refresh also regenerates the standings PNG.
 
 Player stats show every player currently available in the local stats feed; a full official player feed can be connected later.

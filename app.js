@@ -38,8 +38,10 @@ const TEAM_FLAGS = {
   Germany: "🇩🇪",
   Ghana: "🇬🇭",
   Haiti: "🇭🇹",
+  Hungary: "🇭🇺",
   Iran: "🇮🇷",
   Iraq: "🇮🇶",
+  Italy: "🇮🇹",
   Japan: "🇯🇵",
   Jordan: "🇯🇴",
   Mexico: "🇲🇽",
@@ -49,6 +51,7 @@ const TEAM_FLAGS = {
   Norway: "🇳🇴",
   Panama: "🇵🇦",
   Paraguay: "🇵🇾",
+  Poland: "🇵🇱",
   Portugal: "🇵🇹",
   Qatar: "🇶🇦",
   "Saudi Arabia": "🇸🇦",
@@ -64,6 +67,10 @@ const TEAM_FLAGS = {
   "United States": "🇺🇸",
   Uruguay: "🇺🇾",
   Uzbekistan: "🇺🇿",
+  Bulgaria: "🇧🇬",
+  Chile: "🇨🇱",
+  "Soviet Union": "css:soviet",
+  Yugoslavia: "css:yugoslavia",
 };
 const FEATURED_PLAYERS = new Set(["Kylian Mbappé", "Lionel Messi", "Cristiano Ronaldo", "Erling Haaland"]);
 const PST_SLOTS = ["9:00 AM PST", "11:00 AM PST", "1:00 PM PST", "3:00 PM PST", "5:00 PM PST", "7:00 PM PST"];
@@ -196,6 +203,9 @@ function statusLabel(status) {
 
 function teamLabel(team) {
   const flag = TEAM_FLAGS[team];
+  if (flag?.startsWith("css:")) {
+    return `<span class="flag flag-css flag-${flag.slice(4)}" aria-hidden="true"></span><span>${team}</span>`;
+  }
   return `${flag ? `<span class="flag" aria-hidden="true">${flag}</span>` : ""}<span>${team}</span>`;
 }
 
@@ -286,6 +296,12 @@ function historyCountryCell(country) {
   return teamLabel(normalizeCountry(country));
 }
 
+function countCell(entry) {
+  if (!entry) return "";
+  const [country, count] = entry;
+  return `${teamLabel(country)} <strong>${count}</strong>`;
+}
+
 function renderHistory() {
   const selected = historyCountry.value;
   const historyRows = [HISTORY_PLACEHOLDER_2026, ...HISTORY_TOP_FOUR].sort((a, b) => b.year - a.year);
@@ -312,20 +328,32 @@ function renderHistory() {
   });
   document.querySelector("#historyCounts").innerHTML = `
     <h3>Placement Counts By Country</h3>
-    <div class="placement-grid">
-      <div class="placement-spacer" aria-hidden="true"></div>
-      ${HISTORY_FINISHES.map(([key, label]) => {
-        const sortedCounts = Object.entries(counts[key]).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-        return `
-          <section class="placement-card">
-            <h4>${label}</h4>
-            <div class="count-grid">
-              ${sortedCounts.map(([country, count]) => `<span>${teamLabel(country)} <strong>${count}</strong></span>`).join("")}
-            </div>
-          </section>
-        `;
-      }).join("")}
-      <div class="placement-spacer" aria-hidden="true"></div>
+    <div class="history-table-wrap">
+      <table class="history-table count-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Champion</th>
+            <th>Runner-up</th>
+            <th>Third</th>
+            <th>Fourth</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${(() => {
+            const rankings = HISTORY_FINISHES.map(([key]) => Object.entries(counts[key]).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])));
+            const maxRows = Math.max(...rankings.map((ranking) => ranking.length));
+            return Array.from({ length: maxRows }, (_, index) => `
+              <tr>
+                <td>${index + 1}</td>
+                ${rankings.map((ranking) => `<td>${countCell(ranking[index])}</td>`).join("")}
+                <td></td>
+              </tr>
+            `).join("");
+          })()}
+        </tbody>
+      </table>
     </div>
   `;
 }

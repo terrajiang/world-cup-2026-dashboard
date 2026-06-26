@@ -76,6 +76,19 @@ h2 {
   gap: 12px;
 }
 
+.refresh-stack {
+  align-items: end;
+  display: grid;
+  gap: 5px;
+}
+
+.refresh-stack span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  text-align: right;
+}
+
 .status-pill {
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -327,6 +340,43 @@ tr.eliminated {
   vertical-align: -1px;
 }
 
+.flag-css {
+  border: 1px solid #c9c1b3;
+  border-radius: 2px;
+  height: 12px;
+  width: 18px;
+}
+
+.flag-yugoslavia {
+  background: linear-gradient(to bottom, #1f4aa8 0 33%, white 33% 66%, #c9232d 66% 100%);
+  position: relative;
+}
+
+.flag-yugoslavia::after {
+  color: #c9232d;
+  content: "★";
+  font-size: 7px;
+  left: 5px;
+  line-height: 1;
+  position: absolute;
+  top: 2px;
+}
+
+.flag-soviet {
+  background: #c9232d;
+  position: relative;
+}
+
+.flag-soviet::after {
+  color: #f5d24b;
+  content: "★";
+  font-size: 7px;
+  left: 2px;
+  line-height: 1;
+  position: absolute;
+  top: 2px;
+}
+
 .scores-pane {
   max-height: calc(100vh - 205px);
   overflow: auto;
@@ -555,41 +605,14 @@ tr.eliminated {
   margin: 0 0 10px;
 }
 
-.placement-grid {
-  display: grid;
-  gap: 0;
-  grid-template-columns: 82px repeat(4, minmax(140px, 1fr)) minmax(140px, 1fr);
-}
-
-.placement-card {
-  border-left: 1px solid var(--line);
-  padding: 0 12px;
-}
-
-.placement-card h4 {
-  color: var(--teal);
-  font-size: 14px;
-  margin: 0 0 10px;
-}
-
-.count-grid {
-  display: grid;
-  gap: 6px;
-}
-
-.count-grid span {
-  align-items: center;
+.count-table td {
   color: var(--muted);
-  display: flex;
-  gap: 6px;
-  justify-content: space-between;
-  line-height: 1.25;
-  padding: 2px 0;
 }
 
-.count-grid strong {
+.count-table td strong {
   color: var(--ink);
-  margin-left: 8px;
+  float: right;
+  margin-left: 12px;
 }
 
 .tree-head {
@@ -901,12 +924,12 @@ tr.eliminated {
     grid-template-columns: 1fr;
   }
 
-  .placement-grid {
-    grid-template-columns: 1fr;
+  .refresh-stack {
+    align-items: start;
   }
 
-  .placement-spacer {
-    display: none;
+  .refresh-stack span {
+    text-align: left;
   }
 
   .result-main {

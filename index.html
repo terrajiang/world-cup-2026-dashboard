@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>World Cup 2026 Live Dashboard</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">FIFA World Cup 2026</p>
+        <h1>Live Scores, Standings & Match Tree</h1>
+      </div>
+      <div class="header-actions">
+        <div class="status-pill" id="lastUpdated">Loading...</div>
+        <button class="icon-button" id="refreshBtn" title="Refresh latest data">Refresh</button>
+      </div>
+    </header>
+
+    <nav class="tabs" aria-label="Dashboard views">
+      <button class="tab active" data-tab="standings">Standings & Scores</button>
+      <button class="tab" data-tab="players">Player Stats</button>
+      <button class="tab" data-tab="tree">Match Tree</button>
+    </nav>
+
+    <main>
+      <section class="panel active" id="standingsPanel">
+        <div class="toolbar">
+          <div class="search-wrap">
+            <label for="teamSearch">Search</label>
+            <input id="teamSearch" type="search" placeholder="Team or group" />
+          </div>
+          <label class="toggle">
+            <input id="autoRefresh" type="checkbox" />
+            <span>Auto-refresh every 60s</span>
+          </label>
+          <button class="ghost" id="resetBtn">Reset seed</button>
+        </div>
+
+        <p class="source-note" id="sourceNote"></p>
+
+        <div class="layout no-score-editor">
+          <section>
+            <div class="section-title">
+              <h2>Group Standings</h2>
+              <span>GD, GF, Pts</span>
+            </div>
+            <div class="definition-row" aria-label="Standings abbreviation definitions">
+              <span><strong>GD</strong> Goal difference: goals for minus goals against.</span>
+              <span><strong>GF</strong> Goals for: total goals scored.</span>
+            </div>
+            <div class="groups-grid" id="groupsGrid"></div>
+          </section>
+
+          <aside class="scores-pane" hidden>
+            <div class="section-title">
+              <h2>Scores</h2>
+              <span>Edit then save</span>
+            </div>
+            <p class="panel-help">This panel lists each group match. Change a score or match status, then Save to update the local standings and bracket projections.</p>
+            <div id="matchesList"></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="panel" id="playersPanel">
+        <div class="stats-head">
+          <div>
+            <h2>Player Stats</h2>
+            <p id="playerStatsNote"></p>
+          </div>
+          <div class="search-wrap">
+            <label for="playerSearch">Search</label>
+            <input id="playerSearch" type="search" placeholder="Player or team" />
+          </div>
+        </div>
+        <div class="stats-summary" id="statsSummary"></div>
+        <div class="stats-table-wrap">
+          <table class="stats-table">
+            <thead>
+              <tr>
+                <th>Player</th>
+                <th>Team</th>
+                <th>Goals</th>
+                <th>Assists</th>
+                <th>Yellow Cards</th>
+                <th>Red Cards</th>
+              </tr>
+            </thead>
+            <tbody id="playerStatsBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel" id="treePanel">
+        <div class="tree-head">
+          <div>
+            <h2>Potential Knockout Match Tree</h2>
+            <p>Teams are placed from the current standings table. Completed groups show true placement; incomplete groups are projections based on current rank until FIFA confirms final placement and third-place allocation.</p>
+          </div>
+          <div class="legend">
+            <span><i class="advanced"></i> Filled team</span>
+            <span><i class="pending"></i> Conditional slot</span>
+          </div>
+        </div>
+        <div class="tree-map" id="bracket"></div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" hidden></div>
+    <script src="/app.js"></script>
+  </body>
+</html>

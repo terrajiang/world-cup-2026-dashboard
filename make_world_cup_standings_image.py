@@ -1,7 +1,11 @@
+import json
+from pathlib import Path
+
 from PIL import Image, ImageDraw, ImageFont
 
 
-OUT = "world_cup_2026_group_standings_june25.png"
+ROOT = Path(__file__).resolve().parent
+OUT = "world_cup_2026_group_standings.png"
 
 groups = {
     "A": [("Mexico", 9), ("South Africa", 4), ("South Korea", 3), ("Czechia", 1)],
@@ -42,6 +46,31 @@ eliminated = {
     "Jordan",
     "Panama",
 }
+
+snapshot_path = ROOT / "world_cup_cache.json"
+source_note = "Generated from built-in seed data."
+retrieved_label = "latest local data"
+if snapshot_path.exists():
+    with snapshot_path.open("r", encoding="utf-8") as handle:
+        snapshot = json.load(handle)
+    groups = {
+        group: [(row["team"], row["pts"]) for row in rows]
+        for group, rows in snapshot.get("groups", {}).items()
+    }
+    advanced = {
+        row["team"]
+        for rows in snapshot.get("groups", {}).values()
+        for row in rows
+        if row.get("status") == "advanced"
+    }
+    eliminated = {
+        row["team"]
+        for rows in snapshot.get("groups", {}).values()
+        for row in rows
+        if row.get("status") == "eliminated"
+    }
+    source_note = snapshot.get("sourceNote", source_note)
+    retrieved_label = snapshot.get("lastUpdated", retrieved_label)
 
 third_place = {teams[2][0] for teams in groups.values()}
 
@@ -97,7 +126,7 @@ draw = ImageDraw.Draw(img)
 draw.text((MARGIN, 58), "World Cup 2026 Group Standings", font=title_font, fill=INK)
 draw.text(
     (MARGIN, 142),
-    "Current points only - all 12 groups / 48 teams - retrieved June 25, 2026 at 3:03 PM PDT",
+    f"Current points only - all 12 groups / 48 teams - generated from {retrieved_label}",
     font=subtitle_font,
     fill="#4d5157",
 )
@@ -159,7 +188,7 @@ note_y = H - 112
 draw.line((MARGIN, note_y - 22, W - MARGIN, note_y - 22), fill=LINE, width=2)
 draw.text(
     (MARGIN, note_y),
-    "Sources checked: SB Nation standings/knockout updates; Guardian live blogs for in-progress Group E movement on Jun 25.",
+    f"Refresh note: {source_note}"[:155],
     font=small,
     fill="#4d5157",
 )

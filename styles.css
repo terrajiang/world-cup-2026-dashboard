@@ -640,6 +640,34 @@ tr.eliminated {
   font-weight: 800;
 }
 
+.image-head {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.image-head p {
+  color: var(--muted);
+  line-height: 1.45;
+  margin: 6px 0 0;
+}
+
+.image-preview-wrap {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: auto;
+  padding: 14px;
+}
+
+.image-preview-wrap img {
+  display: block;
+  max-width: 100%;
+  min-height: 260px;
+  object-fit: contain;
+}
+
 .tree-team.filled {
   background: var(--green-soft);
   color: var(--green);
@@ -682,7 +710,8 @@ tr.eliminated {
   .app-header,
   .section-title,
   .tree-head,
-  .stats-head {
+  .stats-head,
+  .image-head {
     align-items: start;
     flex-direction: column;
     gap: 12px;

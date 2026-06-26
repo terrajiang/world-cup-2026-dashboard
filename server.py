@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 import re
 import ssl
+import subprocess
+import sys
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone
@@ -15,6 +17,9 @@ from world_cup_data import GROUPS, PLAYER_STATS, SEED_STANDINGS, seed_payload
 
 ROOT = Path(__file__).resolve().parent
 CACHE = ROOT / "world_cup_cache.json"
+IMAGE_PATH = ROOT / "world_cup_2026_group_standings.png"
+IMAGE_SCRIPT = ROOT / "make_world_cup_standings_image.py"
+BUNDLED_PYTHON = Path("/Users/terra/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3")
 STANDINGS_URL = "https://www.sbnation.com/soccer/1117905/world-cup-standings-updated-full-list-of-teams"
 VERIFIED_GROUPS = {"D", "E", "F"}
 VERIFIED_MATCH_SCORES = {
@@ -47,6 +52,7 @@ def load_data():
 
 
 def save_data(data):
+    data["imagePath"] = "/world_cup_2026_group_standings.png"
     with CACHE.open("w", encoding="utf-8") as handle:
         json.dump(data, handle, ensure_ascii=False, indent=2)
 
@@ -76,6 +82,43 @@ def apply_verified_overrides(data):
             match["awayScore"] = away_score
             match["status"] = status
     merge_player_stats(data)
+
+
+def write_dynamic_snapshot(data):
+    snapshot = {
+        "lastUpdated": data.get("lastUpdated"),
+        "sourceNote": data.get("sourceNote"),
+        "groups": data.get("groups", {}),
+        "matches": data.get("matches", []),
+        "playerStats": data.get("playerStats", []),
+        "playerStatsNote": data.get("playerStatsNote", ""),
+    }
+    (ROOT / "world_cup_dynamic_snapshot.json").write_text(json.dumps(snapshot, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def update_project_data_files(data):
+    # Keep a source-controlled snapshot beside the Python seed module so refreshes are visible in the repo.
+    write_dynamic_snapshot(data)
+
+
+def generate_standings_image(data=None):
+    if data is None:
+        data = load_data()
+    save_data(data)
+    python = BUNDLED_PYTHON if BUNDLED_PYTHON.exists() else Path(sys.executable)
+    result = subprocess.run(
+        [str(python), str(IMAGE_SCRIPT)],
+        cwd=str(ROOT),
+        capture_output=True,
+        text=True,
+        timeout=30,
+        check=False,
+    )
+    if result.returncode != 0:
+        raise RuntimeError((result.stderr or result.stdout or "Image generator failed").strip())
+    data["imagePath"] = "/world_cup_2026_group_standings.png"
+    save_data(data)
+    return data
 
 
 def recalculate_from_matches(data):
@@ -196,12 +239,16 @@ def try_refresh_from_web(data):
         apply_verified_overrides(data)
         data["lastUpdated"] = utc_now()
         data["sourceNote"] = "Refresh reached the standings source, but no group tables could be parsed. Verified Group D/E/F corrections and checked player-stat leaders are still applied."
+        update_project_data_files(data)
+        generate_standings_image(data)
         save_data(data)
         return data
 
     apply_verified_overrides(data)
     data["lastUpdated"] = utc_now()
     data["sourceNote"] = f"Refreshed {changed} group table(s) from SB Nation, then validated Group D/E/F with June 26 corrections. Scores remain locally editable."
+    update_project_data_files(data)
+    generate_standings_image(data)
     save_data(data)
     return data
 
@@ -239,6 +286,10 @@ class Handler(SimpleHTTPRequestHandler):
                 data = load_data()
                 self.send_json(try_refresh_from_web(data))
                 return
+            if path == "/api/generate-image":
+                data = generate_standings_image(load_data())
+                self.send_json(data)
+                return
             if path == "/api/update-match":
                 body = self.read_json()
                 data = load_data()
@@ -253,11 +304,6 @@ class Handler(SimpleHTTPRequestHandler):
                     self.send_json({"error": f"Unknown match id: {match_id}"}, status=404)
                     return
                 recalculate_from_matches(data)
-                save_data(data)
-                self.send_json(data)
-                return
-            if path == "/api/reset":
-                data = seed_payload()
                 save_data(data)
                 self.send_json(data)
                 return

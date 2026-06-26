@@ -5,8 +5,9 @@ const tabs = document.querySelectorAll(".tab");
 const standingsPanel = document.querySelector("#standingsPanel");
 const treePanel = document.querySelector("#treePanel");
 const playersPanel = document.querySelector("#playersPanel");
+const imagePanel = document.querySelector("#imagePanel");
 const refreshBtn = document.querySelector("#refreshBtn");
-const resetBtn = document.querySelector("#resetBtn");
+const generateImageBtn = document.querySelector("#generateImageBtn");
 const autoRefresh = document.querySelector("#autoRefresh");
 const teamSearch = document.querySelector("#teamSearch");
 const playerSearch = document.querySelector("#playerSearch");
@@ -114,6 +115,15 @@ function renderMeta() {
     ? `Updated ${formatDate(state.lastUpdated)}`
     : "Not updated yet";
   document.querySelector("#sourceNote").textContent = state.sourceNote || "";
+}
+
+function renderImagePreview() {
+  const image = document.querySelector("#standingsImage");
+  if (state.imagePath) {
+    image.src = `${state.imagePath}?v=${encodeURIComponent(state.lastUpdated || Date.now())}`;
+  } else {
+    image.removeAttribute("src");
+  }
 }
 
 function groupVisible(group, rows) {
@@ -330,6 +340,7 @@ function render() {
   renderMatches();
   renderBracket();
   renderPlayerStats();
+  renderImagePreview();
 }
 
 async function loadInitial() {
@@ -343,6 +354,7 @@ tabs.forEach((tab) => {
     standingsPanel.classList.toggle("active", tab.dataset.tab === "standings");
     playersPanel.classList.toggle("active", tab.dataset.tab === "players");
     treePanel.classList.toggle("active", tab.dataset.tab === "tree");
+    imagePanel.classList.toggle("active", tab.dataset.tab === "image");
   });
 });
 
@@ -361,12 +373,6 @@ refreshBtn.addEventListener("click", async () => {
   }
 });
 
-resetBtn.addEventListener("click", async () => {
-  state = await request("/api/reset", { method: "POST" });
-  render();
-  showToast("Seed data restored");
-});
-
 autoRefresh.addEventListener("change", () => {
   if (autoTimer) {
     clearInterval(autoTimer);
@@ -374,6 +380,21 @@ autoRefresh.addEventListener("change", () => {
   }
   if (autoRefresh.checked) {
     autoTimer = setInterval(() => refreshBtn.click(), 60000);
+  }
+});
+
+generateImageBtn.addEventListener("click", async () => {
+  generateImageBtn.disabled = true;
+  generateImageBtn.textContent = "Generating";
+  try {
+    state = await request("/api/generate-image", { method: "POST" });
+    render();
+    showToast("Standings image generated");
+  } catch (error) {
+    showToast(`Image generation failed: ${error.message}`);
+  } finally {
+    generateImageBtn.disabled = false;
+    generateImageBtn.textContent = "Generate Image";
   }
 });
 

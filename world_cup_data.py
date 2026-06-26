@@ -1,6 +1,11 @@
 from __future__ import annotations
 
 from copy import deepcopy
+import json
+from pathlib import Path
+
+
+DYNAMIC_SNAPSHOT_PATH = Path(__file__).resolve().parent / "world_cup_dynamic_snapshot.json"
 
 
 GROUPS = {
@@ -225,6 +230,21 @@ PLAYER_STATS = [
 
 
 def seed_payload():
+    if DYNAMIC_SNAPSHOT_PATH.exists():
+        with DYNAMIC_SNAPSHOT_PATH.open("r", encoding="utf-8") as handle:
+            snapshot = json.load(handle)
+        payload = {
+            "lastUpdated": snapshot.get("lastUpdated"),
+            "sourceNote": snapshot.get("sourceNote", "Loaded from dynamic refresh snapshot."),
+            "groups": snapshot.get("groups", deepcopy(SEED_STANDINGS)),
+            "matches": snapshot.get("matches", []),
+            "knockout": deepcopy(KNOCKOUT),
+            "playerStats": snapshot.get("playerStats", deepcopy(PLAYER_STATS)),
+            "playerStatsNote": snapshot.get("playerStatsNote", "Loaded from dynamic refresh snapshot."),
+            "imagePath": "/world_cup_2026_group_standings.png",
+        }
+        return payload
+
     matches = []
     for idx, (group, date, home, away, home_score, away_score, status) in enumerate(MATCHES, start=1):
         matches.append(

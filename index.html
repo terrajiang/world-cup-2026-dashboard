@@ -22,6 +22,7 @@
       <button class="tab active" data-tab="standings">Standings & Scores</button>
       <button class="tab" data-tab="players">Player Stats</button>
       <button class="tab" data-tab="tree">Match Tree</button>
+      <button class="tab" data-tab="image">Image</button>
     </nav>
 
     <main>
@@ -35,7 +36,6 @@
             <input id="autoRefresh" type="checkbox" />
             <span>Auto-refresh every 60s</span>
           </label>
-          <button class="ghost" id="resetBtn" title="Restore the built-in baseline data and clear local refresh/edit changes">Reset seed data</button>
         </div>
 
         <p class="source-note" id="sourceNote"></p>
@@ -105,6 +105,19 @@
           </div>
         </div>
         <div class="tree-map" id="bracket"></div>
+      </section>
+
+      <section class="panel" id="imagePanel">
+        <div class="image-head">
+          <div>
+            <h2>Standings Image</h2>
+            <p>Generate or overwrite the local PNG from the latest refreshed data.</p>
+          </div>
+          <button class="icon-button" id="generateImageBtn">Generate Image</button>
+        </div>
+        <div class="image-preview-wrap">
+          <img id="standingsImage" alt="Generated World Cup 2026 group standings image" />
+        </div>
       </section>
     </main>
 

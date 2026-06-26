@@ -39,7 +39,9 @@ select {
   justify-content: space-between;
   min-height: 112px;
   padding: 22px 32px;
-  z-index: 5;
+  position: sticky;
+  top: 0;
+  z-index: 9;
 }
 
 .eyebrow {
@@ -130,7 +132,7 @@ button {
   overflow-x: auto;
   padding: 16px 32px 0;
   position: sticky;
-  top: 0;
+  top: 112px;
   z-index: 8;
 }
 
@@ -1130,6 +1132,10 @@ td.stage-quarterfinal {
     align-items: start;
     flex-direction: column;
     gap: 12px;
+  }
+
+  .tabs {
+    top: 185px;
   }
 
   .header-actions,

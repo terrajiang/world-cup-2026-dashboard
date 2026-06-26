@@ -73,6 +73,10 @@ const TEAM_FLAGS = {
   "Soviet Union": "css:soviet",
   Yugoslavia: "css:yugoslavia",
 };
+const SELECT_FLAG_FALLBACKS = {
+  England: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+  Scotland: "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+};
 const FEATURED_PLAYERS = new Set(["Kylian Mbappé", "Lionel Messi", "Cristiano Ronaldo", "Erling Haaland"]);
 const PST_SLOTS = ["9:00 AM PT", "11:00 AM PT", "1:00 PM PT", "3:00 PM PT", "5:00 PM PT", "7:00 PM PT"];
 const PLACEMENT_EMOJIS = {
@@ -218,6 +222,7 @@ function teamLabel(team) {
 
 function optionLabel(team) {
   const flag = TEAM_FLAGS[team];
+  if (SELECT_FLAG_FALLBACKS[team]) return `${SELECT_FLAG_FALLBACKS[team]} ${team}`;
   return `${flag && !flag.startsWith("css:") ? `${flag} ` : ""}${team}`;
 }
 

@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-26T20:52:00.649134+00:00",
+  "lastUpdated": "2026-06-26T20:59:02.255471+00:00",
   "sourceNote": "Refreshed 11 group table(s), checked live match pages, and validated stored score corrections.",
   "groups": {
     "A": [
@@ -409,9 +409,9 @@
         "won": 3,
         "drawn": 0,
         "lost": 0,
-        "gf": 9,
+        "gf": 10,
         "ga": 2,
-        "gd": 7,
+        "gd": 8,
         "pts": 9,
         "status": "advanced"
       },
@@ -422,8 +422,8 @@
         "drawn": 0,
         "lost": 1,
         "gf": 8,
-        "ga": 6,
-        "gd": 2,
+        "ga": 7,
+        "gd": 1,
         "pts": 6,
         "status": "advanced"
       },
@@ -1135,7 +1135,7 @@
       "home": "Norway",
       "away": "France",
       "homeScore": 1,
-      "awayScore": 3,
+      "awayScore": 4,
       "status": "Live",
       "timePst": "12:00 PM PT"
     },

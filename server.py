@@ -21,6 +21,7 @@ IMAGE_PATH = ROOT / "world_cup_2026_group_standings.png"
 IMAGE_SCRIPT = ROOT / "make_world_cup_standings_image.py"
 BUNDLED_PYTHON = Path("/Users/terra/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3")
 STANDINGS_URL = "https://www.sbnation.com/soccer/1117905/world-cup-standings-updated-full-list-of-teams"
+PLAYER_STATS_URL = "https://www.sbnation.com/fifa-world-cup/1118693/world-cup-2026-golden-boot-standings"
 VERIFIED_GROUPS = {"D", "E", "F"}
 VERIFIED_MATCH_SCORES = {
     ("D", "Türkiye", "United States"): (3, 2, "FT"),
@@ -30,7 +31,7 @@ VERIFIED_MATCH_SCORES = {
     ("F", "Tunisia", "Netherlands"): (1, 3, "FT"),
     ("F", "Japan", "Sweden"): (1, 1, "FT"),
 }
-PLAYER_STATS_NOTE = "Player stats were checked against June 26 Golden Boot reports. Goals are updated for reported leaders; assists are only filled where a reliable report listed them, and cards still require an official feed."
+PLAYER_STATS_NOTE = "Player goals and assists refresh from the Golden Boot table. Yellow and red cards stay at 0 until a reliable card feed is connected."
 MATCH_TIMES_PACIFIC = {
     ("G", "New Zealand", "Belgium"): "5:00 PM PT",
     ("G", "Egypt", "Iran"): "5:00 PM PT",
@@ -71,6 +72,7 @@ def load_data():
             data = json.load(handle)
         if "playerStats" not in data:
             data["playerStats"] = []
+            merge_player_stats(data)
         apply_verified_overrides(data)
         apply_match_times(data)
         save_data(data)
@@ -91,12 +93,19 @@ def clone_rows(rows):
     return [dict(row) for row in rows]
 
 
-def merge_player_stats(data):
+def merge_player_stats(data, source_rows=None):
     current = {(row.get("player"), row.get("team")): row for row in data.get("playerStats", [])}
+    source = source_rows or PLAYER_STATS
     merged = []
-    for row in PLAYER_STATS:
-        merged.append({**current.pop((row["player"], row["team"]), {}), **row})
-    merged.extend(current.values())
+    for row in source:
+        prior = current.pop((row["player"], row["team"]), {})
+        merged.append(
+            {
+                **row,
+                "yellowCards": prior.get("yellowCards", row.get("yellowCards", 0)),
+                "redCards": prior.get("redCards", row.get("redCards", 0)),
+            }
+        )
     data["playerStats"] = merged
     data["playerStatsNote"] = PLAYER_STATS_NOTE
 
@@ -118,7 +127,6 @@ def apply_verified_overrides(data):
             match["homeScore"] = home_score
             match["awayScore"] = away_score
             match["status"] = status
-    merge_player_stats(data)
     apply_match_times(data)
 
 
@@ -158,6 +166,58 @@ def apply_live_score_updates(data):
         match["status"] = "Live"
         changed += 1
     return changed
+
+
+def normalize_team_name(team):
+    aliases = {
+        "Ivory Coast": "Côte d'Ivoire",
+    }
+    return aliases.get(team, team)
+
+
+def parse_golden_boot_stats(text):
+    start = text.find("Minutes")
+    if start == -1:
+        return []
+    end = text.find("See More", start)
+    chunk = text[start + len("Minutes") : end if end != -1 else len(text)]
+    team_names = sorted({team for teams in GROUPS.values() for team in teams} | {"Ivory Coast"}, key=len, reverse=True)
+    team_pattern = "|".join(re.escape(team) for team in team_names)
+    row_pattern = re.compile(rf"(.+?)\s*({team_pattern})\s+(\d+)\s+(\d+)\s+(\d+)(?=\s+\S|\s*$)")
+    rows = []
+    for match in row_pattern.finditer(chunk):
+        player, team, goals, assists, minutes = match.groups()
+        player = player.strip()
+        if not player:
+            continue
+        rows.append(
+            {
+                "player": player,
+                "team": normalize_team_name(team),
+                "goals": int(goals),
+                "assists": int(assists),
+                "yellowCards": 0,
+                "redCards": 0,
+                "minutes": int(minutes),
+            }
+        )
+    return rows
+
+
+def refresh_player_stats(data):
+    try:
+        text = strip_html(fetch_text(PLAYER_STATS_URL))
+    except (urllib.error.URLError, TimeoutError):
+        if not data.get("playerStats"):
+            merge_player_stats(data)
+        return len(data.get("playerStats", []))
+    rows = parse_golden_boot_stats(text)
+    if not rows:
+        if not data.get("playerStats"):
+            merge_player_stats(data)
+        return len(data.get("playerStats", []))
+    merge_player_stats(data, rows)
+    return len(rows)
 
 
 def write_dynamic_snapshot(data):
@@ -324,6 +384,7 @@ def try_refresh_from_web(data):
             apply_verified_overrides(data)
         data["lastUpdated"] = utc_now()
         data["sourceNote"] = "Refresh reached the standings source, checked live match pages, and kept verified local corrections where source tables could not be parsed."
+        refresh_player_stats(data)
         update_project_data_files(data)
         generate_standings_image(data)
         save_data(data)
@@ -336,6 +397,7 @@ def try_refresh_from_web(data):
         apply_verified_overrides(data)
     data["lastUpdated"] = utc_now()
     data["sourceNote"] = f"Refreshed {changed} group table(s), checked live match pages, and validated stored score corrections."
+    refresh_player_stats(data)
     update_project_data_files(data)
     generate_standings_image(data)
     save_data(data)
@@ -398,8 +460,10 @@ class Handler(SimpleHTTPRequestHandler):
                 return
         except (urllib.error.URLError, TimeoutError, RuntimeError) as exc:
             data = load_data()
+            refresh_player_stats(data)
             data["lastUpdated"] = utc_now()
             data["sourceNote"] = f"Online refresh unavailable ({exc}). Cached data is still shown."
+            update_project_data_files(data)
             save_data(data)
             self.send_json(data)
             return

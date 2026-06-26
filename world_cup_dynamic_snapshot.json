@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-26T19:46:10.268529+00:00",
+  "lastUpdated": "2026-06-26T20:00:42.628369+00:00",
   "sourceNote": "Refreshed 11 group table(s), checked live match pages, and validated stored score corrections.",
   "groups": {
     "A": [
@@ -1344,7 +1344,17 @@
       "goals": 5,
       "assists": 0,
       "yellowCards": 0,
-      "redCards": 0
+      "redCards": 0,
+      "minutes": 188
+    },
+    {
+      "player": "Vinicius Jr.",
+      "team": "Brazil",
+      "goals": 4,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 294
     },
     {
       "player": "Kylian Mbappé",
@@ -1352,7 +1362,8 @@
       "goals": 4,
       "assists": 0,
       "yellowCards": 0,
-      "redCards": 0
+      "redCards": 0,
+      "minutes": 199
     },
     {
       "player": "Erling Haaland",
@@ -1360,7 +1371,8 @@
       "goals": 4,
       "assists": 0,
       "yellowCards": 0,
-      "redCards": 0
+      "redCards": 0,
+      "minutes": 208
     },
     {
       "player": "Deniz Undav",
@@ -1368,7 +1380,44 @@
       "goals": 3,
       "assists": 2,
       "yellowCards": 0,
-      "redCards": 0
+      "redCards": 0,
+      "minutes": 107
+    },
+    {
+      "player": "Johan Manzambi",
+      "team": "Switzerland",
+      "goals": 3,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 147
+    },
+    {
+      "player": "Brian Brobbey",
+      "team": "Netherlands",
+      "goals": 3,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 168
+    },
+    {
+      "player": "Matheus Cunha",
+      "team": "Brazil",
+      "goals": 3,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 191
+    },
+    {
+      "player": "Ismael Saibari",
+      "team": "Morocco",
+      "goals": 3,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 255
     },
     {
       "player": "Jonathan David",
@@ -1376,23 +1425,125 @@
       "goals": 3,
       "assists": 0,
       "yellowCards": 0,
-      "redCards": 0
+      "redCards": 0,
+      "minutes": 271
+    },
+    {
+      "player": "Mikel Oyarzabal",
+      "team": "Spain",
+      "goals": 2,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 144
+    },
+    {
+      "player": "Crysencio Summerville",
+      "team": "Netherlands",
+      "goals": 2,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 147
+    },
+    {
+      "player": "Maxi Araujo",
+      "team": "Uruguay",
+      "goals": 2,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 174
+    },
+    {
+      "player": "Ruben Vargas",
+      "team": "Switzerland",
+      "goals": 2,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 194
+    },
+    {
+      "player": "Ayase Ueda",
+      "team": "Japan",
+      "goals": 2,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 245
+    },
+    {
+      "player": "Cody Gakpo",
+      "team": "Netherlands",
+      "goals": 2,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 268
+    },
+    {
+      "player": "Ermin Mahmic",
+      "team": "Bosnia and Herzegovina",
+      "goals": 2,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 37
+    },
+    {
+      "player": "Anthony Elanga",
+      "team": "Sweden",
+      "goals": 2,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 149
     },
     {
       "player": "Nicolas Pépé",
       "team": "Côte d'Ivoire",
-      "goals": 3,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0
-    },
-    {
-      "player": "Vinícius Júnior",
-      "team": "Brazil",
       "goals": 2,
       "assists": 0,
       "yellowCards": 0,
-      "redCards": 0
+      "redCards": 0,
+      "minutes": 164
+    },
+    {
+      "player": "Folarin Balogun",
+      "team": "United States",
+      "goals": 2,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 180
+    },
+    {
+      "player": "Ismaila Sarr",
+      "team": "Senegal",
+      "goals": 2,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 186
+    },
+    {
+      "player": "Cyle Larin",
+      "team": "Canada",
+      "goals": 2,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 187
+    },
+    {
+      "player": "Elijah Just",
+      "team": "New Zealand",
+      "goals": 2,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 190
     },
     {
       "player": "Cristiano Ronaldo",
@@ -1400,7 +1551,8 @@
       "goals": 2,
       "assists": 0,
       "yellowCards": 0,
-      "redCards": 0
+      "redCards": 0,
+      "minutes": 202
     },
     {
       "player": "Harry Kane",
@@ -1408,63 +1560,503 @@
       "goals": 2,
       "assists": 0,
       "yellowCards": 0,
-      "redCards": 0
+      "redCards": 0,
+      "minutes": 204
     },
     {
-      "player": "Cody Gakpo",
-      "team": "Netherlands",
+      "player": "Daniel Muñoz",
+      "team": "Colombia",
       "goals": 2,
       "assists": 0,
       "yellowCards": 0,
-      "redCards": 0
+      "redCards": 0,
+      "minutes": 207
     },
     {
-      "player": "Brian Brobbey",
-      "team": "Netherlands",
+      "player": "Kai Havertz",
+      "team": "Germany",
       "goals": 2,
       "assists": 0,
       "yellowCards": 0,
-      "redCards": 0
+      "redCards": 0,
+      "minutes": 256
+    },
+    {
+      "player": "Julian Quinones",
+      "team": "Mexico",
+      "goals": 2,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 270
+    },
+    {
+      "player": "Daichi Kamada",
+      "team": "Japan",
+      "goals": 2,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 278
+    },
+    {
+      "player": "Yasin Ayari",
+      "team": "Sweden",
+      "goals": 2,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 286
+    },
+    {
+      "player": "Nathan-Dylan Saliba",
+      "team": "Canada",
+      "goals": 1,
+      "assists": 2,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 143
+    },
+    {
+      "player": "Mohamed Salah",
+      "team": "Egypt",
+      "goals": 1,
+      "assists": 2,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 168
+    },
+    {
+      "player": "Breel Embolo",
+      "team": "Switzerland",
+      "goals": 1,
+      "assists": 2,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 283
+    },
+    {
+      "player": "Alexander Isak",
+      "team": "Sweden",
+      "goals": 1,
+      "assists": 2,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 296
+    },
+    {
+      "player": "Viktor Gyokeres",
+      "team": "Sweden",
+      "goals": 1,
+      "assists": 2,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 303
+    },
+    {
+      "player": "Soufiane Rahimi",
+      "team": "Morocco",
+      "goals": 1,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 54
+    },
+    {
+      "player": "Promise David",
+      "team": "Canada",
+      "goals": 1,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 58
     },
     {
       "player": "Luis Romo",
       "team": "Mexico",
       "goals": 1,
-      "assists": 0,
+      "assists": 1,
       "yellowCards": 0,
-      "redCards": 0
+      "redCards": 0,
+      "minutes": 141
     },
     {
-      "player": "Johan Manzambi",
-      "team": "Switzerland",
+      "player": "Ousmane Dembélé",
+      "team": "France",
+      "goals": 1,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 156
+    },
+    {
+      "player": "Mostafa Ziko",
+      "team": "Egypt",
+      "goals": 1,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 160
+    },
+    {
+      "player": "Nathaniel Brown",
+      "team": "Germany",
+      "goals": 1,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 182
+    },
+    {
+      "player": "Sebastian Berhalter",
+      "team": "United States",
+      "goals": 1,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 183
+    },
+    {
+      "player": "Hwang In-beom",
+      "team": "South Korea",
+      "goals": 1,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 187
+    },
+    {
+      "player": "Baris Yilmaz",
+      "team": "Türkiye",
+      "goals": 1,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 196
+    },
+    {
+      "player": "Luis Díaz",
+      "team": "Colombia",
+      "goals": 1,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 199
+    },
+    {
+      "player": "Ramin Rezaeian",
+      "team": "Iran",
+      "goals": 1,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 205
+    },
+    {
+      "player": "Alex Freeman",
+      "team": "United States",
+      "goals": 1,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 232
+    },
+    {
+      "player": "Felix Nmecha",
+      "team": "Germany",
+      "goals": 1,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 250
+    },
+    {
+      "player": "Keito Nakamura",
+      "team": "Japan",
+      "goals": 1,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 261
+    },
+    {
+      "player": "Virgil van Dijk",
+      "team": "Netherlands",
+      "goals": 1,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 298
+    },
+    {
+      "player": "Achraf Hakimi",
+      "team": "Morocco",
+      "goals": 1,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 309
+    },
+    {
+      "player": "Kaan Ayhan",
+      "team": "Türkiye",
       "goals": 1,
       "assists": 0,
       "yellowCards": 0,
-      "redCards": 0
+      "redCards": 0,
+      "minutes": 12
     },
     {
-      "player": "Rubén Vargas",
-      "team": "Switzerland",
+      "player": "Mikel Svanberg",
+      "team": "Sweden",
       "goals": 1,
       "assists": 0,
       "yellowCards": 0,
-      "redCards": 0
+      "redCards": 0,
+      "minutes": 13
     },
     {
-      "player": "Amad Diallo",
-      "team": "Côte d'Ivoire",
+      "player": "Mahmoud Trezeguet",
+      "team": "Egypt",
       "goals": 1,
       "assists": 0,
       "yellowCards": 0,
-      "redCards": 0
+      "redCards": 0,
+      "minutes": 25
     },
     {
-      "player": "Leroy Sané",
+      "player": "Gessime Yassine",
+      "team": "Morocco",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 28
+    },
+    {
+      "player": "Jaminton Campaz",
+      "team": "Colombia",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 29
+    },
+    {
+      "player": "Rafael Leão",
+      "team": "Portugal",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 37
+    },
+    {
+      "player": "Marcus Rashford",
+      "team": "England",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 38
+    },
+    {
+      "player": "Helio Varela",
+      "team": "Cabo Verde",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 40
+    },
+    {
+      "player": "Leo Østigard",
+      "team": "Norway",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 41
+    },
+    {
+      "player": "Ante Budimir",
+      "team": "Croatia",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 50
+    },
+    {
+      "player": "Nadhir Benbouali",
+      "team": "Algeria",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 52
+    },
+    {
+      "player": "Oh Hyeon-gyu",
+      "team": "South Korea",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 67
+    },
+    {
+      "player": "Lamine Yamal",
+      "team": "Spain",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 69
+    },
+    {
+      "player": "Hasan Al Haydos",
+      "team": "Qatar",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 70
+    },
+    {
+      "player": "Ibrahim Mbaye",
+      "team": "Senegal",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 71
+    },
+    {
+      "player": "Jovo Lukic",
+      "team": "Bosnia and Herzegovina",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 77
+    },
+    {
+      "player": "Mateo Chávez",
+      "team": "Mexico",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 82
+    },
+    {
+      "player": "Marko Arnautovic",
+      "team": "Austria",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 88
+    },
+    {
+      "player": "Marcus Pedersen",
+      "team": "Norway",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 92
+    },
+    {
+      "player": "Hazem Mastouri",
+      "team": "Tunisia",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 93
+    },
+    {
+      "player": "Alvaro Fidalgo",
+      "team": "Mexico",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 94
+    },
+    {
+      "player": "Gio Reyna",
+      "team": "United States",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 101
+    },
+    {
+      "player": "Abdulelah Al-Amri",
+      "team": "Saudi Arabia",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 102
+    },
+    {
+      "player": "Aymen Hussein",
+      "team": "Iraq",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 103
+    },
+    {
+      "player": "Mauricio",
+      "team": "Paraguay",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 104
+    },
+    {
+      "player": "Bradley Barcola",
+      "team": "France",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 106
+    },
+    {
+      "player": "Petar Musa",
+      "team": "Croatia",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 116
+    },
+    {
+      "player": "Auston Trusty",
+      "team": "United States",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 123
+    },
+    {
+      "player": "Nico Schlotterbeck",
       "team": "Germany",
       "goals": 1,
       "assists": 0,
       "yellowCards": 0,
-      "redCards": 0
+      "redCards": 0,
+      "minutes": 145
     },
     {
       "player": "Nilson Angulo",
@@ -1472,8 +2064,360 @@
       "goals": 1,
       "assists": 0,
       "yellowCards": 0,
-      "redCards": 0
+      "redCards": 0,
+      "minutes": 157
+    },
+    {
+      "player": "Amine Gouiri",
+      "team": "Algeria",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 158
+    },
+    {
+      "player": "Agustin Canobbio",
+      "team": "Uruguay",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 160
+    },
+    {
+      "player": "Abbosbek Fayzullaev",
+      "team": "Uzbekistan",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 161
+    },
+    {
+      "player": "Junya Ito",
+      "team": "Japan",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 161
+    },
+    {
+      "player": "Emam Ashour",
+      "team": "Egypt",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 163
+    },
+    {
+      "player": "Jude Bellingham",
+      "team": "England",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 164
+    },
+    {
+      "player": "Raul Jimenez",
+      "team": "Mexico",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 164
+    },
+    {
+      "player": "Thapelo Maseko",
+      "team": "South Africa",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 167
+    },
+    {
+      "player": "Amad Diallo",
+      "team": "Côte d'Ivoire",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 169
+    },
+    {
+      "player": "Daizen Maeda",
+      "team": "Japan",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 171
+    },
+    {
+      "player": "Romano Schmid",
+      "team": "Austria",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 171
+    },
+    {
+      "player": "Mohammad Mohebbi",
+      "team": "Iran",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 175
+    },
+    {
+      "player": "Kevin Lenini",
+      "team": "Cabo Verde",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 177
+    },
+    {
+      "player": "Alexandre Nuno Mendes",
+      "team": "Portugal",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 178
+    },
+    {
+      "player": "Martin Baturina",
+      "team": "Croatia",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 182
+    },
+    {
+      "player": "Joāo Neves",
+      "team": "Portugal",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 182
+    },
+    {
+      "player": "Matías Galaraza",
+      "team": "Paraguay",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 199
+    },
+    {
+      "player": "Omar Rekik",
+      "team": "Tunisia",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 201
+    },
+    {
+      "player": "Wilson Isidor",
+      "team": "Haiti",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 201
+    },
+    {
+      "player": "Yoane Wissa",
+      "team": "DR Congo",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 202
+    },
+    {
+      "player": "Teboho Mokoena",
+      "team": "South Africa",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 202
+    },
+    {
+      "player": "Kerim Alajbegovic",
+      "team": "Bosnia and Herzegovina",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 202
+    },
+    {
+      "player": "Ali Olwan",
+      "team": "Jordan",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 203
+    },
+    {
+      "player": "Michal Sadilek",
+      "team": "Czechia",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 204
+    },
+    {
+      "player": "Finn Surman",
+      "team": "New Zealand",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 206
+    },
+    {
+      "player": "Nestory Irankunda",
+      "team": "Australia",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 208
+    },
+    {
+      "player": "Nizar al-Rashdan",
+      "team": "Jordan",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 209
+    },
+    {
+      "player": "Caleb Yirenkyi",
+      "team": "Ghana",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 209
+    },
+    {
+      "player": "Jamal Musiala",
+      "team": "Germany",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 237
+    },
+    {
+      "player": "Livano Comenencia",
+      "team": "Curaçao",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 253
+    },
+    {
+      "player": "Connor Metcalfe",
+      "team": "Australia",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 255
+    },
+    {
+      "player": "Leroy Sané",
+      "team": "Germany",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 268
+    },
+    {
+      "player": "John McGinn",
+      "team": "Scotland",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 278
+    },
+    {
+      "player": "Franck Kessié",
+      "team": "Côte d'Ivoire",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 288
+    },
+    {
+      "player": "Jan Paul van Hecke",
+      "team": "Netherlands",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 298
+    },
+    {
+      "player": "Ladislav Krejci",
+      "team": "Czechia",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 301
+    },
+    {
+      "player": "Granit Xhaka",
+      "team": "Switzerland",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 304
+    },
+    {
+      "player": "Gonzalo Plata",
+      "team": "Ecuador",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 304
+    },
+    {
+      "player": "Arda Guler",
+      "team": "Türkiye",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 314
     }
   ],
-  "playerStatsNote": "Player stats were checked against June 26 Golden Boot reports. Goals are updated for reported leaders; assists are only filled where a reliable report listed them, and cards still require an official feed."
+  "playerStatsNote": "Player goals and assists refresh from the Golden Boot table. Yellow and red cards stay at 0 until a reliable card feed is connected."
 }

@@ -97,6 +97,52 @@ const HISTORY_FINISHES = [
   ["third", "Third"],
   ["fourth", "Fourth"],
 ];
+const HISTORY_STAGE_OVERRIDES = {
+  Algeria: { 1982: "Group stage", 1986: "Group stage", 2010: "Group stage", 2014: "Round of 16" },
+  Argentina: { 1934: "Round of 16", 1958: "Group stage", 1962: "Group stage", 1974: "Second group stage", 1982: "Second group stage", 1994: "Round of 16", 1998: "Quarterfinal", 2002: "Group stage", 2006: "Quarterfinal", 2010: "Quarterfinal", 2018: "Round of 16" },
+  Australia: { 1974: "Group stage", 2006: "Round of 16", 2010: "Group stage", 2014: "Group stage", 2018: "Group stage", 2022: "Round of 16" },
+  Austria: { 1978: "Second group stage", 1982: "Second group stage", 1990: "Group stage", 1998: "Group stage" },
+  Belgium: { 1930: "Group stage", 1934: "Round of 16", 1938: "Round of 16", 1954: "Group stage", 1970: "Group stage", 1982: "Second group stage", 1990: "Round of 16", 1994: "Round of 16", 1998: "Group stage", 2002: "Round of 16", 2014: "Quarterfinal", 2022: "Group stage" },
+  "Bosnia and Herzegovina": { 2014: "Group stage" },
+  Brazil: { 1930: "Group stage", 1934: "Round of 16", 1966: "Group stage", 1982: "Second group stage", 1986: "Quarterfinal", 1990: "Round of 16", 2006: "Quarterfinal", 2010: "Quarterfinal", 2018: "Quarterfinal", 2022: "Quarterfinal" },
+  Canada: { 1986: "Group stage", 2022: "Group stage" },
+  Colombia: { 1962: "Group stage", 1990: "Round of 16", 1994: "Group stage", 1998: "Group stage", 2014: "Quarterfinal", 2018: "Round of 16" },
+  Croatia: { 2002: "Group stage", 2006: "Group stage", 2014: "Group stage" },
+  Czechia: { 1982: "Group stage", 2006: "Group stage" },
+  "Côte d'Ivoire": { 2006: "Group stage", 2010: "Group stage", 2014: "Group stage" },
+  "DR Congo": { 1974: "Group stage" },
+  Ecuador: { 2002: "Group stage", 2006: "Round of 16", 2014: "Group stage", 2022: "Group stage" },
+  Egypt: { 1934: "Round of 16", 1990: "Group stage", 2018: "Group stage" },
+  England: { 1950: "Group stage", 1954: "Quarterfinal", 1958: "Group stage", 1962: "Quarterfinal", 1970: "Quarterfinal", 1982: "Second group stage", 1986: "Quarterfinal", 1998: "Round of 16", 2002: "Quarterfinal", 2006: "Quarterfinal", 2010: "Round of 16", 2014: "Group stage", 2022: "Quarterfinal" },
+  France: { 1930: "Group stage", 1934: "Round of 16", 1938: "Quarterfinal", 1954: "Group stage", 1966: "Group stage", 1978: "Group stage", 2002: "Group stage", 2010: "Group stage", 2014: "Quarterfinal" },
+  Germany: { 1938: "Round of 16", 1978: "Second group stage", 1994: "Quarterfinal", 1998: "Quarterfinal", 2018: "Group stage", 2022: "Group stage" },
+  Ghana: { 2006: "Round of 16", 2010: "Quarterfinal", 2014: "Group stage", 2022: "Group stage" },
+  Haiti: { 1974: "Group stage" },
+  Iran: { 1978: "Group stage", 1998: "Group stage", 2006: "Group stage", 2014: "Group stage", 2018: "Group stage", 2022: "Group stage" },
+  Iraq: { 1986: "Group stage" },
+  Japan: { 1998: "Group stage", 2002: "Round of 16", 2006: "Group stage", 2010: "Round of 16", 2014: "Group stage", 2018: "Round of 16", 2022: "Round of 16" },
+  Mexico: { 1930: "Group stage", 1950: "Group stage", 1954: "Group stage", 1958: "Group stage", 1962: "Group stage", 1966: "Group stage", 1970: "Quarterfinal", 1978: "Group stage", 1986: "Quarterfinal", 1994: "Round of 16", 1998: "Round of 16", 2002: "Round of 16", 2006: "Round of 16", 2010: "Round of 16", 2014: "Round of 16", 2018: "Round of 16", 2022: "Group stage" },
+  Morocco: { 1970: "Group stage", 1986: "Round of 16", 1994: "Group stage", 1998: "Group stage", 2018: "Group stage" },
+  Netherlands: { 1934: "Round of 16", 1938: "Round of 16", 1990: "Round of 16", 1994: "Quarterfinal", 2006: "Round of 16", 2022: "Quarterfinal" },
+  "New Zealand": { 1982: "Group stage", 2010: "Group stage" },
+  Norway: { 1938: "Round of 16", 1994: "Group stage", 1998: "Round of 16" },
+  Panama: { 2018: "Group stage" },
+  Paraguay: { 1930: "Group stage", 1950: "Group stage", 1958: "Group stage", 1986: "Round of 16", 1998: "Round of 16", 2002: "Round of 16", 2006: "Group stage", 2010: "Quarterfinal" },
+  Portugal: { 1986: "Group stage", 2002: "Group stage", 2010: "Round of 16", 2014: "Group stage", 2018: "Round of 16", 2022: "Quarterfinal" },
+  Qatar: { 2022: "Group stage" },
+  "Saudi Arabia": { 1994: "Round of 16", 1998: "Group stage", 2002: "Group stage", 2006: "Group stage", 2018: "Group stage", 2022: "Group stage" },
+  Scotland: { 1954: "Group stage", 1958: "Group stage", 1974: "Group stage", 1978: "Group stage", 1982: "Group stage", 1986: "Group stage", 1990: "Group stage", 1998: "Group stage" },
+  Senegal: { 2002: "Quarterfinal", 2018: "Group stage", 2022: "Round of 16" },
+  "South Africa": { 1998: "Group stage", 2002: "Group stage", 2010: "Group stage" },
+  "South Korea": { 1954: "Group stage", 1986: "Group stage", 1990: "Group stage", 1994: "Group stage", 1998: "Group stage", 2006: "Group stage", 2010: "Round of 16", 2014: "Group stage", 2018: "Group stage", 2022: "Round of 16" },
+  Spain: { 1934: "Quarterfinal", 1962: "Group stage", 1966: "Group stage", 1978: "Group stage", 1982: "Second group stage", 1986: "Quarterfinal", 1990: "Round of 16", 1994: "Quarterfinal", 1998: "Group stage", 2002: "Quarterfinal", 2006: "Round of 16", 2014: "Group stage", 2018: "Round of 16", 2022: "Round of 16" },
+  Sweden: { 1934: "Quarterfinal", 1970: "Group stage", 1974: "Second group stage", 1978: "Group stage", 1990: "Group stage", 2002: "Round of 16", 2006: "Round of 16", 2018: "Quarterfinal" },
+  Switzerland: { 1934: "Quarterfinal", 1938: "Quarterfinal", 1950: "Group stage", 1954: "Quarterfinal", 1962: "Group stage", 1966: "Group stage", 1994: "Round of 16", 2006: "Round of 16", 2010: "Group stage", 2014: "Round of 16", 2018: "Round of 16", 2022: "Round of 16" },
+  Tunisia: { 1978: "Group stage", 1998: "Group stage", 2002: "Group stage", 2006: "Group stage", 2018: "Group stage", 2022: "Group stage" },
+  Türkiye: { 1954: "Group stage" },
+  "United States": { 1934: "Round of 16", 1950: "Group stage", 1990: "Group stage", 1994: "Round of 16", 1998: "Group stage", 2002: "Quarterfinal", 2006: "Group stage", 2010: "Round of 16", 2014: "Round of 16", 2022: "Round of 16" },
+  Uruguay: { 1962: "Group stage", 1966: "Quarterfinal", 1974: "Group stage", 1986: "Round of 16", 1990: "Round of 16", 2002: "Group stage", 2014: "Round of 16", 2018: "Quarterfinal", 2022: "Group stage" },
+};
 
 function showToast(message) {
   toast.textContent = message;
@@ -230,7 +276,7 @@ function renderHistoryControls() {
 function selectedCountryFinish(row, selected) {
   if (!selected) return "Choose a country";
   const finish = HISTORY_FINISHES.find(([key]) => normalizeCountry(row[key]) === selected);
-  return finish ? finish[1] : "Outside top 4";
+  return finish ? finish[1] : HISTORY_STAGE_OVERRIDES[selected]?.[row.year] || "Did not qualify";
 }
 
 function historyCountryCell(country) {
@@ -248,23 +294,32 @@ function renderHistory() {
         <td>${historyCountryCell(row.runnerUp)}</td>
         <td>${historyCountryCell(row.third)}</td>
         <td>${historyCountryCell(row.fourth)}</td>
-        <td class="${selected && selectedCountryFinish(row, selected) !== "Outside top 4" ? "history-hit" : ""}">${selectedCountryFinish(row, selected)}</td>
+        <td class="${selected && HISTORY_FINISHES.some(([, label]) => label === selectedCountryFinish(row, selected)) ? "history-hit" : ""}">${selectedCountryFinish(row, selected)}</td>
       </tr>
     `,
   ).join("");
 
-  const counts = {};
+  const counts = Object.fromEntries(HISTORY_FINISHES.map(([key]) => [key, {}]));
   HISTORY_TOP_FOUR.forEach((row) => {
     HISTORY_FINISHES.forEach(([key]) => {
       const country = normalizeCountry(row[key]);
-      counts[country] = (counts[country] || 0) + 1;
+      counts[key][country] = (counts[key][country] || 0) + 1;
     });
   });
-  const sortedCounts = Object.entries(counts).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
   document.querySelector("#historyCounts").innerHTML = `
-    <h3>Total Top 4 Counts</h3>
-    <div class="count-grid">
-      ${sortedCounts.map(([country, count]) => `<span>${teamLabel(country)} <strong>${count}</strong></span>`).join("")}
+    <h3>Placement Counts By Country</h3>
+    <div class="placement-grid">
+      ${HISTORY_FINISHES.map(([key, label]) => {
+        const sortedCounts = Object.entries(counts[key]).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+        return `
+          <section class="placement-card">
+            <h4>${label}</h4>
+            <div class="count-grid">
+              ${sortedCounts.map(([country, count]) => `<span>${teamLabel(country)} <strong>${count}</strong></span>`).join("")}
+            </div>
+          </section>
+        `;
+      }).join("")}
     </div>
   `;
 }

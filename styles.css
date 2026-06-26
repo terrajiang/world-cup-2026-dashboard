@@ -551,10 +551,28 @@ tr.eliminated {
   margin: 0 0 10px;
 }
 
+.placement-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(4, minmax(210px, 1fr));
+}
+
+.placement-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.placement-card h4 {
+  color: var(--teal);
+  font-size: 14px;
+  margin: 0 0 10px;
+}
+
 .count-grid {
   display: grid;
   gap: 8px;
-  grid-template-columns: repeat(4, minmax(180px, 1fr));
 }
 
 .count-grid span {
@@ -880,6 +898,10 @@ tr.eliminated {
   }
 
   .count-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .placement-grid {
     grid-template-columns: 1fr;
   }
 

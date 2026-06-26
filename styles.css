@@ -344,12 +344,61 @@ tr.eliminated {
   border: 1px solid #c9c1b3;
   border-radius: 2px;
   height: 12px;
+  overflow: hidden;
+  position: relative;
   width: 18px;
+}
+
+.flag-england {
+  background: white;
+}
+
+.flag-england::before,
+.flag-england::after {
+  background: #c8102e;
+  content: "";
+  left: 0;
+  position: absolute;
+  top: 0;
+}
+
+.flag-england::before {
+  height: 2px;
+  top: 5px;
+  width: 100%;
+}
+
+.flag-england::after {
+  height: 100%;
+  left: 8px;
+  width: 2px;
+}
+
+.flag-scotland {
+  background: #005eb8;
+}
+
+.flag-scotland::before,
+.flag-scotland::after {
+  background: white;
+  content: "";
+  height: 2px;
+  left: -3px;
+  position: absolute;
+  top: 5px;
+  width: 24px;
+}
+
+.flag-scotland::before {
+  transform: rotate(34deg);
+}
+
+.flag-scotland::after {
+  transform: rotate(-34deg);
 }
 
 .flag-yugoslavia {
   background: linear-gradient(to bottom, #1f4aa8 0 33%, white 33% 66%, #c9232d 66% 100%);
-  position: relative;
 }
 
 .flag-yugoslavia::after {
@@ -364,7 +413,6 @@ tr.eliminated {
 
 .flag-soviet {
   background: #c9232d;
-  position: relative;
 }
 
 .flag-soviet::after {

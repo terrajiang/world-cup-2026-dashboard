@@ -33,7 +33,7 @@ const TEAM_FLAGS = {
   "DR Congo": "🇨🇩",
   Ecuador: "🇪🇨",
   Egypt: "🇪🇬",
-  England: "🏴",
+  England: "css:england",
   France: "🇫🇷",
   Germany: "🇩🇪",
   Ghana: "🇬🇭",
@@ -55,7 +55,7 @@ const TEAM_FLAGS = {
   Portugal: "🇵🇹",
   Qatar: "🇶🇦",
   "Saudi Arabia": "🇸🇦",
-  Scotland: "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+  Scotland: "css:scotland",
   Senegal: "🇸🇳",
   "South Africa": "🇿🇦",
   "South Korea": "🇰🇷",
@@ -73,7 +73,7 @@ const TEAM_FLAGS = {
   Yugoslavia: "css:yugoslavia",
 };
 const FEATURED_PLAYERS = new Set(["Kylian Mbappé", "Lionel Messi", "Cristiano Ronaldo", "Erling Haaland"]);
-const PST_SLOTS = ["9:00 AM PST", "11:00 AM PST", "1:00 PM PST", "3:00 PM PST", "5:00 PM PST", "7:00 PM PST"];
+const PST_SLOTS = ["9:00 AM PT", "11:00 AM PT", "1:00 PM PT", "3:00 PM PT", "5:00 PM PT", "7:00 PM PT"];
 const HISTORY_TOP_FOUR = [
   { year: 1930, champion: "Uruguay", runnerUp: "Argentina", third: "United States", fourth: "Yugoslavia" },
   { year: 1934, champion: "Italy", runnerUp: "Czechoslovakia", third: "Germany", fourth: "Austria" },
@@ -209,6 +209,11 @@ function teamLabel(team) {
   return `${flag ? `<span class="flag" aria-hidden="true">${flag}</span>` : ""}<span>${team}</span>`;
 }
 
+function optionLabel(team) {
+  const flag = TEAM_FLAGS[team];
+  return `${flag && !flag.startsWith("css:") ? `${flag} ` : ""}${team}`;
+}
+
 function normalizeCountry(country) {
   const aliases = {
     "West Germany": "Germany",
@@ -220,6 +225,7 @@ function normalizeCountry(country) {
 
 function pstTime(match, collection) {
   if (match.timePst) return match.timePst;
+  if (match.date >= "2026-06-26") return "Time TBD";
   const sameDate = collection.filter((item) => item.date === match.date);
   const index = Math.max(
     0,
@@ -267,7 +273,7 @@ function renderLookupControls() {
   const selectedCountry = countryLookup.value;
   const selectedDate = dateLookup.value;
   countryLookup.innerHTML = `<option value="">All countries</option>${countryOptions()
-    .map((team) => `<option value="${team}">${TEAM_FLAGS[team] ? `${TEAM_FLAGS[team]} ` : ""}${team}</option>`)
+    .map((team) => `<option value="${team}">${optionLabel(team)}</option>`)
     .join("")}`;
   dateLookup.innerHTML = `<option value="">All dates</option>${gameDates()
     .map((date) => `<option value="${date}">${formatDateLong(date)}</option>`)
@@ -279,7 +285,7 @@ function renderLookupControls() {
 function renderHistoryControls() {
   const selected = historyCountry.value;
   historyCountry.innerHTML = `<option value="">All countries</option>${countryOptions()
-    .map((team) => `<option value="${team}">${TEAM_FLAGS[team] ? `${TEAM_FLAGS[team]} ` : ""}${team}</option>`)
+    .map((team) => `<option value="${team}">${optionLabel(team)}</option>`)
     .join("")}`;
   historyCountry.value = selected;
 }

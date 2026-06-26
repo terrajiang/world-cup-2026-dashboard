@@ -7,7 +7,7 @@ import subprocess
 import sys
 import urllib.error
 import urllib.request
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse
@@ -31,6 +31,34 @@ VERIFIED_MATCH_SCORES = {
     ("F", "Japan", "Sweden"): (1, 1, "FT"),
 }
 PLAYER_STATS_NOTE = "Player stats were checked against June 26 Golden Boot reports. Goals are updated for reported leaders; assists are only filled where a reliable report listed them, and cards still require an official feed."
+MATCH_TIMES_PACIFIC = {
+    ("G", "New Zealand", "Belgium"): "5:00 PM PT",
+    ("G", "Egypt", "Iran"): "5:00 PM PT",
+    ("H", "Cabo Verde", "Saudi Arabia"): "8:00 PM PT",
+    ("H", "Uruguay", "Spain"): "8:00 PM PT",
+    ("I", "Norway", "France"): "12:00 PM PT",
+    ("I", "Senegal", "Iraq"): "12:00 PM PT",
+    ("J", "Algeria", "Austria"): "7:00 PM PT",
+    ("J", "Jordan", "Argentina"): "7:00 PM PT",
+    ("K", "Colombia", "Portugal"): "4:30 PM PT",
+    ("K", "DR Congo", "Uzbekistan"): "4:30 PM PT",
+    ("L", "Panama", "England"): "2:00 PM PT",
+    ("L", "Croatia", "Ghana"): "2:00 PM PT",
+}
+LIVE_MATCH_SOURCES = {
+    ("G", "New Zealand", "Belgium"): "https://www.theguardian.com/football/live/2026/jun/26/new-zealand-v-belgium-world-cup-2026-live-updates",
+    ("G", "Egypt", "Iran"): "https://www.theguardian.com/football/live/2026/jun/26/egypt-v-iran-world-cup-2026-live-updates",
+    ("H", "Cabo Verde", "Saudi Arabia"): "https://www.theguardian.com/football/live/2026/jun/26/cabo-verde-v-saudi-arabia-world-cup-2026-live-updates",
+    ("H", "Uruguay", "Spain"): "https://www.theguardian.com/football/live/2026/jun/26/uruguay-v-spain-world-cup-2026-live-updates",
+    ("I", "Norway", "France"): "https://www.theguardian.com/football/live/2026/jun/26/norway-v-france-world-cup-2026-live-updates",
+    ("I", "Senegal", "Iraq"): "https://www.theguardian.com/football/live/2026/jun/26/senegal-v-iraq-world-cup-2026-live-updates",
+    ("J", "Algeria", "Austria"): "https://www.theguardian.com/football/live/2026/jun/27/algeria-v-austria-world-cup-2026-live-updates",
+    ("J", "Jordan", "Argentina"): "https://www.theguardian.com/football/live/2026/jun/27/jordan-v-argentina-world-cup-2026-live-updates",
+    ("K", "Colombia", "Portugal"): "https://www.theguardian.com/football/live/2026/jun/27/colombia-v-portugal-world-cup-2026-live-updates",
+    ("K", "DR Congo", "Uzbekistan"): "https://www.theguardian.com/football/live/2026/jun/27/dr-congo-v-uzbekistan-world-cup-2026-live-updates",
+    ("L", "Panama", "England"): "https://www.theguardian.com/football/live/2026/jun/27/panama-v-england-world-cup-2026-live-updates",
+    ("L", "Croatia", "Ghana"): "https://www.theguardian.com/football/live/2026/jun/27/croatia-v-ghana-world-cup-2026-live-updates",
+}
 
 
 def utc_now():
@@ -44,9 +72,11 @@ def load_data():
         if "playerStats" not in data:
             data["playerStats"] = []
         apply_verified_overrides(data)
+        apply_match_times(data)
         save_data(data)
         return data
     data = seed_payload()
+    apply_match_times(data)
     save_data(data)
     return data
 
@@ -71,6 +101,13 @@ def merge_player_stats(data):
     data["playerStatsNote"] = PLAYER_STATS_NOTE
 
 
+def apply_match_times(data):
+    for match in data.get("matches", []):
+        key = (match.get("group"), match.get("home"), match.get("away"))
+        if key in MATCH_TIMES_PACIFIC:
+            match["timePst"] = MATCH_TIMES_PACIFIC[key]
+
+
 def apply_verified_overrides(data):
     for group in VERIFIED_GROUPS:
         data["groups"][group] = clone_rows(SEED_STANDINGS[group])
@@ -82,6 +119,45 @@ def apply_verified_overrides(data):
             match["awayScore"] = away_score
             match["status"] = status
     merge_player_stats(data)
+    apply_match_times(data)
+
+
+def parse_guardian_live_score(text, home, away):
+    patterns = [
+        rf"{re.escape(home)}\s+(\d+)\s*[-–]\s*(\d+)\s+{re.escape(away)}",
+        rf"{re.escape(away)}\s+(\d+)\s*[-–]\s*(\d+)\s+{re.escape(home)}",
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, text, flags=re.I)
+        if not match:
+            continue
+        first, second = map(int, match.groups())
+        if pattern.startswith(re.escape(home)):
+            return first, second
+        return second, first
+    return None
+
+
+def apply_live_score_updates(data):
+    changed = 0
+    today = date.today().isoformat()
+    for match in data.get("matches", []):
+        key = (match.get("group"), match.get("home"), match.get("away"))
+        if key not in LIVE_MATCH_SOURCES:
+            continue
+        if match.get("date") != today or match.get("status") == "FT":
+            continue
+        try:
+            text = strip_html(fetch_text(LIVE_MATCH_SOURCES[key]))
+        except (urllib.error.URLError, TimeoutError):
+            continue
+        score = parse_guardian_live_score(text, match["home"], match["away"])
+        if not score:
+            continue
+        match["homeScore"], match["awayScore"] = score
+        match["status"] = "Live"
+        changed += 1
+    return changed
 
 
 def write_dynamic_snapshot(data):
@@ -235,18 +311,31 @@ def try_refresh_from_web(data):
             data["groups"][group] = rows
             changed += 1
 
+    live_changed = apply_live_score_updates(data)
+    if live_changed:
+        recalculate_from_matches(data)
+        apply_verified_overrides(data)
+
     if changed == 0:
         apply_verified_overrides(data)
+        live_changed = apply_live_score_updates(data)
+        if live_changed:
+            recalculate_from_matches(data)
+            apply_verified_overrides(data)
         data["lastUpdated"] = utc_now()
-        data["sourceNote"] = "Refresh reached the standings source, but no group tables could be parsed. Verified Group D/E/F corrections and checked player-stat leaders are still applied."
+        data["sourceNote"] = "Refresh reached the standings source, checked live match pages, and kept verified local corrections where source tables could not be parsed."
         update_project_data_files(data)
         generate_standings_image(data)
         save_data(data)
         return data
 
     apply_verified_overrides(data)
+    live_changed = apply_live_score_updates(data)
+    if live_changed:
+        recalculate_from_matches(data)
+        apply_verified_overrides(data)
     data["lastUpdated"] = utc_now()
-    data["sourceNote"] = f"Refreshed {changed} group table(s) from SB Nation, then validated Group D/E/F with June 26 corrections. Scores remain locally editable."
+    data["sourceNote"] = f"Refreshed {changed} group table(s), checked live match pages, and validated stored score corrections."
     update_project_data_files(data)
     generate_standings_image(data)
     save_data(data)

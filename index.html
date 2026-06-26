@@ -20,6 +20,7 @@
 
     <nav class="tabs" aria-label="Dashboard views">
       <button class="tab active" data-tab="standings">Standings & Scores</button>
+      <button class="tab" data-tab="schedule">Game Log</button>
       <button class="tab" data-tab="players">Player Stats</button>
       <button class="tab" data-tab="tree">Match Tree</button>
       <button class="tab" data-tab="image">Image</button>
@@ -29,8 +30,8 @@
       <section class="panel active" id="standingsPanel">
         <div class="toolbar">
           <div class="search-wrap">
-            <label for="teamSearch">Search</label>
-            <input id="teamSearch" type="search" placeholder="Team or group" />
+            <label for="matchLookup">Match lookup</label>
+            <input id="matchLookup" type="search" placeholder="Team or date" />
           </div>
         </div>
 
@@ -47,6 +48,13 @@
               <span><strong>GF</strong> Goals for: total goals scored.</span>
             </div>
             <div class="groups-grid" id="groupsGrid"></div>
+            <section class="match-lookup">
+              <div class="section-title">
+                <h2>Match Result Lookup</h2>
+                <span>Search by team or date</span>
+              </div>
+              <div class="match-list compact" id="matchLookupResults"></div>
+            </section>
           </section>
 
           <aside class="scores-pane" hidden>
@@ -58,6 +66,14 @@
             <div id="matchesList"></div>
           </aside>
         </div>
+      </section>
+
+      <section class="panel" id="schedulePanel">
+        <div class="section-title">
+          <h2>Game Log</h2>
+          <span>Past results and future dates</span>
+        </div>
+        <div class="match-list timeline" id="scheduleList"></div>
       </section>
 
       <section class="panel" id="playersPanel">

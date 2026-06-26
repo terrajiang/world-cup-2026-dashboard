@@ -2,12 +2,13 @@ let state = null;
 
 const tabs = document.querySelectorAll(".tab");
 const standingsPanel = document.querySelector("#standingsPanel");
+const schedulePanel = document.querySelector("#schedulePanel");
 const treePanel = document.querySelector("#treePanel");
 const playersPanel = document.querySelector("#playersPanel");
 const imagePanel = document.querySelector("#imagePanel");
 const refreshBtn = document.querySelector("#refreshBtn");
 const generateImageBtn = document.querySelector("#generateImageBtn");
-const teamSearch = document.querySelector("#teamSearch");
+const matchLookup = document.querySelector("#matchLookup");
 const playerSearch = document.querySelector("#playerSearch");
 const toast = document.querySelector("#toast");
 const TEAM_FLAGS = {
@@ -108,6 +109,17 @@ function teamLabel(team) {
   return `${flag ? `<span class="flag" aria-hidden="true">${flag}</span>` : ""}<span>${team}</span>`;
 }
 
+function scoreText(match) {
+  if (match.homeScore === null || match.homeScore === undefined || match.awayScore === null || match.awayScore === undefined) {
+    return match.status === "Live" ? "Live" : "vs";
+  }
+  return `${match.homeScore} - ${match.awayScore}`;
+}
+
+function matchSearchText(match) {
+  return [match.group, match.date, formatDate(match.date), match.home, match.away, match.status].join(" ").toLowerCase();
+}
+
 function renderMeta() {
   document.querySelector("#lastUpdated").textContent = state.lastUpdated
     ? `Updated ${formatDate(state.lastUpdated)}`
@@ -124,17 +136,10 @@ function renderImagePreview() {
   }
 }
 
-function groupVisible(group, rows) {
-  const query = teamSearch.value.trim().toLowerCase();
-  if (!query) return true;
-  return group.toLowerCase().includes(query) || rows.some((row) => row.team.toLowerCase().includes(query));
-}
-
 function renderGroups() {
   const grid = document.querySelector("#groupsGrid");
   grid.innerHTML = "";
   Object.entries(state.groups).forEach(([group, rows]) => {
-    if (!groupVisible(group, rows)) return;
     const card = document.createElement("article");
     card.className = "group-card";
     card.innerHTML = `
@@ -164,17 +169,57 @@ function renderGroups() {
   });
 }
 
+function matchResultHtml(match, compact = false) {
+  const isFinished = match.status === "FT";
+  const isLive = match.status === "Live";
+  return `
+    <article class="result-card ${isFinished ? "finished" : ""} ${isLive ? "live" : ""}">
+      <div class="result-meta">
+        <span>Group ${match.group} · ${formatDate(match.date)}</span>
+        <span>${match.status}</span>
+      </div>
+      <div class="result-main">
+        <span>${teamLabel(match.home)}</span>
+        <strong>${scoreText(match)}</strong>
+        <span>${teamLabel(match.away)}</span>
+      </div>
+      ${compact ? "" : `<div class="result-date">${match.date}</div>`}
+    </article>
+  `;
+}
+
+function matchesByDate() {
+  return [...state.matches].sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
+}
+
+function renderMatchLookup() {
+  const container = document.querySelector("#matchLookupResults");
+  const query = matchLookup.value.trim().toLowerCase();
+  if (!query) {
+    container.innerHTML = `<div class="empty-state">Enter a team name or date to find matching games.</div>`;
+    return;
+  }
+  const matches = matchesByDate().filter((match) => matchSearchText(match).includes(query));
+  container.innerHTML = matches.length
+    ? matches.map((match) => matchResultHtml(match, true)).join("")
+    : `<div class="empty-state">No games found for "${matchLookup.value.trim()}".</div>`;
+}
+
+function renderSchedule() {
+  const container = document.querySelector("#scheduleList");
+  let currentDate = "";
+  container.innerHTML = matchesByDate()
+    .map((match) => {
+      const heading = match.date === currentDate ? "" : `<h3>${formatDate(match.date)}</h3>`;
+      currentDate = match.date;
+      return `${heading}${matchResultHtml(match)}`;
+    })
+    .join("");
+}
+
 function renderMatches() {
   const list = document.querySelector("#matchesList");
-  const query = teamSearch.value.trim().toLowerCase();
-  const matches = state.matches.filter((match) => {
-    if (!query) return true;
-    return (
-      match.group.toLowerCase().includes(query) ||
-      match.home.toLowerCase().includes(query) ||
-      match.away.toLowerCase().includes(query)
-    );
-  });
+  const matches = state.matches;
   list.innerHTML = matches
     .map(
       (match) => `
@@ -370,6 +415,7 @@ function drawBracketConnectors() {
   const finalRect = bracket.querySelector('[data-slot="Final"]')?.getBoundingClientRect();
   const finalCenter = finalRect ? finalRect.left + finalRect.width / 2 : mapRect.left + mapRect.width / 2;
   bracketConnections().forEach(([upperSlot, targetSlot, lowerSlot], index) => {
+    const color = index % 3 === 0 ? "#d7d1c3" : index % 3 === 1 ? "#cbd8cf" : "#d4cbe0";
     const upper = bracket.querySelector(`[data-slot="${upperSlot}"]`);
     const target = bracket.querySelector(`[data-slot="${targetSlot}"]`);
     const lower = bracket.querySelector(`[data-slot="${lowerSlot}"]`);
@@ -391,7 +437,7 @@ function drawBracketConnectors() {
         cardAnchor(target, mapRect, targetToward),
         cardAnchor(lower, mapRect, toward),
       ],
-      index % 3 === 0 ? "#d7d1c3" : index % 3 === 1 ? "#cbd8cf" : "#d4cbe0",
+      color,
     );
   });
 }
@@ -440,6 +486,8 @@ function renderPlayerStats() {
 function render() {
   renderMeta();
   renderGroups();
+  renderMatchLookup();
+  renderSchedule();
   renderMatches();
   renderBracket();
   renderPlayerStats();
@@ -455,6 +503,7 @@ tabs.forEach((tab) => {
   tab.addEventListener("click", () => {
     tabs.forEach((item) => item.classList.toggle("active", item === tab));
     standingsPanel.classList.toggle("active", tab.dataset.tab === "standings");
+    schedulePanel.classList.toggle("active", tab.dataset.tab === "schedule");
     playersPanel.classList.toggle("active", tab.dataset.tab === "players");
     treePanel.classList.toggle("active", tab.dataset.tab === "tree");
     imagePanel.classList.toggle("active", tab.dataset.tab === "image");
@@ -494,7 +543,7 @@ generateImageBtn.addEventListener("click", async () => {
   }
 });
 
-teamSearch.addEventListener("input", render);
+matchLookup.addEventListener("input", renderMatchLookup);
 playerSearch.addEventListener("input", renderPlayerStats);
 window.addEventListener("resize", drawBracketConnectors);
 document.querySelector("#bracket").addEventListener("scroll", drawBracketConnectors);

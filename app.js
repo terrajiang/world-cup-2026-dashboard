@@ -1,5 +1,4 @@
 let state = null;
-let autoTimer = null;
 
 const tabs = document.querySelectorAll(".tab");
 const standingsPanel = document.querySelector("#standingsPanel");
@@ -8,7 +7,6 @@ const playersPanel = document.querySelector("#playersPanel");
 const imagePanel = document.querySelector("#imagePanel");
 const refreshBtn = document.querySelector("#refreshBtn");
 const generateImageBtn = document.querySelector("#generateImageBtn");
-const autoRefresh = document.querySelector("#autoRefresh");
 const teamSearch = document.querySelector("#teamSearch");
 const playerSearch = document.querySelector("#playerSearch");
 const toast = document.querySelector("#toast");
@@ -226,18 +224,11 @@ function slotHtml(slot) {
   return slot.filled ? teamLabel(slot.text) : slot.text;
 }
 
-function connectorClass(side, roundIndex, matchIndex, roundSize) {
-  if (side !== "left" && side !== "right") return "";
-  const parity = matchIndex % 2 === 0 ? "upper" : "lower";
-  const edge = roundIndex === roundSize - 1 ? "to-final" : "to-next";
-  return `${edge} ${parity}`;
-}
-
-function cardHtml(match, side = "", roundIndex = 0, matchIndex = 0, roundSize = 0) {
+function cardHtml(match, side = "") {
   const home = resolveSlot(match.home);
   const away = resolveSlot(match.away);
   return `
-    <article class="tree-card ${side} ${connectorClass(side, roundIndex, matchIndex, roundSize)}">
+    <article class="tree-card ${side}" data-slot="${match.slot}">
       <div class="tree-slot">${match.slot} · ${formatDate(match.date)}</div>
       <div class="tree-pair">
         <div class="tree-team ${home.filled ? "filled" : "pending"}">${slotHtml(home)}</div>
@@ -257,7 +248,7 @@ function renderTreeSide(label, roundGroups, side) {
             (group) => `
               <section class="round-column ${side}">
                 <div class="round-heading">${group.title}</div>
-                ${group.matches.map((match, matchIndex) => cardHtml(match, side, roundGroups.indexOf(group), matchIndex, group.matches.length)).join("")}
+                ${group.matches.map((match) => cardHtml(match, side)).join("")}
               </section>
             `,
           )
@@ -290,7 +281,119 @@ function renderBracket() {
       ${cardHtml(bySlot["3P"], "final")}
     </section>
     ${renderTreeSide("Right Side", right, "right")}
+    <svg class="connector-layer" id="connectorLayer" aria-hidden="true"></svg>
   `;
+  requestAnimationFrame(drawBracketConnectors);
+}
+
+function branchPairs(prefix, count, targetPrefix) {
+  return Array.from({ length: count }, (_, index) => [
+    `${prefix}-${index * 2 + 1}`,
+    `${targetPrefix}-${index + 1}`,
+    `${prefix}-${index * 2 + 2}`,
+  ]);
+}
+
+function bracketConnections() {
+  return [
+    ...branchPairs("R32", 8, "R16"),
+    ...branchPairs("R16", 4, "QF"),
+    ...branchPairs("QF", 2, "SF"),
+    ["SF-1", "Final", "SF-2"],
+    ["SF-1", "3P", "SF-2"],
+  ];
+}
+
+function cardAnchor(card, mapRect, towardCenter) {
+  const bracket = document.querySelector("#bracket");
+  const rect = card.getBoundingClientRect();
+  const scrollLeft = bracket?.scrollLeft || 0;
+  const scrollTop = bracket?.scrollTop || 0;
+  const y = rect.top - mapRect.top + rect.height / 2 + scrollTop;
+  const left = rect.left - mapRect.left + scrollLeft;
+  const right = rect.right - mapRect.left + scrollLeft;
+  if (towardCenter === "left") return { x: left, y };
+  if (towardCenter === "right") return { x: right, y };
+  return { x: left + rect.width / 2, y };
+}
+
+function drawCurve(svg, from, to, color) {
+  const direction = to.x > from.x ? 1 : -1;
+  const bend = Math.max(52, Math.min(180, Math.abs(to.x - from.x) * 0.42));
+  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path.setAttribute("d", `M ${from.x} ${from.y} C ${from.x + direction * bend} ${from.y}, ${to.x - direction * bend} ${to.y}, ${to.x} ${to.y}`);
+  path.setAttribute("fill", "none");
+  path.setAttribute("stroke", color);
+  path.setAttribute("stroke-width", "2");
+  path.setAttribute("stroke-linecap", "round");
+  path.setAttribute("stroke-linejoin", "round");
+  svg.appendChild(path);
+}
+
+function drawBranch(svg, points, color) {
+  const [a, target, b] = points;
+  const midX = (a.x + b.x) / 2;
+  const bend = Math.max(32, Math.min(120, Math.abs(target.x - midX) * 0.45));
+  const outDirection = target.x > midX ? 1 : -1;
+  const stemX = midX + outDirection * bend;
+  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path.setAttribute(
+    "d",
+    [
+      `M ${a.x} ${a.y}`,
+      `C ${a.x + outDirection * bend} ${a.y}, ${stemX} ${a.y}, ${stemX} ${(a.y + b.y) / 2}`,
+      `C ${stemX} ${b.y}, ${b.x + outDirection * bend} ${b.y}, ${b.x} ${b.y}`,
+      `M ${stemX} ${(a.y + b.y) / 2}`,
+      `C ${stemX} ${target.y}, ${target.x - outDirection * bend} ${target.y}, ${target.x} ${target.y}`,
+    ].join(" "),
+  );
+  path.setAttribute("fill", "none");
+  path.setAttribute("stroke", color);
+  path.setAttribute("stroke-width", "2");
+  path.setAttribute("stroke-linecap", "round");
+  path.setAttribute("stroke-linejoin", "round");
+  svg.appendChild(path);
+}
+
+function drawBracketConnectors() {
+  const bracket = document.querySelector("#bracket");
+  const svg = document.querySelector("#connectorLayer");
+  if (!bracket || !svg) return;
+  const mapRect = bracket.getBoundingClientRect();
+  const width = bracket.scrollWidth;
+  const height = bracket.scrollHeight;
+  svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+  svg.setAttribute("width", width);
+  svg.setAttribute("height", height);
+  svg.innerHTML = "";
+
+  const finalRect = bracket.querySelector('[data-slot="Final"]')?.getBoundingClientRect();
+  const finalCenter = finalRect ? finalRect.left + finalRect.width / 2 : mapRect.left + mapRect.width / 2;
+  bracketConnections().forEach(([upperSlot, targetSlot, lowerSlot], index) => {
+    const upper = bracket.querySelector(`[data-slot="${upperSlot}"]`);
+    const target = bracket.querySelector(`[data-slot="${targetSlot}"]`);
+    const lower = bracket.querySelector(`[data-slot="${lowerSlot}"]`);
+    if (!upper || !target || !lower) return;
+
+    if (targetSlot === "Final" || targetSlot === "3P") {
+      drawCurve(svg, cardAnchor(upper, mapRect, "right"), cardAnchor(target, mapRect, "left"), color);
+      drawCurve(svg, cardAnchor(lower, mapRect, "left"), cardAnchor(target, mapRect, "right"), color);
+      return;
+    }
+
+    const upperCenter = upper.getBoundingClientRect().left + upper.getBoundingClientRect().width / 2;
+    const toward = upperCenter < finalCenter ? "right" : "left";
+    const targetToward = toward === "right" ? "left" : "right";
+    drawBranch(
+      svg,
+      [
+        cardAnchor(upper, mapRect, toward),
+        cardAnchor(target, mapRect, targetToward),
+        cardAnchor(lower, mapRect, toward),
+      ],
+      index % 3 === 0 ? "#d7d1c3" : index % 3 === 1 ? "#cbd8cf" : "#d4cbe0",
+    );
+  });
 }
 
 function renderPlayerStats() {
@@ -355,6 +458,9 @@ tabs.forEach((tab) => {
     playersPanel.classList.toggle("active", tab.dataset.tab === "players");
     treePanel.classList.toggle("active", tab.dataset.tab === "tree");
     imagePanel.classList.toggle("active", tab.dataset.tab === "image");
+    if (tab.dataset.tab === "tree") {
+      requestAnimationFrame(drawBracketConnectors);
+    }
   });
 });
 
@@ -370,16 +476,6 @@ refreshBtn.addEventListener("click", async () => {
   } finally {
     refreshBtn.disabled = false;
     refreshBtn.textContent = "Refresh";
-  }
-});
-
-autoRefresh.addEventListener("change", () => {
-  if (autoTimer) {
-    clearInterval(autoTimer);
-    autoTimer = null;
-  }
-  if (autoRefresh.checked) {
-    autoTimer = setInterval(() => refreshBtn.click(), 60000);
   }
 });
 
@@ -400,6 +496,8 @@ generateImageBtn.addEventListener("click", async () => {
 
 teamSearch.addEventListener("input", render);
 playerSearch.addEventListener("input", renderPlayerStats);
+window.addEventListener("resize", drawBracketConnectors);
+document.querySelector("#bracket").addEventListener("scroll", drawBracketConnectors);
 
 document.querySelector("#matchesList").addEventListener("click", async (event) => {
   const button = event.target.closest(".save-match");

@@ -176,12 +176,6 @@ input[type="search"] {
   min-width: 260px;
 }
 
-.toggle {
-  align-items: center;
-  display: flex;
-  gap: 8px;
-}
-
 .source-note {
   color: var(--muted);
   font-size: 14px;
@@ -420,6 +414,7 @@ tr.eliminated {
   grid-template-columns: minmax(1040px, 1fr) 300px minmax(1040px, 1fr);
   overflow-x: auto;
   padding-bottom: 24px;
+  position: relative;
 }
 
 .bracket-side h3,
@@ -468,74 +463,15 @@ tr.eliminated {
   min-height: 118px;
   padding: 12px;
   position: relative;
+  z-index: 2;
 }
 
-.tree-card.to-next::after,
-.tree-card.to-next::before,
-.tree-card.to-final::after,
-.tree-card.to-final::before {
-  content: "";
+.connector-layer {
+  inset: 0;
+  min-height: 100%;
+  pointer-events: none;
   position: absolute;
-}
-
-.tree-card.left.to-next::after,
-.tree-card.left.to-final::after {
-  border-right: 2px solid var(--line);
-  right: -41px;
-  width: 40px;
-}
-
-.tree-card.left.to-next.upper::after,
-.tree-card.left.to-final.upper::after {
-  border-top: 2px solid var(--line);
-  height: 92px;
-  top: 58px;
-}
-
-.tree-card.left.to-next.lower::after,
-.tree-card.left.to-final.lower::after {
-  border-bottom: 2px solid var(--line);
-  bottom: 58px;
-  height: 92px;
-}
-
-.tree-card.left.to-next::before,
-.tree-card.left.to-final::before {
-  background: var(--line);
-  height: 2px;
-  right: -41px;
-  top: 58px;
-  width: 40px;
-}
-
-.tree-card.right.to-next::after,
-.tree-card.right.to-final::after {
-  border-left: 2px solid var(--line);
-  left: -41px;
-  width: 40px;
-}
-
-.tree-card.right.to-next.upper::after,
-.tree-card.right.to-final.upper::after {
-  border-top: 2px solid var(--line);
-  height: 92px;
-  top: 58px;
-}
-
-.tree-card.right.to-next.lower::after,
-.tree-card.right.to-final.lower::after {
-  border-bottom: 2px solid var(--line);
-  bottom: 58px;
-  height: 92px;
-}
-
-.tree-card.right.to-next::before,
-.tree-card.right.to-final::before {
-  background: var(--line);
-  height: 2px;
-  left: -41px;
-  top: 58px;
-  width: 40px;
+  z-index: 1;
 }
 
 .final-column {

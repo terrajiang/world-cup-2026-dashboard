@@ -688,12 +688,14 @@ tr.eliminated {
   max-width: 760px;
 }
 
-.history-head label {
+.history-head label,
+.history-filters label {
   display: grid;
   gap: 6px;
 }
 
-.placement-legend {
+.placement-legend,
+.stage-legend {
   align-items: center;
   color: var(--muted);
   display: flex;
@@ -705,15 +707,51 @@ tr.eliminated {
   max-width: 330px;
 }
 
-.placement-legend span {
+.placement-legend span,
+.stage-legend span {
+  align-items: center;
   background: #ebe6dc;
   border: 1px solid var(--line);
   border-radius: 999px;
+  display: inline-flex;
+  gap: 6px;
   padding: 5px 8px;
 }
 
-.history-head select {
-  min-width: 240px;
+.stage-legend {
+  max-width: 430px;
+}
+
+.stage-legend i {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  display: inline-block;
+  height: 14px;
+  width: 22px;
+}
+
+.legend-round {
+  background: var(--yellow);
+}
+
+.legend-qf {
+  background: #f6c27a;
+}
+
+.legend-group {
+  background: var(--brown-soft);
+}
+
+.history-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.history-head select,
+.history-filters select {
+  min-width: 190px;
 }
 
 .history-table-wrap {
@@ -744,34 +782,41 @@ tr.eliminated {
   background: #ebe6dc;
 }
 
-.history-hit {
+td.history-hit {
   background: var(--green-soft);
   color: var(--green);
   font-weight: 800;
 }
 
 .history-stage {
-  border-radius: 999px;
   display: inline-block;
   font-weight: 800;
   min-width: 42px;
-  padding: 5px 9px;
   text-align: center;
 }
 
-.stage-dnq {
-  background: var(--gray);
-  color: var(--gray-text);
-}
-
-.stage-group {
+td.stage-group {
   background: var(--brown-soft);
   color: #73572f;
+  font-weight: 800;
 }
 
-.stage-round {
+td.stage-round {
   background: var(--yellow);
   color: var(--ink);
+  font-weight: 800;
+}
+
+td.stage-quarterfinal {
+  background: #f6c27a;
+  color: #5c3b06;
+  font-weight: 800;
+}
+
+.history-empty {
+  color: var(--muted);
+  font-weight: 800;
+  text-align: center !important;
 }
 
 .history-counts {
@@ -1120,6 +1165,11 @@ tr.eliminated {
   }
 
   .placement-legend {
+    justify-content: flex-start;
+  }
+
+  .stage-legend,
+  .history-filters {
     justify-content: flex-start;
   }
 

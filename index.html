@@ -156,10 +156,29 @@
             <span>🥉 Third</span>
             <span>🏅 Fourth</span>
           </div>
-          <label>
-            Country
-            <select id="historyCountry"></select>
-          </label>
+          <div class="stage-legend" aria-label="Selected-country stage highlight legend">
+            <span><i class="legend-round"></i>Round of 32/16</span>
+            <span><i class="legend-qf"></i>Quarterfinal</span>
+            <span><i class="legend-group"></i>Group stage</span>
+          </div>
+          <div class="history-filters">
+            <label>
+              Country
+              <select id="historyCountry"></select>
+            </label>
+            <label>
+              Show rows
+              <select id="historyFilter">
+                <option value="">All years</option>
+                <option value="podium">Selected country top 4</option>
+                <option value="round">Round of 32 / Round of 16</option>
+                <option value="quarterfinal">Quarterfinal</option>
+                <option value="group">Group stage</option>
+                <option value="qualified">Qualified only</option>
+                <option value="dnq">Did not qualify</option>
+              </select>
+            </label>
+          </div>
         </div>
         <div class="history-table-wrap">
           <table class="history-table">

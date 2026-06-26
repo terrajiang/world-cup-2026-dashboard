@@ -13,6 +13,7 @@ const generateImageBtn = document.querySelector("#generateImageBtn");
 const countryLookup = document.querySelector("#countryLookup");
 const dateLookup = document.querySelector("#dateLookup");
 const historyCountry = document.querySelector("#historyCountry");
+const historyFilter = document.querySelector("#historyFilter");
 const playerSearch = document.querySelector("#playerSearch");
 const toast = document.querySelector("#toast");
 const TEAM_FLAGS = {
@@ -294,6 +295,7 @@ function renderHistoryControls() {
     .map((team) => `<option value="${team}">${optionLabel(team)}</option>`)
     .join("")}`;
   historyCountry.value = selected;
+  historyFilter.disabled = !selected;
 }
 
 function selectedCountryFinish(row, selected) {
@@ -310,10 +312,22 @@ function finishDisplay(value) {
 function finishClass(value) {
   const normalized = value.toLowerCase();
   if (PLACEMENT_EMOJIS[value]) return "history-hit";
-  if (normalized === "did not qualify") return "stage-dnq";
   if (normalized.includes("group stage")) return "stage-group";
-  if (normalized.startsWith("round of ")) return "stage-round";
+  if (normalized === "round of 32" || normalized === "round of 16") return "stage-round";
+  if (normalized === "quarterfinal") return "stage-quarterfinal";
   return "";
+}
+
+function historyRowMatchesFilter(finish, filterValue) {
+  if (!filterValue) return true;
+  const normalized = finish.toLowerCase();
+  if (filterValue === "podium") return Boolean(PLACEMENT_EMOJIS[finish]);
+  if (filterValue === "round") return normalized === "round of 32" || normalized === "round of 16";
+  if (filterValue === "quarterfinal") return normalized === "quarterfinal";
+  if (filterValue === "group") return normalized.includes("group stage");
+  if (filterValue === "qualified") return normalized !== "did not qualify";
+  if (filterValue === "dnq") return normalized === "did not qualify";
+  return true;
 }
 
 function historyCountryCell(country) {
@@ -329,11 +343,17 @@ function countCell(entry) {
 
 function renderHistory() {
   const selected = historyCountry.value;
-  const historyRows = [HISTORY_PLACEHOLDER_2026, ...HISTORY_TOP_FOUR].sort((a, b) => b.year - a.year);
+  historyFilter.disabled = !selected;
+  if (!selected) historyFilter.value = "";
+  const filterValue = historyFilter.value;
+  const historyRows = [HISTORY_PLACEHOLDER_2026, ...HISTORY_TOP_FOUR]
+    .sort((a, b) => b.year - a.year)
+    .filter((row) => !selected || historyRowMatchesFilter(selectedCountryFinish(row, selected), filterValue));
   document.querySelector("#historyQueryHead").textContent = selected ? `${selected} finish` : "Selected country";
   document.querySelector("#historyBody").innerHTML = historyRows.map(
     (row) => {
       const finish = selectedCountryFinish(row, selected);
+      const stageClass = selected ? finishClass(finish) : "";
       return `
         <tr class="${row.placeholder ? "history-placeholder" : ""}">
           <td>${row.year}</td>
@@ -341,11 +361,18 @@ function renderHistory() {
           <td>${historyCountryCell(row.runnerUp)}</td>
           <td>${historyCountryCell(row.third)}</td>
           <td>${historyCountryCell(row.fourth)}</td>
-          <td><span class="history-stage ${selected ? finishClass(finish) : ""}">${finishDisplay(finish)}</span></td>
+          <td class="${stageClass}"><span class="history-stage">${finishDisplay(finish)}</span></td>
         </tr>
       `;
     },
   ).join("");
+  if (!historyRows.length) {
+    document.querySelector("#historyBody").innerHTML = `
+      <tr>
+        <td colspan="6" class="history-empty">No rows match that filter.</td>
+      </tr>
+    `;
+  }
 
   const counts = Object.fromEntries(HISTORY_FINISHES.map(([key]) => [key, {}]));
   HISTORY_TOP_FOUR.forEach((row) => {
@@ -918,6 +945,7 @@ generateImageBtn.addEventListener("click", async () => {
 countryLookup.addEventListener("change", renderMatchLookup);
 dateLookup.addEventListener("change", renderMatchLookup);
 historyCountry.addEventListener("change", renderHistory);
+historyFilter.addEventListener("change", renderHistory);
 playerSearch.addEventListener("input", renderPlayerStats);
 window.addEventListener("resize", drawBracketConnectors);
 document.querySelector("#bracket").addEventListener("scroll", drawBracketConnectors);

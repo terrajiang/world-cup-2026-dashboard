@@ -707,6 +707,12 @@ tr.eliminated {
   max-width: 330px;
 }
 
+.placement-legend {
+  flex-wrap: nowrap;
+  max-width: none;
+  white-space: nowrap;
+}
+
 .placement-legend span,
 .stage-legend span {
   align-items: center;

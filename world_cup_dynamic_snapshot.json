@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-26T20:33:25.374078+00:00",
+  "lastUpdated": "2026-06-26T20:52:00.649134+00:00",
   "sourceNote": "Refreshed 11 group table(s), checked live match pages, and validated stored score corrections.",
   "groups": {
     "A": [
@@ -433,9 +433,9 @@
         "won": 1,
         "drawn": 0,
         "lost": 2,
-        "gf": 6,
+        "gf": 8,
         "ga": 6,
-        "gd": 0,
+        "gd": 2,
         "pts": 3,
         "status": "third"
       },
@@ -446,8 +446,8 @@
         "drawn": 0,
         "lost": 3,
         "gf": 1,
-        "ga": 10,
-        "gd": -9,
+        "ga": 12,
+        "gd": -11,
         "pts": 0,
         "status": "eliminated"
       }
@@ -1145,7 +1145,7 @@
       "date": "2026-06-26",
       "home": "Senegal",
       "away": "Iraq",
-      "homeScore": 3,
+      "homeScore": 5,
       "awayScore": 0,
       "status": "Live",
       "timePst": "12:00 PM PT"

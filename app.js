@@ -91,6 +91,7 @@ const HISTORY_TOP_FOUR = [
   { year: 2018, champion: "France", runnerUp: "Croatia", third: "Belgium", fourth: "England" },
   { year: 2022, champion: "Argentina", runnerUp: "France", third: "Croatia", fourth: "Morocco" },
 ];
+const HISTORY_PLACEHOLDER_2026 = { year: 2026, champion: "TBD", runnerUp: "TBD", third: "TBD", fourth: "TBD", placeholder: true };
 const HISTORY_FINISHES = [
   ["champion", "Champion"],
   ["runnerUp", "Runner-up"],
@@ -275,20 +276,23 @@ function renderHistoryControls() {
 
 function selectedCountryFinish(row, selected) {
   if (!selected) return "Choose a country";
+  if (row.placeholder) return "Tournament pending";
   const finish = HISTORY_FINISHES.find(([key]) => normalizeCountry(row[key]) === selected);
   return finish ? finish[1] : HISTORY_STAGE_OVERRIDES[selected]?.[row.year] || "Did not qualify";
 }
 
 function historyCountryCell(country) {
+  if (country === "TBD") return "TBD";
   return teamLabel(normalizeCountry(country));
 }
 
 function renderHistory() {
   const selected = historyCountry.value;
+  const historyRows = [HISTORY_PLACEHOLDER_2026, ...HISTORY_TOP_FOUR].sort((a, b) => b.year - a.year);
   document.querySelector("#historyQueryHead").textContent = selected ? `${selected} finish` : "Selected country";
-  document.querySelector("#historyBody").innerHTML = HISTORY_TOP_FOUR.map(
+  document.querySelector("#historyBody").innerHTML = historyRows.map(
     (row) => `
-      <tr>
+      <tr class="${row.placeholder ? "history-placeholder" : ""}">
         <td>${row.year}</td>
         <td>${historyCountryCell(row.champion)}</td>
         <td>${historyCountryCell(row.runnerUp)}</td>
@@ -309,6 +313,7 @@ function renderHistory() {
   document.querySelector("#historyCounts").innerHTML = `
     <h3>Placement Counts By Country</h3>
     <div class="placement-grid">
+      <div class="placement-spacer" aria-hidden="true"></div>
       ${HISTORY_FINISHES.map(([key, label]) => {
         const sortedCounts = Object.entries(counts[key]).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
         return `
@@ -320,6 +325,7 @@ function renderHistory() {
           </section>
         `;
       }).join("")}
+      <div class="placement-spacer" aria-hidden="true"></div>
     </div>
   `;
 }
@@ -739,23 +745,36 @@ function render() {
 async function loadInitial() {
   state = await request("/api/data");
   render();
+  activateTab(tabFromHash());
+}
+
+function tabFromHash() {
+  const tabName = window.location.hash.replace("#", "");
+  return document.querySelector(`.tab[data-tab="${tabName}"]`) ? tabName : "standings";
+}
+
+function activateTab(tabName) {
+  tabs.forEach((item) => item.classList.toggle("active", item.dataset.tab === tabName));
+  standingsPanel.classList.toggle("active", tabName === "standings");
+  treePanel.classList.toggle("active", tabName === "tree");
+  schedulePanel.classList.toggle("active", tabName === "schedule");
+  playersPanel.classList.toggle("active", tabName === "players");
+  historyPanel.classList.toggle("active", tabName === "history");
+  imagePanel.classList.toggle("active", tabName === "image");
+  rulesPanel.classList.toggle("active", tabName === "rules");
+  if (tabName === "tree") {
+    requestAnimationFrame(drawBracketConnectors);
+  }
 }
 
 tabs.forEach((tab) => {
   tab.addEventListener("click", () => {
-    tabs.forEach((item) => item.classList.toggle("active", item === tab));
-    standingsPanel.classList.toggle("active", tab.dataset.tab === "standings");
-    schedulePanel.classList.toggle("active", tab.dataset.tab === "schedule");
-    rulesPanel.classList.toggle("active", tab.dataset.tab === "rules");
-    historyPanel.classList.toggle("active", tab.dataset.tab === "history");
-    playersPanel.classList.toggle("active", tab.dataset.tab === "players");
-    treePanel.classList.toggle("active", tab.dataset.tab === "tree");
-    imagePanel.classList.toggle("active", tab.dataset.tab === "image");
-    if (tab.dataset.tab === "tree") {
-      requestAnimationFrame(drawBracketConnectors);
-    }
+    window.location.hash = tab.dataset.tab;
+    activateTab(tab.dataset.tab);
   });
 });
+
+window.addEventListener("hashchange", () => activateTab(tabFromHash()));
 
 refreshBtn.addEventListener("click", async () => {
   refreshBtn.disabled = true;

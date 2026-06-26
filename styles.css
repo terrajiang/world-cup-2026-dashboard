@@ -535,6 +535,10 @@ tr.eliminated {
   min-width: 82px;
 }
 
+.history-placeholder {
+  background: #ebe6dc;
+}
+
 .history-hit {
   background: var(--green-soft);
   color: var(--green);
@@ -553,15 +557,13 @@ tr.eliminated {
 
 .placement-grid {
   display: grid;
-  gap: 14px;
-  grid-template-columns: repeat(4, minmax(210px, 1fr));
+  gap: 0;
+  grid-template-columns: 82px repeat(4, minmax(140px, 1fr)) minmax(140px, 1fr);
 }
 
 .placement-card {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 12px;
+  border-left: 1px solid var(--line);
+  padding: 0 12px;
 }
 
 .placement-card h4 {
@@ -572,20 +574,22 @@ tr.eliminated {
 
 .count-grid {
   display: grid;
-  gap: 8px;
+  gap: 6px;
 }
 
 .count-grid span {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 8px;
+  align-items: center;
   color: var(--muted);
-  padding: 10px 12px;
+  display: flex;
+  gap: 6px;
+  justify-content: space-between;
+  line-height: 1.25;
+  padding: 2px 0;
 }
 
 .count-grid strong {
   color: var(--ink);
-  float: right;
+  margin-left: 8px;
 }
 
 .tree-head {
@@ -897,12 +901,12 @@ tr.eliminated {
     grid-template-columns: 1fr;
   }
 
-  .count-grid {
+  .placement-grid {
     grid-template-columns: 1fr;
   }
 
-  .placement-grid {
-    grid-template-columns: 1fr;
+  .placement-spacer {
+    display: none;
   }
 
   .result-main {

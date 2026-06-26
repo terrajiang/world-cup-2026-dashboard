@@ -116,6 +116,32 @@
             </ul>
           </article>
         </div>
+        <details class="rules-more">
+          <summary>More detailed rules</summary>
+          <div class="rules-detail-grid">
+            <article>
+              <h3>Group Ranking Order</h3>
+              <ol>
+                <li>Total points from all group matches.</li>
+                <li>Goal difference from all group matches.</li>
+                <li>Goals scored in all group matches.</li>
+                <li>Points in matches between the tied teams.</li>
+                <li>Goal difference in matches between the tied teams.</li>
+                <li>Goals scored in matches between the tied teams.</li>
+                <li>Fair-play points, where cards can hurt a team's ranking.</li>
+                <li>Drawing of lots if teams still cannot be separated.</li>
+              </ol>
+            </article>
+            <article>
+              <h3>Best Third-Place Teams</h3>
+              <p>The 12 third-place teams are compared in one table. The best 8 advance to the Round of 32. They are compared by points, then goal difference, then goals scored, then fair-play rules if needed.</p>
+            </article>
+            <article>
+              <h3>Knockout Matches</h3>
+              <p>Knockout games cannot end in a draw. If the score is tied after 90 minutes, teams play two 15-minute halves of extra time. If still tied, a penalty shootout decides who advances.</p>
+            </article>
+          </div>
+        </details>
       </section>
 
       <section class="panel" id="historyPanel">
@@ -123,6 +149,12 @@
           <div>
             <h2>World Cup Top 4 History</h2>
             <p>Men's FIFA World Cup top-four finishers by year, plus the selected 2026 participant's top-four result.</p>
+          </div>
+          <div class="placement-legend" aria-label="Placement legend">
+            <span>🥇 Champion</span>
+            <span>🥈 Runner-up</span>
+            <span>🥉 Third</span>
+            <span>🏅 Fourth</span>
           </div>
           <label>
             Country
@@ -134,10 +166,10 @@
             <thead>
               <tr>
                 <th>Year</th>
-                <th>Champion</th>
-                <th>Runner-up</th>
-                <th>Third</th>
-                <th>Fourth</th>
+                <th>🥇</th>
+                <th>🥈</th>
+                <th>🥉</th>
+                <th>🏅</th>
                 <th id="historyQueryHead">Selected country</th>
               </tr>
             </thead>

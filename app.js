@@ -74,6 +74,12 @@ const TEAM_FLAGS = {
 };
 const FEATURED_PLAYERS = new Set(["Kylian Mbappé", "Lionel Messi", "Cristiano Ronaldo", "Erling Haaland"]);
 const PST_SLOTS = ["9:00 AM PT", "11:00 AM PT", "1:00 PM PT", "3:00 PM PT", "5:00 PM PT", "7:00 PM PT"];
+const PLACEMENT_EMOJIS = {
+  Champion: "🥇",
+  "Runner-up": "🥈",
+  Third: "🥉",
+  Fourth: "🏅",
+};
 const HISTORY_TOP_FOUR = [
   { year: 1930, champion: "Uruguay", runnerUp: "Argentina", third: "United States", fourth: "Yugoslavia" },
   { year: 1934, champion: "Italy", runnerUp: "Czechoslovakia", third: "Germany", fourth: "Austria" },
@@ -297,6 +303,19 @@ function selectedCountryFinish(row, selected) {
   return finish ? finish[1] : HISTORY_STAGE_OVERRIDES[selected]?.[row.year] || "Did not qualify";
 }
 
+function finishDisplay(value) {
+  return PLACEMENT_EMOJIS[value] || value;
+}
+
+function finishClass(value) {
+  const normalized = value.toLowerCase();
+  if (PLACEMENT_EMOJIS[value]) return "history-hit";
+  if (normalized === "did not qualify") return "stage-dnq";
+  if (normalized.includes("group stage")) return "stage-group";
+  if (normalized.startsWith("round of ")) return "stage-round";
+  return "";
+}
+
 function historyCountryCell(country) {
   if (country === "TBD") return "TBD";
   return teamLabel(normalizeCountry(country));
@@ -313,16 +332,19 @@ function renderHistory() {
   const historyRows = [HISTORY_PLACEHOLDER_2026, ...HISTORY_TOP_FOUR].sort((a, b) => b.year - a.year);
   document.querySelector("#historyQueryHead").textContent = selected ? `${selected} finish` : "Selected country";
   document.querySelector("#historyBody").innerHTML = historyRows.map(
-    (row) => `
-      <tr class="${row.placeholder ? "history-placeholder" : ""}">
-        <td>${row.year}</td>
-        <td>${historyCountryCell(row.champion)}</td>
-        <td>${historyCountryCell(row.runnerUp)}</td>
-        <td>${historyCountryCell(row.third)}</td>
-        <td>${historyCountryCell(row.fourth)}</td>
-        <td class="${selected && HISTORY_FINISHES.some(([, label]) => label === selectedCountryFinish(row, selected)) ? "history-hit" : ""}">${selectedCountryFinish(row, selected)}</td>
-      </tr>
-    `,
+    (row) => {
+      const finish = selectedCountryFinish(row, selected);
+      return `
+        <tr class="${row.placeholder ? "history-placeholder" : ""}">
+          <td>${row.year}</td>
+          <td>${historyCountryCell(row.champion)}</td>
+          <td>${historyCountryCell(row.runnerUp)}</td>
+          <td>${historyCountryCell(row.third)}</td>
+          <td>${historyCountryCell(row.fourth)}</td>
+          <td><span class="history-stage ${selected ? finishClass(finish) : ""}">${finishDisplay(finish)}</span></td>
+        </tr>
+      `;
+    },
   ).join("");
 
   const counts = Object.fromEntries(HISTORY_FINISHES.map(([key]) => [key, {}]));
@@ -339,10 +361,10 @@ function renderHistory() {
         <thead>
           <tr>
             <th>Rank</th>
-            <th>Champion</th>
-            <th>Runner-up</th>
-            <th>Third</th>
-            <th>Fourth</th>
+            <th>🥇</th>
+            <th>🥈</th>
+            <th>🥉</th>
+            <th>🏅</th>
             <th></th>
           </tr>
         </thead>
@@ -364,6 +386,22 @@ function renderHistory() {
   `;
 }
 
+function liveMatches() {
+  return (state.matches || []).filter((match) => match.status === "Live");
+}
+
+function isTeamLive(team) {
+  return liveMatches().some((match) => match.home === team || match.away === team);
+}
+
+function isGroupLive(group) {
+  return liveMatches().some((match) => match.group === group);
+}
+
+function liveBadge(text = "Live") {
+  return `<span class="live-badge">${text}</span>`;
+}
+
 function renderGroups() {
   const grid = document.querySelector("#groupsGrid");
   grid.innerHTML = "";
@@ -371,7 +409,7 @@ function renderGroups() {
     const card = document.createElement("article");
     card.className = "group-card";
     card.innerHTML = `
-      <div class="group-title"><strong>Group ${group}</strong><span>${rows.length} teams</span></div>
+      <div class="group-title"><strong>Group ${group}</strong><span>${isGroupLive(group) ? liveBadge("Live now") : `${rows.length} teams`}</span></div>
       <table>
         <thead>
           <tr><th>Team</th><th>GD</th><th>GF</th><th class="pts-head">Pts</th><th></th></tr>
@@ -381,7 +419,7 @@ function renderGroups() {
             .map(
               (row) => `
                 <tr class="${row.status}">
-                  <td>${teamLabel(row.team)}</td>
+                  <td>${teamLabel(row.team)}${isTeamLive(row.team) ? liveBadge() : ""}</td>
                   <td>${row.gd > 0 ? `+${row.gd}` : row.gd}</td>
                   <td>${row.gf}</td>
                   <td class="pts-cell">${row.pts}</td>
@@ -431,10 +469,10 @@ function matchResultHtml(match, compact = false, collection = state.matches) {
   const isFinished = match.status === "FT";
   const isLive = match.status === "Live";
   return `
-    <article class="result-card ${isFinished ? "finished" : ""} ${isLive ? "live" : ""}">
+    <article class="result-card ${isFinished ? "finished" : ""} ${isLive ? "live" : ""}" data-match-id="${match.id || match.slot}" data-status="${match.status}">
       <div class="result-meta">
         <span>${match.phase || `Group ${match.group}`} · ${formatDate(match.date)} · ${pstTime(match, collection)}</span>
-        <span>${match.status}</span>
+        <span>${isLive ? liveBadge("Live now") : match.status}</span>
       </div>
       <div class="result-main">
         <span>${teamLabel(match.homeLabel || match.home)}</span>
@@ -479,6 +517,24 @@ function renderSchedule() {
       return `${heading}${matchResultHtml(match, false, items)}`;
     })
     .join("");
+}
+
+function scheduleFocusMatch() {
+  const items = scheduleItems();
+  const live = items.find((match) => match.status === "Live");
+  if (live) return live;
+  const today = new Date().toISOString().slice(0, 10);
+  return items.find((match) => match.status !== "FT" && match.date >= today) || items.find((match) => match.status !== "FT");
+}
+
+function scrollScheduleToFocus() {
+  const focus = scheduleFocusMatch();
+  if (!focus) return;
+  const selector = `[data-match-id="${focus.id || focus.slot}"]`;
+  const card = document.querySelector(`#scheduleList ${selector}`);
+  if (!card) return;
+  card.classList.add("focus-match");
+  card.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 function renderMatches() {
@@ -596,6 +652,7 @@ function renderBracket() {
     { title: "Round of 32", matches: Array.from({ length: 8 }, (_, index) => bySlot[`R32-${index + 9}`]) },
   ];
   bracket.innerHTML = `
+    ${liveMatches().length ? `<div class="tree-live-note">${liveBadge("Live now")} Group-stage games are ongoing; projected bracket positions can move while scores update.</div>` : ""}
     ${renderTreeSide(left, "left")}
     <section class="final-column">
       <div class="round-heading">Final</div>
@@ -774,6 +831,10 @@ function render() {
   renderBracket();
   renderPlayerStats();
   renderImagePreview();
+  updateLiveTabs();
+  if (schedulePanel.classList.contains("active")) {
+    setTimeout(scrollScheduleToFocus, 80);
+  }
 }
 
 async function loadInitial() {
@@ -799,6 +860,20 @@ function activateTab(tabName) {
   if (tabName === "tree") {
     requestAnimationFrame(drawBracketConnectors);
   }
+  if (tabName === "schedule") {
+    setTimeout(scrollScheduleToFocus, 80);
+  }
+}
+
+function updateLiveTabs() {
+  const hasLive = liveMatches().length > 0;
+  tabs.forEach((tab) => {
+    const baseLabel = tab.dataset.label || tab.textContent.replace(/\s*Live\s*$/i, "").trim();
+    tab.dataset.label = baseLabel;
+    const shouldShow = hasLive && ["standings", "schedule", "tree"].includes(tab.dataset.tab);
+    tab.innerHTML = `${baseLabel}${shouldShow ? ' <span class="tab-live">Live</span>' : ""}`;
+    tab.classList.toggle("has-live", shouldShow);
+  });
 }
 
 tabs.forEach((tab) => {

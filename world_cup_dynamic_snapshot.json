@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-06-27T00:50:44.342661+00:00",
-  "sourceNote": "Refreshed 11 group table(s), checked live match pages, and validated stored score corrections.",
+  "lastUpdated": "2026-06-27T01:04:20.098200+00:00",
+  "sourceNote": "Checked live match windows and live score sources on page load.",
   "groups": {
     "A": [
       {
@@ -1118,7 +1118,7 @@
       "away": "Saudi Arabia",
       "homeScore": null,
       "awayScore": null,
-      "status": "Scheduled",
+      "status": "Live",
       "timePst": "5:00 PM PST"
     },
     {
@@ -1129,7 +1129,7 @@
       "away": "Spain",
       "homeScore": null,
       "awayScore": null,
-      "status": "Scheduled",
+      "status": "Live",
       "timePst": "5:00 PM PST"
     },
     {

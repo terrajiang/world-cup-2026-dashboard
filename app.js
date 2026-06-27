@@ -431,6 +431,10 @@ function liveMatches() {
   return (state.matches || []).filter((match) => match.status === "Live");
 }
 
+function liveKnockoutMatches() {
+  return (state.knockout || []).filter((match) => match.status === "Live");
+}
+
 function isTeamLive(team) {
   return liveMatches().some((match) => match.home === team || match.away === team);
 }
@@ -693,7 +697,7 @@ function renderBracket() {
     { title: "Round of 32", matches: Array.from({ length: 8 }, (_, index) => bySlot[`R32-${index + 9}`]) },
   ];
   bracket.innerHTML = `
-    ${liveMatches().length ? `<div class="tree-live-note">${liveBadge("Live now")} Group-stage games are ongoing; projected bracket positions can move while scores update.</div>` : ""}
+    ${liveKnockoutMatches().length ? `<div class="tree-live-note">${liveBadge("Live now")} Knockout games are ongoing; bracket positions can move while scores update.</div>` : ""}
     ${renderTreeSide(left, "left")}
     <section class="final-column">
       <div class="round-heading">Final</div>
@@ -907,11 +911,14 @@ function activateTab(tabName) {
 }
 
 function updateLiveTabs() {
-  const hasLive = liveMatches().length > 0;
+  const hasGroupLive = liveMatches().length > 0;
+  const hasTreeLive = liveKnockoutMatches().length > 0;
   tabs.forEach((tab) => {
     const baseLabel = tab.dataset.label || tab.textContent.replace(/\s*Live\s*$/i, "").trim();
     tab.dataset.label = baseLabel;
-    const shouldShow = hasLive && ["standings", "schedule", "tree"].includes(tab.dataset.tab);
+    const shouldShow =
+      (hasGroupLive && ["standings", "schedule"].includes(tab.dataset.tab)) ||
+      (hasTreeLive && tab.dataset.tab === "tree");
     tab.innerHTML = `${baseLabel}${shouldShow ? ' <span class="tab-live">Live</span>' : ""}`;
     tab.classList.toggle("has-live", shouldShow);
   });

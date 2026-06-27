@@ -314,10 +314,8 @@ def apply_live_score_updates(data, now=None):
         except (urllib.error.URLError, TimeoutError):
             if in_window:
                 match["status"] = "Live"
-                if match.get("homeScore") is None:
-                    match["homeScore"] = 0
-                if match.get("awayScore") is None:
-                    match["awayScore"] = 0
+                match["homeScore"] = None
+                match["awayScore"] = None
                 if before != (match.get("homeScore"), match.get("awayScore"), match.get("status")):
                     changed += 1
             continue
@@ -328,12 +326,12 @@ def apply_live_score_updates(data, now=None):
             match["homeScore"], match["awayScore"], match["status"] = parsed
         elif in_window:
             match["status"] = "Live"
-            if match.get("homeScore") is None:
-                match["homeScore"] = 0
-            if match.get("awayScore") is None:
-                match["awayScore"] = 0
+            match["homeScore"] = None
+            match["awayScore"] = None
         elif match.get("status") == "Live":
             match["status"] = "Scheduled"
+            match["homeScore"] = None
+            match["awayScore"] = None
         if before != (match.get("homeScore"), match.get("awayScore"), match.get("status")):
             changed += 1
     return changed

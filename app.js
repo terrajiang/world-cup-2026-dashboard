@@ -28,7 +28,7 @@ const TEAM_FLAGS = {
   "Cabo Verde": "🇨🇻",
   Colombia: "🇨🇴",
   Croatia: "🇭🇷",
-  Curaçao: "🇨🇼",
+  "Curaçao": "🇨🇼",
   Czechia: "🇨🇿",
   "Côte d'Ivoire": "🇨🇮",
   "DR Congo": "🇨🇩",
@@ -64,7 +64,7 @@ const TEAM_FLAGS = {
   Sweden: "🇸🇪",
   Switzerland: "🇨🇭",
   Tunisia: "🇹🇳",
-  Türkiye: "🇹🇷",
+  "Türkiye": "🇹🇷",
   "United States": "🇺🇸",
   Uruguay: "🇺🇾",
   Uzbekistan: "🇺🇿",
@@ -78,6 +78,20 @@ const SELECT_FLAG_FALLBACKS = {
   Scotland: "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
 };
 const FEATURED_PLAYERS = new Set(["Kylian Mbappé", "Lionel Messi", "Cristiano Ronaldo", "Erling Haaland"]);
+const SEEDED_TEAMS = new Set([
+  "Argentina",
+  "Belgium",
+  "Brazil",
+  "Canada",
+  "England",
+  "France",
+  "Germany",
+  "Mexico",
+  "Netherlands",
+  "Portugal",
+  "Spain",
+  "United States",
+]);
 const PLACEMENT_EMOJIS = {
   Champion: "🥇",
   "Runner-up": "🥈",
@@ -213,10 +227,11 @@ function statusLabel(status) {
 
 function teamLabel(team) {
   const flag = TEAM_FLAGS[team];
+  const nameClass = SEEDED_TEAMS.has(team) ? "team-name seed-team" : "team-name";
   if (flag?.startsWith("css:")) {
-    return `<span class="flag flag-css flag-${flag.slice(4)}" aria-hidden="true"></span><span>${team}</span>`;
+    return `<span class="flag flag-css flag-${flag.slice(4)}" aria-hidden="true"></span><span class="${nameClass}">${team}</span>`;
   }
-  return `${flag ? `<span class="flag" aria-hidden="true">${flag}</span>` : ""}<span>${team}</span>`;
+  return `${flag ? `<span class="flag" aria-hidden="true">${flag}</span>` : ""}<span class="${nameClass}">${team}</span>`;
 }
 
 function optionLabel(team) {
@@ -355,12 +370,37 @@ function countCell(entry) {
   return `${teamLabel(country)} <strong>${count}</strong>`;
 }
 
+function resultTeams(match) {
+  if (!match || match.status !== "FT" || match.homeScore === null || match.awayScore === null) return null;
+  const teams = knockoutTeams(match);
+  if ([teams.home, teams.away].some((team) => /^(Winner|Loser|TBD)/.test(team))) return null;
+  const homeWon = Number(match.homeScore) > Number(match.awayScore);
+  return {
+    winner: homeWon ? teams.home : teams.away,
+    loser: homeWon ? teams.away : teams.home,
+  };
+}
+
+function currentTopFourRow() {
+  const bySlot = Object.fromEntries((state.knockout || []).map((match) => [match.slot, match]));
+  const final = resultTeams(bySlot.Final);
+  const thirdPlace = resultTeams(bySlot["3P"]);
+  if (!final || !thirdPlace) return HISTORY_PLACEHOLDER_2026;
+  return {
+    year: 2026,
+    champion: final.winner,
+    runnerUp: final.loser,
+    third: thirdPlace.winner,
+    fourth: thirdPlace.loser,
+  };
+}
+
 function renderHistory() {
   const selected = historyCountry.value;
   historyFilter.disabled = !selected;
   if (!selected) historyFilter.value = "";
   const filterValue = historyFilter.value;
-  const historyRows = [HISTORY_PLACEHOLDER_2026, ...HISTORY_TOP_FOUR]
+  const historyRows = [currentTopFourRow(), ...HISTORY_TOP_FOUR]
     .sort((a, b) => b.year - a.year)
     .filter((row) => !selected || historyRowMatchesFilter(selectedCountryFinish(row, selected), filterValue));
   document.querySelector("#historyQueryHead").textContent = selected ? `${selected} finish` : "Selected country";

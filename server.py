@@ -22,6 +22,7 @@ IMAGE_PATH = ROOT / "world_cup_2026_group_standings.png"
 IMAGE_SCRIPT = ROOT / "make_world_cup_standings_image.py"
 BUNDLED_PYTHON = Path("/Users/terra/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3")
 STANDINGS_URL = "https://www.sbnation.com/soccer/1117905/world-cup-standings-updated-full-list-of-teams"
+SCHEDULE_URL = "https://www.sbnation.com/soccer/1117513/world-cup-schedule-2026-how-to-watch-every-match-scores-and-more"
 PLAYER_STATS_URL = "https://www.sbnation.com/fifa-world-cup/1118693/world-cup-2026-golden-boot-standings"
 VERIFIED_GROUPS = {"D", "E", "F"}
 PACIFIC_TZ = ZoneInfo("America/Los_Angeles")
@@ -337,6 +338,35 @@ def apply_live_score_updates(data, now=None):
     return changed
 
 
+def find_schedule_score(text, group, home, away):
+    patterns = [
+        (home, away, rf"Group {re.escape(group)}:\s*{re.escape(home)}\s+(\d+),\s*{re.escape(away)}\s+(\d+)"),
+        (away, home, rf"Group {re.escape(group)}:\s*{re.escape(away)}\s+(\d+),\s*{re.escape(home)}\s+(\d+)"),
+    ]
+    for first_team, _, pattern in patterns:
+        match = re.search(pattern, text, flags=re.I)
+        if not match:
+            continue
+        first_score, second_score = map(int, match.groups())
+        if first_team == home:
+            return first_score, second_score
+        return second_score, first_score
+    return None
+
+
+def apply_schedule_score_updates(data, text):
+    changed = 0
+    for match in data.get("matches", []):
+        parsed = find_schedule_score(text, match["group"], match["home"], match["away"])
+        if not parsed:
+            continue
+        before = (match.get("homeScore"), match.get("awayScore"), match.get("status"))
+        match["homeScore"], match["awayScore"], match["status"] = parsed[0], parsed[1], "FT"
+        if before != (match.get("homeScore"), match.get("awayScore"), match.get("status")):
+            changed += 1
+    return changed
+
+
 def load_data_with_live_check():
     data = load_data()
     live_changed = apply_live_score_updates(data)
@@ -511,6 +541,11 @@ def fetch_text(url):
 def try_refresh_from_web(data):
     html = fetch_text(STANDINGS_URL)
     text = strip_html(html)
+    schedule_text = ""
+    try:
+        schedule_text = strip_html(fetch_text(SCHEDULE_URL))
+    except (urllib.error.URLError, TimeoutError):
+        schedule_text = ""
     changed = 0
 
     for group, teams in GROUPS.items():
@@ -553,15 +588,17 @@ def try_refresh_from_web(data):
             data["groups"][group] = rows
             changed += 1
 
+    score_changed = apply_schedule_score_updates(data, schedule_text) if schedule_text else 0
     live_changed = apply_live_score_updates(data)
-    if live_changed:
+    if score_changed or live_changed:
         recalculate_from_matches(data)
         apply_verified_overrides(data)
 
     if changed == 0:
         apply_verified_overrides(data)
+        score_changed = apply_schedule_score_updates(data, schedule_text) if schedule_text else 0
         live_changed = apply_live_score_updates(data)
-        if live_changed:
+        if score_changed or live_changed:
             recalculate_from_matches(data)
             apply_verified_overrides(data)
         data["lastUpdated"] = utc_now()
@@ -573,8 +610,9 @@ def try_refresh_from_web(data):
         return data
 
     apply_verified_overrides(data)
+    score_changed = apply_schedule_score_updates(data, schedule_text) if schedule_text else 0
     live_changed = apply_live_score_updates(data)
-    if live_changed:
+    if score_changed or live_changed:
         recalculate_from_matches(data)
         apply_verified_overrides(data)
     data["lastUpdated"] = utc_now()

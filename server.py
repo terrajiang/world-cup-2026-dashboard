@@ -147,8 +147,8 @@ KNOCKOUT_TIMES_PACIFIC = {
 LIVE_MATCH_SOURCES = {
     ("G", "New Zealand", "Belgium"): "https://www.theguardian.com/football/live/2026/jun/26/new-zealand-v-belgium-world-cup-2026-live-updates",
     ("G", "Egypt", "Iran"): "https://www.theguardian.com/football/live/2026/jun/26/egypt-v-iran-world-cup-2026-live-updates",
-    ("H", "Cabo Verde", "Saudi Arabia"): "https://www.theguardian.com/football/live/2026/jun/26/cabo-verde-v-saudi-arabia-world-cup-2026-live-updates",
-    ("H", "Uruguay", "Spain"): "https://www.theguardian.com/football/live/2026/jun/26/uruguay-v-spain-world-cup-2026-live-updates",
+    ("H", "Cabo Verde", "Saudi Arabia"): "https://www.theguardian.com/football/live/2026/jun/26/cape-verde-v-saudi-arabia-world-cup-2026-live",
+    ("H", "Uruguay", "Spain"): "https://www.theguardian.com/football/live/2026/jun/26/uruguay-v-spain-world-cup-2026-live",
     ("I", "Norway", "France"): "https://www.theguardian.com/football/live/2026/jun/26/norway-v-france-world-cup-2026-live-updates",
     ("I", "Senegal", "Iraq"): "https://www.theguardian.com/football/live/2026/jun/26/senegal-v-iraq-world-cup-2026-live-updates",
     ("J", "Algeria", "Austria"): "https://www.theguardian.com/football/live/2026/jun/27/algeria-v-austria-world-cup-2026-live-updates",
@@ -157,6 +157,9 @@ LIVE_MATCH_SOURCES = {
     ("K", "DR Congo", "Uzbekistan"): "https://www.theguardian.com/football/live/2026/jun/27/dr-congo-v-uzbekistan-world-cup-2026-live-updates",
     ("L", "Panama", "England"): "https://www.theguardian.com/football/live/2026/jun/27/panama-v-england-world-cup-2026-live-updates",
     ("L", "Croatia", "Ghana"): "https://www.theguardian.com/football/live/2026/jun/27/croatia-v-ghana-world-cup-2026-live-updates",
+}
+LIVE_SOURCE_ALIASES = {
+    "Cabo Verde": ["Cabo Verde", "Cape Verde"],
 }
 
 
@@ -238,29 +241,35 @@ def apply_verified_overrides(data):
 
 
 def parse_guardian_live_score(text, home, away):
+    def team_pattern(team):
+        names = LIVE_SOURCE_ALIASES.get(team, [team])
+        return r"(?:%s)" % "|".join(re.escape(name) for name in names)
+
+    home_pattern = team_pattern(home)
+    away_pattern = team_pattern(away)
     full_time_patterns = [
-        rf"(?:FULL TIME|Full-time!?|Full time):?\s*{re.escape(home)}\s+(\d+)\s*[-–]\s*(\d+)\s+{re.escape(away)}",
-        rf"(?:FULL TIME|Full-time!?|Full time):?\s*{re.escape(away)}\s+(\d+)\s*[-–]\s*(\d+)\s+{re.escape(home)}",
+        rf"(?:FULL TIME|Full-time!?|Full time):?\s*{home_pattern}\s+(\d+)\s*[-–]\s*(\d+)\s+{away_pattern}",
+        rf"(?:FULL TIME|Full-time!?|Full time):?\s*{away_pattern}\s+(\d+)\s*[-–]\s*(\d+)\s+{home_pattern}",
     ]
     for pattern in full_time_patterns:
         match = re.search(pattern, text, flags=re.I)
         if not match:
             continue
         first, second = map(int, match.groups())
-        if re.search(rf"{re.escape(home)}\s+\d+\s*[-–]\s*\d+\s+{re.escape(away)}", match.group(0), flags=re.I):
+        if re.search(rf"{home_pattern}\s+\d+\s*[-–]\s*\d+\s+{away_pattern}", match.group(0), flags=re.I):
             return first, second, "FT"
         return second, first, "FT"
 
     score_patterns = [
-        rf"{re.escape(home)}\s+(\d+)\s*[-–]\s*(\d+)\s+{re.escape(away)}",
-        rf"{re.escape(away)}\s+(\d+)\s*[-–]\s*(\d+)\s+{re.escape(home)}",
+        (True, rf"{home_pattern}\s+(\d+)\s*[-–]\s*(\d+)\s+{away_pattern}"),
+        (False, rf"{away_pattern}\s+(\d+)\s*[-–]\s*(\d+)\s+{home_pattern}"),
     ]
-    for pattern in score_patterns:
+    for home_first, pattern in score_patterns:
         match = re.search(pattern, text, flags=re.I)
         if not match:
             continue
         first, second = map(int, match.groups())
-        if pattern.startswith(re.escape(home)):
+        if home_first:
             return first, second, "Live"
         return second, first, "Live"
     return None

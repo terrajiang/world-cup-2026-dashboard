@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-27T01:34:28.411006+00:00",
+  "lastUpdated": "2026-06-27T01:53:12.940914+00:00",
   "sourceNote": "Refreshed 11 group table(s), checked live match pages, and validated stored score corrections.",
   "groups": {
     "A": [
@@ -355,51 +355,51 @@
     "H": [
       {
         "team": "Spain",
-        "played": 2,
-        "won": 1,
+        "played": 3,
+        "won": 2,
         "drawn": 1,
         "lost": 0,
-        "gf": 4,
+        "gf": 5,
         "ga": 0,
-        "gd": 4,
-        "pts": 4,
-        "status": "contending"
-      },
-      {
-        "team": "Uruguay",
-        "played": 2,
-        "won": 0,
-        "drawn": 2,
-        "lost": 0,
-        "gf": 3,
-        "ga": 3,
-        "gd": 0,
-        "pts": 2,
-        "status": "contending"
+        "gd": 5,
+        "pts": 7,
+        "status": "advanced"
       },
       {
         "team": "Cabo Verde",
-        "played": 2,
+        "played": 3,
         "won": 0,
-        "drawn": 2,
+        "drawn": 3,
         "lost": 0,
         "gf": 2,
         "ga": 2,
         "gd": 0,
+        "pts": 3,
+        "status": "advanced"
+      },
+      {
+        "team": "Uruguay",
+        "played": 3,
+        "won": 0,
+        "drawn": 2,
+        "lost": 1,
+        "gf": 3,
+        "ga": 4,
+        "gd": -1,
         "pts": 2,
         "status": "third"
       },
       {
         "team": "Saudi Arabia",
-        "played": 2,
+        "played": 3,
         "won": 0,
-        "drawn": 1,
+        "drawn": 2,
         "lost": 1,
         "gf": 1,
         "ga": 5,
         "gd": -4,
-        "pts": 1,
-        "status": "contending"
+        "pts": 2,
+        "status": "eliminated"
       }
     ],
     "I": [
@@ -1116,8 +1116,8 @@
       "date": "2026-06-26",
       "home": "Cabo Verde",
       "away": "Saudi Arabia",
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 0,
+      "awayScore": 0,
       "status": "Live",
       "timePst": "5:00 PM PST"
     },
@@ -1127,8 +1127,8 @@
       "date": "2026-06-26",
       "home": "Uruguay",
       "away": "Spain",
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 0,
+      "awayScore": 1,
       "status": "Live",
       "timePst": "5:00 PM PST"
     },

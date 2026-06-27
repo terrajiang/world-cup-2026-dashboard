@@ -33,18 +33,112 @@ VERIFIED_MATCH_SCORES = {
 }
 PLAYER_STATS_NOTE = "Player goals and assists refresh from the Golden Boot table. Yellow and red cards stay at 0 until a reliable card feed is connected."
 MATCH_TIMES_PACIFIC = {
-    ("G", "New Zealand", "Belgium"): "5:00 PM PT",
-    ("G", "Egypt", "Iran"): "5:00 PM PT",
-    ("H", "Cabo Verde", "Saudi Arabia"): "8:00 PM PT",
-    ("H", "Uruguay", "Spain"): "8:00 PM PT",
-    ("I", "Norway", "France"): "12:00 PM PT",
-    ("I", "Senegal", "Iraq"): "12:00 PM PT",
-    ("J", "Algeria", "Austria"): "7:00 PM PT",
-    ("J", "Jordan", "Argentina"): "7:00 PM PT",
-    ("K", "Colombia", "Portugal"): "4:30 PM PT",
-    ("K", "DR Congo", "Uzbekistan"): "4:30 PM PT",
-    ("L", "Panama", "England"): "2:00 PM PT",
-    ("L", "Croatia", "Ghana"): "2:00 PM PT",
+    ("A", "Mexico", "South Africa"): "12:00 PM PST",
+    ("A", "South Korea", "Czechia"): "5:00 PM PST",
+    ("A", "Czechia", "South Africa"): "9:00 AM PST",
+    ("A", "Mexico", "South Korea"): "5:00 PM PST",
+    ("A", "South Africa", "South Korea"): "5:00 PM PST",
+    ("A", "Mexico", "Czechia"): "5:00 PM PST",
+    ("B", "Canada", "Bosnia and Herzegovina"): "12:00 PM PST",
+    ("B", "Qatar", "Switzerland"): "9:00 AM PST",
+    ("B", "Switzerland", "Bosnia and Herzegovina"): "12:00 PM PST",
+    ("B", "Canada", "Qatar"): "3:00 PM PST",
+    ("B", "Switzerland", "Canada"): "12:00 PM PST",
+    ("B", "Bosnia and Herzegovina", "Qatar"): "12:00 PM PST",
+    ("C", "Brazil", "Morocco"): "12:00 PM PST",
+    ("C", "Scotland", "Haiti"): "3:00 PM PST",
+    ("C", "Morocco", "Scotland"): "12:00 PM PST",
+    ("C", "Brazil", "Haiti"): "3:00 PM PST",
+    ("C", "Morocco", "Haiti"): "3:00 PM PST",
+    ("C", "Brazil", "Scotland"): "3:00 PM PST",
+    ("D", "United States", "Paraguay"): "5:00 PM PST",
+    ("D", "Australia", "Türkiye"): "9:00 AM PST",
+    ("D", "United States", "Australia"): "9:00 AM PST",
+    ("D", "Paraguay", "Türkiye"): "5:00 PM PST",
+    ("D", "Türkiye", "United States"): "5:00 PM PST",
+    ("D", "Paraguay", "Australia"): "5:00 PM PST",
+    ("E", "Germany", "Curaçao"): "12:00 PM PST",
+    ("E", "Côte d'Ivoire", "Ecuador"): "5:00 PM PST",
+    ("E", "Germany", "Côte d'Ivoire"): "12:00 PM PST",
+    ("E", "Ecuador", "Curaçao"): "5:00 PM PST",
+    ("E", "Curaçao", "Côte d'Ivoire"): "12:00 PM PST",
+    ("E", "Ecuador", "Germany"): "12:00 PM PST",
+    ("F", "Netherlands", "Japan"): "3:00 PM PST",
+    ("F", "Sweden", "Tunisia"): "8:00 PM PST",
+    ("F", "Netherlands", "Sweden"): "9:00 AM PST",
+    ("F", "Tunisia", "Japan"): "9:00 AM PST",
+    ("F", "Tunisia", "Netherlands"): "3:00 PM PST",
+    ("F", "Japan", "Sweden"): "3:00 PM PST",
+    ("G", "Belgium", "Egypt"): "12:00 PM PST",
+    ("G", "Iran", "New Zealand"): "5:00 PM PST",
+    ("G", "Belgium", "Iran"): "3:00 PM PST",
+    ("G", "New Zealand", "Egypt"): "8:00 PM PST",
+    ("G", "New Zealand", "Belgium"): "8:00 PM PST",
+    ("G", "Egypt", "Iran"): "8:00 PM PST",
+    ("H", "Spain", "Cabo Verde"): "9:00 AM PST",
+    ("H", "Saudi Arabia", "Uruguay"): "3:00 PM PST",
+    ("H", "Spain", "Saudi Arabia"): "12:00 PM PST",
+    ("H", "Uruguay", "Cabo Verde"): "5:00 PM PST",
+    ("H", "Cabo Verde", "Saudi Arabia"): "5:00 PM PST",
+    ("H", "Uruguay", "Spain"): "5:00 PM PST",
+    ("I", "France", "Senegal"): "9:00 AM PST",
+    ("I", "Norway", "Iraq"): "12:00 PM PST",
+    ("I", "France", "Iraq"): "12:00 PM PST",
+    ("I", "Norway", "Senegal"): "3:00 PM PST",
+    ("I", "Norway", "France"): "12:00 PM PST",
+    ("I", "Senegal", "Iraq"): "12:00 PM PST",
+    ("J", "Argentina", "Algeria"): "5:00 PM PST",
+    ("J", "Austria", "Jordan"): "9:00 AM PST",
+    ("J", "Argentina", "Austria"): "9:00 AM PST",
+    ("J", "Algeria", "Jordan"): "5:00 PM PST",
+    ("J", "Algeria", "Austria"): "7:00 PM PST",
+    ("J", "Jordan", "Argentina"): "7:00 PM PST",
+    ("K", "Portugal", "DR Congo"): "12:00 PM PST",
+    ("K", "Colombia", "Uzbekistan"): "8:00 PM PST",
+    ("K", "Portugal", "Uzbekistan"): "12:00 PM PST",
+    ("K", "Colombia", "DR Congo"): "8:00 PM PST",
+    ("K", "Colombia", "Portugal"): "4:30 PM PST",
+    ("K", "DR Congo", "Uzbekistan"): "4:30 PM PST",
+    ("L", "England", "Croatia"): "3:00 PM PST",
+    ("L", "Ghana", "Panama"): "5:00 PM PST",
+    ("L", "England", "Ghana"): "3:00 PM PST",
+    ("L", "Croatia", "Panama"): "5:00 PM PST",
+    ("L", "Panama", "England"): "2:00 PM PST",
+    ("L", "Croatia", "Ghana"): "2:00 PM PST",
+}
+KNOCKOUT_TIMES_PACIFIC = {
+    "R32-1": "12:00 PM PST",
+    "R32-2": "5:00 PM PST",
+    "R32-3": "12:00 PM PST",
+    "R32-4": "5:00 PM PST",
+    "R32-5": "12:00 PM PST",
+    "R32-6": "5:00 PM PST",
+    "R32-7": "9:00 AM PST",
+    "R32-8": "12:00 PM PST",
+    "R32-9": "5:00 PM PST",
+    "R32-10": "9:00 AM PST",
+    "R32-11": "12:00 PM PST",
+    "R32-12": "5:00 PM PST",
+    "R32-13": "9:00 AM PST",
+    "R32-14": "12:00 PM PST",
+    "R32-15": "3:00 PM PST",
+    "R32-16": "5:00 PM PST",
+    "R16-1": "12:00 PM PST",
+    "R16-2": "5:00 PM PST",
+    "R16-3": "12:00 PM PST",
+    "R16-4": "5:00 PM PST",
+    "R16-5": "12:00 PM PST",
+    "R16-6": "5:00 PM PST",
+    "R16-7": "12:00 PM PST",
+    "R16-8": "5:00 PM PST",
+    "QF-1": "12:00 PM PST",
+    "QF-2": "5:00 PM PST",
+    "QF-3": "12:00 PM PST",
+    "QF-4": "5:00 PM PST",
+    "SF-1": "5:00 PM PST",
+    "SF-2": "5:00 PM PST",
+    "3P": "12:00 PM PST",
+    "Final": "12:00 PM PST",
 }
 LIVE_MATCH_SOURCES = {
     ("G", "New Zealand", "Belgium"): "https://www.theguardian.com/football/live/2026/jun/26/new-zealand-v-belgium-world-cup-2026-live-updates",
@@ -84,6 +178,7 @@ def load_data():
 
 
 def save_data(data):
+    apply_match_times(data)
     data["imagePath"] = "/world_cup_2026_group_standings.png"
     with CACHE.open("w", encoding="utf-8") as handle:
         json.dump(data, handle, ensure_ascii=False, indent=2)
@@ -115,6 +210,10 @@ def apply_match_times(data):
         key = (match.get("group"), match.get("home"), match.get("away"))
         if key in MATCH_TIMES_PACIFIC:
             match["timePst"] = MATCH_TIMES_PACIFIC[key]
+    for match in data.get("knockout", []):
+        slot = match.get("slot")
+        if slot in KNOCKOUT_TIMES_PACIFIC:
+            match["timePst"] = KNOCKOUT_TIMES_PACIFIC[slot]
 
 
 def apply_verified_overrides(data):
@@ -233,6 +332,7 @@ def refresh_player_stats(data):
 
 
 def write_dynamic_snapshot(data):
+    apply_match_times(data)
     snapshot = {
         "lastUpdated": data.get("lastUpdated"),
         "sourceNote": data.get("sourceNote"),

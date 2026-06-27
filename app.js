@@ -78,7 +78,6 @@ const SELECT_FLAG_FALLBACKS = {
   Scotland: "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
 };
 const FEATURED_PLAYERS = new Set(["Kylian Mbappé", "Lionel Messi", "Cristiano Ronaldo", "Erling Haaland"]);
-const PST_SLOTS = ["9:00 AM PT", "11:00 AM PT", "1:00 PM PT", "3:00 PM PT", "5:00 PM PT", "7:00 PM PT"];
 const PLACEMENT_EMOJIS = {
   Champion: "🥇",
   "Runner-up": "🥈",
@@ -236,14 +235,24 @@ function normalizeCountry(country) {
 }
 
 function pstTime(match, collection) {
-  if (match.timePst) return match.timePst;
-  if (match.date >= "2026-06-26") return "Time TBD";
-  const sameDate = collection.filter((item) => item.date === match.date);
-  const index = Math.max(
-    0,
-    sameDate.findIndex((item) => (match.id && item.id === match.id) || (match.slot && item.slot === match.slot)),
+  return match.timePst || "Time TBD";
+}
+
+function pstMinutes(label) {
+  const match = String(label || "").match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+  if (!match) return Number.MAX_SAFE_INTEGER;
+  let hours = Number(match[1]) % 12;
+  const minutes = Number(match[2]);
+  if (match[3].toUpperCase() === "PM") hours += 12;
+  return hours * 60 + minutes;
+}
+
+function compareByKickoff(a, b) {
+  return (
+    a.date.localeCompare(b.date) ||
+    pstMinutes(pstTime(a)) - pstMinutes(pstTime(b)) ||
+    String(a.id || a.slot).localeCompare(String(b.id || b.slot), undefined, { numeric: true })
   );
-  return PST_SLOTS[index % PST_SLOTS.length];
 }
 
 function scoreText(match) {
@@ -494,7 +503,7 @@ function scheduleItems() {
       score: "Result TBD",
     };
   });
-  return [...groupItems, ...knockoutItems].sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
+  return [...groupItems, ...knockoutItems].sort(compareByKickoff);
 }
 
 function matchResultHtml(match, compact = false, collection = state.matches) {
@@ -517,7 +526,7 @@ function matchResultHtml(match, compact = false, collection = state.matches) {
 }
 
 function matchesByDate() {
-  return [...state.matches].sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
+  return [...state.matches].sort(compareByKickoff);
 }
 
 function renderMatchLookup() {

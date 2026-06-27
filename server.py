@@ -7,10 +7,11 @@ import subprocess
 import sys
 import urllib.error
 import urllib.request
-from datetime import date, datetime, timezone
+from datetime import date, datetime, time, timedelta, timezone
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse
+from zoneinfo import ZoneInfo
 
 from world_cup_data import GROUPS, PLAYER_STATS, SEED_STANDINGS, seed_payload
 
@@ -23,6 +24,8 @@ BUNDLED_PYTHON = Path("/Users/terra/.cache/codex-runtimes/codex-primary-runtime/
 STANDINGS_URL = "https://www.sbnation.com/soccer/1117905/world-cup-standings-updated-full-list-of-teams"
 PLAYER_STATS_URL = "https://www.sbnation.com/fifa-world-cup/1118693/world-cup-2026-golden-boot-standings"
 VERIFIED_GROUPS = {"D", "E", "F"}
+PACIFIC_TZ = ZoneInfo("America/Los_Angeles")
+LIVE_WINDOW_MINUTES = 150
 VERIFIED_MATCH_SCORES = {
     ("D", "Türkiye", "United States"): (3, 2, "FT"),
     ("D", "Paraguay", "Australia"): (0, 0, "FT"),
@@ -160,6 +163,10 @@ def utc_now():
     return datetime.now(timezone.utc).isoformat()
 
 
+def pacific_now():
+    return datetime.now(PACIFIC_TZ)
+
+
 def load_data():
     if CACHE.exists():
         with CACHE.open("r", encoding="utf-8") as handle:
@@ -258,25 +265,90 @@ def parse_guardian_live_score(text, home, away):
     return None
 
 
-def apply_live_score_updates(data):
+def parse_pacific_time(label):
+    match = re.search(r"(\d{1,2}):(\d{2})\s*(AM|PM)", label or "", flags=re.I)
+    if not match:
+        return None
+    hour = int(match.group(1)) % 12
+    minute = int(match.group(2))
+    if match.group(3).upper() == "PM":
+        hour += 12
+    return time(hour, minute)
+
+
+def match_kickoff_pacific(match):
+    kickoff_time = parse_pacific_time(match.get("timePst"))
+    if not kickoff_time or not match.get("date"):
+        return None
+    try:
+        kickoff_date = date.fromisoformat(match["date"])
+    except ValueError:
+        return None
+    return datetime.combine(kickoff_date, kickoff_time, tzinfo=PACIFIC_TZ)
+
+
+def is_match_in_live_window(match, now=None):
+    kickoff = match_kickoff_pacific(match)
+    if not kickoff:
+        return False
+    now = now or pacific_now()
+    return kickoff <= now <= kickoff + timedelta(minutes=LIVE_WINDOW_MINUTES)
+
+
+def apply_live_score_updates(data, now=None):
     changed = 0
-    today = date.today().isoformat()
+    now = now or pacific_now()
     for match in data.get("matches", []):
         key = (match.get("group"), match.get("home"), match.get("away"))
         if key not in LIVE_MATCH_SOURCES:
             continue
-        if match.get("date") != today or match.get("status") == "FT":
+        if match.get("status") == "FT":
             continue
+        in_window = is_match_in_live_window(match, now)
+        is_today = match.get("date") == now.date().isoformat()
+        if not in_window and not is_today and match.get("status") != "Live":
+            continue
+        before = (match.get("homeScore"), match.get("awayScore"), match.get("status"))
         try:
             text = strip_html(fetch_text(LIVE_MATCH_SOURCES[key]))
         except (urllib.error.URLError, TimeoutError):
+            if in_window:
+                match["status"] = "Live"
+                if match.get("homeScore") is None:
+                    match["homeScore"] = 0
+                if match.get("awayScore") is None:
+                    match["awayScore"] = 0
+                if before != (match.get("homeScore"), match.get("awayScore"), match.get("status")):
+                    changed += 1
             continue
         parsed = parse_guardian_live_score(text, match["home"], match["away"])
-        if not parsed:
-            continue
-        match["homeScore"], match["awayScore"], match["status"] = parsed
-        changed += 1
+        if parsed and parsed[2] == "FT":
+            match["homeScore"], match["awayScore"], match["status"] = parsed
+        elif parsed and in_window:
+            match["homeScore"], match["awayScore"], match["status"] = parsed
+        elif in_window:
+            match["status"] = "Live"
+            if match.get("homeScore") is None:
+                match["homeScore"] = 0
+            if match.get("awayScore") is None:
+                match["awayScore"] = 0
+        elif match.get("status") == "Live":
+            match["status"] = "Scheduled"
+        if before != (match.get("homeScore"), match.get("awayScore"), match.get("status")):
+            changed += 1
     return changed
+
+
+def load_data_with_live_check():
+    data = load_data()
+    live_changed = apply_live_score_updates(data)
+    if live_changed:
+        recalculate_from_matches(data)
+        apply_verified_overrides(data)
+        data["lastUpdated"] = utc_now()
+        data["sourceNote"] = "Checked live match windows and live score sources on page load."
+        save_data(data)
+    return data
 
 
 def normalize_team_name(team):
@@ -536,7 +608,7 @@ class Handler(SimpleHTTPRequestHandler):
     def do_GET(self):
         path = urlparse(self.path).path
         if path == "/api/data":
-            self.send_json(load_data())
+            self.send_json(load_data_with_live_check())
             return
         if path == "/":
             self.path = "/index.html"

@@ -356,7 +356,7 @@ tr.advanced {
   color: var(--green);
 }
 
-tr.third {
+tr.advancing-third {
   background: var(--yellow);
 }
 
@@ -1125,6 +1125,16 @@ td.stage-quarterfinal {
   background: var(--green-soft);
   color: var(--green);
   font-weight: 700;
+}
+
+.tree-team.filled.loser {
+  background: #ffe2e2;
+  color: #b42323;
+}
+
+.tree-team.filled.winner {
+  background: var(--green-soft);
+  color: var(--green);
 }
 
 .tree-team.pending {

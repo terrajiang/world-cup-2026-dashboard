@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-27T01:53:12.940914+00:00",
+  "lastUpdated": "2026-06-29T05:00:41.638904+00:00",
   "sourceNote": "Refreshed 11 group table(s), checked live match pages, and validated stored score corrections.",
   "groups": {
     "A": [
@@ -304,52 +304,52 @@
     ],
     "G": [
       {
-        "team": "Egypt",
-        "played": 2,
+        "team": "Belgium",
+        "played": 3,
         "won": 1,
-        "drawn": 1,
+        "drawn": 2,
         "lost": 0,
-        "gf": 4,
+        "gf": 6,
         "ga": 2,
+        "gd": 4,
+        "pts": 5,
+        "status": "advanced"
+      },
+      {
+        "team": "Egypt",
+        "played": 3,
+        "won": 1,
+        "drawn": 2,
+        "lost": 0,
+        "gf": 5,
+        "ga": 3,
         "gd": 2,
-        "pts": 4,
-        "status": "contending"
+        "pts": 5,
+        "status": "advanced"
       },
       {
         "team": "Iran",
-        "played": 2,
+        "played": 3,
         "won": 0,
-        "drawn": 2,
+        "drawn": 3,
         "lost": 0,
-        "gf": 2,
-        "ga": 2,
+        "gf": 3,
+        "ga": 3,
         "gd": 0,
-        "pts": 2,
-        "status": "contending"
-      },
-      {
-        "team": "Belgium",
-        "played": 2,
-        "won": 0,
-        "drawn": 2,
-        "lost": 0,
-        "gf": 1,
-        "ga": 1,
-        "gd": 0,
-        "pts": 2,
+        "pts": 3,
         "status": "third"
       },
       {
         "team": "New Zealand",
-        "played": 2,
+        "played": 3,
         "won": 0,
         "drawn": 1,
-        "lost": 1,
-        "gf": 3,
-        "ga": 5,
-        "gd": -2,
+        "lost": 2,
+        "gf": 4,
+        "ga": 10,
+        "gd": -6,
         "pts": 1,
-        "status": "contending"
+        "status": "eliminated"
       }
     ],
     "H": [
@@ -374,7 +374,7 @@
         "gf": 2,
         "ga": 2,
         "gd": 0,
-        "pts": 3,
+        "pts": 4,
         "status": "advanced"
       },
       {
@@ -393,12 +393,12 @@
         "team": "Saudi Arabia",
         "played": 3,
         "won": 0,
-        "drawn": 2,
-        "lost": 1,
+        "drawn": 1,
+        "lost": 2,
         "gf": 1,
         "ga": 5,
         "gd": -4,
-        "pts": 2,
+        "pts": 1,
         "status": "eliminated"
       }
     ],
@@ -455,151 +455,151 @@
     "J": [
       {
         "team": "Argentina",
-        "played": 2,
-        "won": 2,
+        "played": 3,
+        "won": 3,
         "drawn": 0,
         "lost": 0,
-        "gf": 5,
-        "ga": 0,
-        "gd": 5,
-        "pts": 6,
-        "status": "contending"
+        "gf": 8,
+        "ga": 1,
+        "gd": 7,
+        "pts": 9,
+        "status": "advanced"
       },
       {
         "team": "Austria",
-        "played": 2,
+        "played": 3,
         "won": 1,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 1,
-        "gf": 3,
-        "ga": 3,
+        "gf": 6,
+        "ga": 6,
         "gd": 0,
-        "pts": 3,
-        "status": "contending"
+        "pts": 4,
+        "status": "advanced"
       },
       {
         "team": "Algeria",
-        "played": 2,
+        "played": 3,
         "won": 1,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 1,
-        "gf": 2,
-        "ga": 4,
+        "gf": 5,
+        "ga": 7,
         "gd": -2,
-        "pts": 3,
+        "pts": 4,
         "status": "third"
       },
       {
         "team": "Jordan",
-        "played": 2,
+        "played": 3,
         "won": 0,
         "drawn": 0,
-        "lost": 2,
-        "gf": 2,
-        "ga": 5,
-        "gd": -3,
+        "lost": 3,
+        "gf": 3,
+        "ga": 8,
+        "gd": -5,
         "pts": 0,
-        "status": "contending"
+        "status": "eliminated"
       }
     ],
     "K": [
       {
         "team": "Colombia",
-        "played": 2,
+        "played": 3,
         "won": 2,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 0,
         "gf": 4,
         "ga": 1,
         "gd": 3,
-        "pts": 6,
-        "status": "contending"
+        "pts": 7,
+        "status": "advanced"
       },
       {
         "team": "Portugal",
-        "played": 2,
+        "played": 3,
         "won": 1,
-        "drawn": 1,
+        "drawn": 2,
         "lost": 0,
         "gf": 6,
         "ga": 1,
         "gd": 5,
-        "pts": 4,
-        "status": "contending"
+        "pts": 5,
+        "status": "advanced"
       },
       {
         "team": "DR Congo",
-        "played": 2,
-        "won": 0,
+        "played": 3,
+        "won": 1,
         "drawn": 1,
         "lost": 1,
-        "gf": 1,
-        "ga": 2,
-        "gd": -1,
-        "pts": 1,
+        "gf": 4,
+        "ga": 3,
+        "gd": 1,
+        "pts": 4,
         "status": "third"
       },
       {
         "team": "Uzbekistan",
-        "played": 2,
+        "played": 3,
         "won": 0,
         "drawn": 0,
-        "lost": 2,
-        "gf": 1,
-        "ga": 8,
-        "gd": -7,
+        "lost": 3,
+        "gf": 2,
+        "ga": 11,
+        "gd": -9,
         "pts": 0,
-        "status": "contending"
+        "status": "eliminated"
       }
     ],
     "L": [
       {
         "team": "England",
-        "played": 2,
-        "won": 1,
+        "played": 3,
+        "won": 2,
         "drawn": 1,
         "lost": 0,
-        "gf": 4,
+        "gf": 6,
         "ga": 2,
-        "gd": 2,
-        "pts": 4,
-        "status": "contending"
-      },
-      {
-        "team": "Ghana",
-        "played": 2,
-        "won": 1,
-        "drawn": 1,
-        "lost": 0,
-        "gf": 1,
-        "ga": 0,
-        "gd": 1,
-        "pts": 4,
-        "status": "contending"
+        "gd": 4,
+        "pts": 7,
+        "status": "advanced"
       },
       {
         "team": "Croatia",
-        "played": 2,
-        "won": 1,
+        "played": 3,
+        "won": 2,
         "drawn": 0,
         "lost": 1,
-        "gf": 3,
-        "ga": 4,
-        "gd": -1,
-        "pts": 3,
+        "gf": 5,
+        "ga": 5,
+        "gd": 0,
+        "pts": 6,
+        "status": "advanced"
+      },
+      {
+        "team": "Ghana",
+        "played": 3,
+        "won": 1,
+        "drawn": 1,
+        "lost": 1,
+        "gf": 2,
+        "ga": 2,
+        "gd": 0,
+        "pts": 4,
         "status": "third"
       },
       {
         "team": "Panama",
-        "played": 2,
+        "played": 3,
         "won": 0,
         "drawn": 0,
-        "lost": 2,
+        "lost": 3,
         "gf": 0,
-        "ga": 2,
-        "gd": -2,
+        "ga": 4,
+        "gd": -4,
         "pts": 0,
-        "status": "contending"
+        "status": "eliminated"
       }
     ]
   },
@@ -1050,9 +1050,9 @@
       "date": "2026-06-26",
       "home": "New Zealand",
       "away": "Belgium",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "Scheduled",
+      "homeScore": 1,
+      "awayScore": 5,
+      "status": "FT",
       "timePst": "8:00 PM PST"
     },
     {
@@ -1061,9 +1061,9 @@
       "date": "2026-06-26",
       "home": "Egypt",
       "away": "Iran",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "Scheduled",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "FT",
       "timePst": "8:00 PM PST"
     },
     {
@@ -1118,7 +1118,7 @@
       "away": "Saudi Arabia",
       "homeScore": 0,
       "awayScore": 0,
-      "status": "Live",
+      "status": "FT",
       "timePst": "5:00 PM PST"
     },
     {
@@ -1129,7 +1129,7 @@
       "away": "Spain",
       "homeScore": 0,
       "awayScore": 1,
-      "status": "Live",
+      "status": "FT",
       "timePst": "5:00 PM PST"
     },
     {
@@ -1248,9 +1248,9 @@
       "date": "2026-06-27",
       "home": "Algeria",
       "away": "Austria",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "Scheduled",
+      "homeScore": 3,
+      "awayScore": 3,
+      "status": "FT",
       "timePst": "7:00 PM PST"
     },
     {
@@ -1259,9 +1259,9 @@
       "date": "2026-06-27",
       "home": "Jordan",
       "away": "Argentina",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "Scheduled",
+      "homeScore": 1,
+      "awayScore": 3,
+      "status": "FT",
       "timePst": "7:00 PM PST"
     },
     {
@@ -1314,9 +1314,9 @@
       "date": "2026-06-27",
       "home": "Colombia",
       "away": "Portugal",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "Scheduled",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "FT",
       "timePst": "4:30 PM PST"
     },
     {
@@ -1325,9 +1325,9 @@
       "date": "2026-06-27",
       "home": "DR Congo",
       "away": "Uzbekistan",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "Scheduled",
+      "homeScore": 3,
+      "awayScore": 1,
+      "status": "FT",
       "timePst": "4:30 PM PST"
     },
     {
@@ -1380,9 +1380,9 @@
       "date": "2026-06-27",
       "home": "Panama",
       "away": "England",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "Scheduled",
+      "homeScore": 0,
+      "awayScore": 2,
+      "status": "FT",
       "timePst": "2:00 PM PST"
     },
     {
@@ -1391,21 +1391,471 @@
       "date": "2026-06-27",
       "home": "Croatia",
       "away": "Ghana",
+      "homeScore": 2,
+      "awayScore": 1,
+      "status": "FT",
+      "timePst": "2:00 PM PST"
+    }
+  ],
+  "knockout": [
+    {
+      "round": "Round of 32",
+      "date": "2026-06-29",
+      "slot": "R32-1",
+      "matchNo": 74,
+      "home": "Winner Group E",
+      "away": "3rd Group A/B/C/D/F",
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "resolvedHome": "Germany",
+      "resolvedAway": "Paraguay",
+      "timePst": "1:30 PM PST"
+    },
+    {
+      "round": "Round of 32",
+      "date": "2026-06-30",
+      "slot": "R32-2",
+      "matchNo": 77,
+      "home": "Winner Group I",
+      "away": "3rd Group C/D/F/G/H",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": "France",
+      "resolvedAway": "Sweden",
       "timePst": "2:00 PM PST"
+    },
+    {
+      "round": "Round of 32",
+      "date": "2026-06-28",
+      "slot": "R32-3",
+      "matchNo": 73,
+      "home": "Runner-up Group A",
+      "away": "Runner-up Group B",
+      "homeScore": 0,
+      "awayScore": 1,
+      "status": "FT",
+      "resolvedHome": "South Africa",
+      "resolvedAway": "Canada",
+      "timePst": "12:00 PM PST"
+    },
+    {
+      "round": "Round of 32",
+      "date": "2026-06-29",
+      "slot": "R32-4",
+      "matchNo": 75,
+      "home": "Winner Group F",
+      "away": "Runner-up Group C",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": "Netherlands",
+      "resolvedAway": "Morocco",
+      "timePst": "6:00 PM PST"
+    },
+    {
+      "round": "Round of 32",
+      "date": "2026-07-02",
+      "slot": "R32-5",
+      "matchNo": 83,
+      "home": "Runner-up Group K",
+      "away": "Runner-up Group L",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": "Portugal",
+      "resolvedAway": "Croatia",
+      "timePst": "8:00 PM PST"
+    },
+    {
+      "round": "Round of 32",
+      "date": "2026-07-02",
+      "slot": "R32-6",
+      "matchNo": 84,
+      "home": "Winner Group H",
+      "away": "Runner-up Group J",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": "Spain",
+      "resolvedAway": "Austria",
+      "timePst": "12:00 PM PST"
+    },
+    {
+      "round": "Round of 32",
+      "date": "2026-07-01",
+      "slot": "R32-7",
+      "matchNo": 81,
+      "home": "Winner Group D",
+      "away": "3rd Group B/E/F/I/J",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": "United States",
+      "resolvedAway": "Bosnia and Herzegovina",
+      "timePst": "5:00 PM PST"
+    },
+    {
+      "round": "Round of 32",
+      "date": "2026-07-01",
+      "slot": "R32-8",
+      "matchNo": 82,
+      "home": "Winner Group G",
+      "away": "3rd Group A/E/H/I/J",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": "Belgium",
+      "resolvedAway": "Senegal",
+      "timePst": "1:00 PM PST"
+    },
+    {
+      "round": "Round of 32",
+      "date": "2026-06-29",
+      "slot": "R32-9",
+      "matchNo": 76,
+      "home": "Winner Group C",
+      "away": "Runner-up Group F",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": "Brazil",
+      "resolvedAway": "Japan",
+      "timePst": "10:00 AM PST"
+    },
+    {
+      "round": "Round of 32",
+      "date": "2026-06-30",
+      "slot": "R32-10",
+      "matchNo": 78,
+      "home": "Runner-up Group E",
+      "away": "Runner-up Group I",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": "Côte d'Ivoire",
+      "resolvedAway": "Norway",
+      "timePst": "10:00 AM PST"
+    },
+    {
+      "round": "Round of 32",
+      "date": "2026-06-30",
+      "slot": "R32-11",
+      "matchNo": 79,
+      "home": "Winner Group A",
+      "away": "3rd Group C/E/F/H/I",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": "Mexico",
+      "resolvedAway": "Ecuador",
+      "timePst": "6:00 PM PST"
+    },
+    {
+      "round": "Round of 32",
+      "date": "2026-07-01",
+      "slot": "R32-12",
+      "matchNo": 80,
+      "home": "Winner Group L",
+      "away": "3rd Group E/H/I/J/K",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": "England",
+      "resolvedAway": "DR Congo",
+      "timePst": "9:00 AM PST"
+    },
+    {
+      "round": "Round of 32",
+      "date": "2026-07-03",
+      "slot": "R32-13",
+      "matchNo": 86,
+      "home": "Winner Group J",
+      "away": "Runner-up Group H",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": "Argentina",
+      "resolvedAway": "Cabo Verde",
+      "timePst": "11:00 AM PST"
+    },
+    {
+      "round": "Round of 32",
+      "date": "2026-07-03",
+      "slot": "R32-14",
+      "matchNo": 88,
+      "home": "Runner-up Group D",
+      "away": "Runner-up Group G",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": "Australia",
+      "resolvedAway": "Egypt",
+      "timePst": "6:30 PM PST"
+    },
+    {
+      "round": "Round of 32",
+      "date": "2026-07-02",
+      "slot": "R32-15",
+      "matchNo": 85,
+      "home": "Winner Group B",
+      "away": "3rd Group E/F/G/I/J",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": "Switzerland",
+      "resolvedAway": "Algeria",
+      "timePst": "4:00 PM PST"
+    },
+    {
+      "round": "Round of 32",
+      "date": "2026-07-03",
+      "slot": "R32-16",
+      "matchNo": 87,
+      "home": "Winner Group K",
+      "away": "3rd Group D/E/I/J/L",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": "Colombia",
+      "resolvedAway": "Ghana",
+      "timePst": "3:00 PM PST"
+    },
+    {
+      "round": "Round of 16",
+      "date": "2026-07-04",
+      "slot": "R16-1",
+      "matchNo": 89,
+      "home": "Winner R32-1",
+      "away": "Winner R32-2",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": null,
+      "resolvedAway": null,
+      "timePst": "12:00 PM PST"
+    },
+    {
+      "round": "Round of 16",
+      "date": "2026-07-04",
+      "slot": "R16-2",
+      "matchNo": 90,
+      "home": "Winner R32-3",
+      "away": "Winner R32-4",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": "Canada",
+      "resolvedAway": null,
+      "timePst": "5:00 PM PST"
+    },
+    {
+      "round": "Round of 16",
+      "date": "2026-07-05",
+      "slot": "R16-3",
+      "matchNo": 93,
+      "home": "Winner R32-5",
+      "away": "Winner R32-6",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": null,
+      "resolvedAway": null,
+      "timePst": "12:00 PM PST"
+    },
+    {
+      "round": "Round of 16",
+      "date": "2026-07-05",
+      "slot": "R16-4",
+      "matchNo": 94,
+      "home": "Winner R32-7",
+      "away": "Winner R32-8",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": null,
+      "resolvedAway": null,
+      "timePst": "5:00 PM PST"
+    },
+    {
+      "round": "Round of 16",
+      "date": "2026-07-06",
+      "slot": "R16-5",
+      "matchNo": 91,
+      "home": "Winner R32-9",
+      "away": "Winner R32-10",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": null,
+      "resolvedAway": null,
+      "timePst": "12:00 PM PST"
+    },
+    {
+      "round": "Round of 16",
+      "date": "2026-07-06",
+      "slot": "R16-6",
+      "matchNo": 92,
+      "home": "Winner R32-11",
+      "away": "Winner R32-12",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": null,
+      "resolvedAway": null,
+      "timePst": "5:00 PM PST"
+    },
+    {
+      "round": "Round of 16",
+      "date": "2026-07-07",
+      "slot": "R16-7",
+      "matchNo": 95,
+      "home": "Winner R32-13",
+      "away": "Winner R32-14",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": null,
+      "resolvedAway": null,
+      "timePst": "12:00 PM PST"
+    },
+    {
+      "round": "Round of 16",
+      "date": "2026-07-07",
+      "slot": "R16-8",
+      "matchNo": 96,
+      "home": "Winner R32-15",
+      "away": "Winner R32-16",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": null,
+      "resolvedAway": null,
+      "timePst": "5:00 PM PST"
+    },
+    {
+      "round": "Quarterfinal",
+      "date": "2026-07-09",
+      "slot": "QF-1",
+      "matchNo": 97,
+      "home": "Winner R16-1",
+      "away": "Winner R16-2",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": null,
+      "resolvedAway": null,
+      "timePst": "12:00 PM PST"
+    },
+    {
+      "round": "Quarterfinal",
+      "date": "2026-07-10",
+      "slot": "QF-2",
+      "matchNo": 98,
+      "home": "Winner R16-3",
+      "away": "Winner R16-4",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": null,
+      "resolvedAway": null,
+      "timePst": "5:00 PM PST"
+    },
+    {
+      "round": "Quarterfinal",
+      "date": "2026-07-11",
+      "slot": "QF-3",
+      "matchNo": 99,
+      "home": "Winner R16-5",
+      "away": "Winner R16-6",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": null,
+      "resolvedAway": null,
+      "timePst": "12:00 PM PST"
+    },
+    {
+      "round": "Quarterfinal",
+      "date": "2026-07-11",
+      "slot": "QF-4",
+      "matchNo": 100,
+      "home": "Winner R16-7",
+      "away": "Winner R16-8",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": null,
+      "resolvedAway": null,
+      "timePst": "5:00 PM PST"
+    },
+    {
+      "round": "Semifinal",
+      "date": "2026-07-14",
+      "slot": "SF-1",
+      "matchNo": 101,
+      "home": "Winner QF-1",
+      "away": "Winner QF-2",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": null,
+      "resolvedAway": null,
+      "timePst": "5:00 PM PST"
+    },
+    {
+      "round": "Semifinal",
+      "date": "2026-07-15",
+      "slot": "SF-2",
+      "matchNo": 102,
+      "home": "Winner QF-3",
+      "away": "Winner QF-4",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": null,
+      "resolvedAway": null,
+      "timePst": "5:00 PM PST"
+    },
+    {
+      "round": "Third Place",
+      "date": "2026-07-18",
+      "slot": "3P",
+      "matchNo": 103,
+      "home": "Loser SF-1",
+      "away": "Loser SF-2",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": null,
+      "resolvedAway": null,
+      "timePst": "12:00 PM PST"
+    },
+    {
+      "round": "Final",
+      "date": "2026-07-19",
+      "slot": "Final",
+      "matchNo": 104,
+      "home": "Winner SF-1",
+      "away": "Winner SF-2",
+      "homeScore": null,
+      "awayScore": null,
+      "status": "Scheduled",
+      "resolvedHome": null,
+      "resolvedAway": null,
+      "timePst": "12:00 PM PST"
     }
   ],
   "playerStats": [
     {
       "player": "Lionel Messi",
       "team": "Argentina",
-      "goals": 5,
+      "goals": 6,
       "assists": 0,
       "yellowCards": 0,
       "redCards": 0,
-      "minutes": 188
+      "minutes": 223
     },
     {
       "player": "Kylian Mbappé",
@@ -1498,22 +1948,40 @@
       "minutes": 255
     },
     {
+      "player": "Harry Kane",
+      "team": "England",
+      "goals": 3,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 291
+    },
+    {
+      "player": "Elijah Just",
+      "team": "New Zealand",
+      "goals": 3,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 292
+    },
+    {
+      "player": "Yoane Wissa",
+      "team": "DR Congo",
+      "goals": 3,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 307
+    },
+    {
       "player": "Jonathan David",
       "team": "Canada",
       "goals": 3,
       "assists": 0,
       "yellowCards": 0,
       "redCards": 0,
-      "minutes": 271
-    },
-    {
-      "player": "Mikel Oyarzabal",
-      "team": "Spain",
-      "goals": 2,
-      "assists": 1,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 144
+      "minutes": 371
     },
     {
       "player": "Crysencio Summerville",
@@ -1523,15 +1991,6 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 147
-    },
-    {
-      "player": "Maxi Araujo",
-      "team": "Uruguay",
-      "goals": 2,
-      "assists": 1,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 174
     },
     {
       "player": "Pape Gueye",
@@ -1552,6 +2011,33 @@
       "minutes": 194
     },
     {
+      "player": "Riyad Mahrez",
+      "team": "Algeria",
+      "goals": 2,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 214
+    },
+    {
+      "player": "Mikel Oyarzabal",
+      "team": "Spain",
+      "goals": 2,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 228
+    },
+    {
+      "player": "Jude Bellingham",
+      "team": "England",
+      "goals": 2,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 238
+    },
+    {
       "player": "Ayase Ueda",
       "team": "Japan",
       "goals": 2,
@@ -1570,6 +2056,24 @@
       "minutes": 268
     },
     {
+      "player": "Maxi Araujo",
+      "team": "Uruguay",
+      "goals": 2,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 278
+    },
+    {
+      "player": "Ramin Rezaeian",
+      "team": "Iran",
+      "goals": 2,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 309
+    },
+    {
       "player": "Ermin Mahmic",
       "team": "Bosnia and Herzegovina",
       "goals": 2,
@@ -1577,6 +2081,15 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 37
+    },
+    {
+      "player": "Marko Arnautovic",
+      "team": "Austria",
+      "goals": 2,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 133
     },
     {
       "player": "Anthony Elanga",
@@ -1615,40 +2128,13 @@
       "minutes": 187
     },
     {
-      "player": "Elijah Just",
-      "team": "New Zealand",
-      "goals": 2,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 190
-    },
-    {
-      "player": "Cristiano Ronaldo",
-      "team": "Portugal",
-      "goals": 2,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 202
-    },
-    {
-      "player": "Harry Kane",
-      "team": "England",
-      "goals": 2,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 204
-    },
-    {
       "player": "Daniel Muñoz",
       "team": "Colombia",
       "goals": 2,
       "assists": 0,
       "yellowCards": 0,
       "redCards": 0,
-      "minutes": 207
+      "minutes": 216
     },
     {
       "player": "Kai Havertz",
@@ -1678,6 +2164,15 @@
       "minutes": 278
     },
     {
+      "player": "Leandro Trossard",
+      "team": "Belgium",
+      "goals": 2,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 280
+    },
+    {
       "player": "Yasin Ayari",
       "team": "Sweden",
       "goals": 2,
@@ -1685,6 +2180,15 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 286
+    },
+    {
+      "player": "Cristiano Ronaldo",
+      "team": "Portugal",
+      "goals": 2,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 301
     },
     {
       "player": "Iliman-Cheikh Ndiaye",
@@ -1702,7 +2206,7 @@
       "assists": 2,
       "yellowCards": 0,
       "redCards": 0,
-      "minutes": 143
+      "minutes": 204
     },
     {
       "player": "Mohamed Salah",
@@ -1711,7 +2215,7 @@
       "assists": 2,
       "yellowCards": 0,
       "redCards": 0,
-      "minutes": 168
+      "minutes": 231
     },
     {
       "player": "Breel Embolo",
@@ -1756,7 +2260,16 @@
       "assists": 1,
       "yellowCards": 0,
       "redCards": 0,
-      "minutes": 58
+      "minutes": 84
+    },
+    {
+      "player": "Romelu Lukaku",
+      "team": "Belgium",
+      "goals": 1,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 121
     },
     {
       "player": "Bradley Barcola",
@@ -1775,15 +2288,6 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 141
-    },
-    {
-      "player": "Mostafa Ziko",
-      "team": "Egypt",
-      "goals": 1,
-      "assists": 1,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 160
     },
     {
       "player": "Nathaniel Brown",
@@ -1822,22 +2326,22 @@
       "minutes": 196
     },
     {
-      "player": "Luis Díaz",
-      "team": "Colombia",
+      "player": "Petar Sucic",
+      "team": "Croatia",
       "goals": 1,
       "assists": 1,
       "yellowCards": 0,
       "redCards": 0,
-      "minutes": 199
+      "minutes": 226
     },
     {
-      "player": "Ramin Rezaeian",
-      "team": "Iran",
+      "player": "Mousa Tamari",
+      "team": "Jordan",
       "goals": 1,
       "assists": 1,
       "yellowCards": 0,
       "redCards": 0,
-      "minutes": 205
+      "minutes": 230
     },
     {
       "player": "Alex Freeman",
@@ -1847,6 +2351,15 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 232
+    },
+    {
+      "player": "Mostafa Ziko",
+      "team": "Egypt",
+      "goals": 1,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 241
     },
     {
       "player": "Felix Nmecha",
@@ -1869,6 +2382,15 @@
     {
       "player": "Virgil van Dijk",
       "team": "Netherlands",
+      "goals": 1,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 298
+    },
+    {
+      "player": "Luis Díaz",
+      "team": "Colombia",
       "goals": 1,
       "assists": 1,
       "yellowCards": 0,
@@ -1903,15 +2425,6 @@
       "minutes": 13
     },
     {
-      "player": "Mahmoud Trezeguet",
-      "team": "Egypt",
-      "goals": 1,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 25
-    },
-    {
       "player": "Gessime Yassine",
       "team": "Morocco",
       "goals": 1,
@@ -1930,40 +2443,31 @@
       "minutes": 29
     },
     {
-      "player": "Rafael Leão",
-      "team": "Portugal",
+      "player": "Mahmoud Saber",
+      "team": "Egypt",
       "goals": 1,
       "assists": 0,
       "yellowCards": 0,
       "redCards": 0,
-      "minutes": 37
+      "minutes": 45
     },
     {
-      "player": "Marcus Rashford",
-      "team": "England",
+      "player": "Fiston Mayele",
+      "team": "DR Congo",
       "goals": 1,
       "assists": 0,
       "yellowCards": 0,
       "redCards": 0,
-      "minutes": 38
+      "minutes": 47
     },
     {
-      "player": "Helio Varela",
-      "team": "Cabo Verde",
+      "player": "Sasa Kalajdzic",
+      "team": "Austria",
       "goals": 1,
       "assists": 0,
       "yellowCards": 0,
       "redCards": 0,
-      "minutes": 40
-    },
-    {
-      "player": "Ante Budimir",
-      "team": "Croatia",
-      "goals": 1,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 50
+      "minutes": 48
     },
     {
       "player": "Nadhir Benbouali",
@@ -1975,22 +2479,22 @@
       "minutes": 52
     },
     {
-      "player": "Oh Hyeon-gyu",
-      "team": "South Korea",
+      "player": "Rafael Leão",
+      "team": "Portugal",
       "goals": 1,
       "assists": 0,
       "yellowCards": 0,
       "redCards": 0,
-      "minutes": 67
+      "minutes": 63
     },
     {
-      "player": "Lamine Yamal",
-      "team": "Spain",
+      "player": "Giovani Lo Celso",
+      "team": "Argentina",
       "goals": 1,
       "assists": 0,
       "yellowCards": 0,
       "redCards": 0,
-      "minutes": 69
+      "minutes": 65
     },
     {
       "player": "Hasan Al Haydos",
@@ -2000,6 +2504,15 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 70
+    },
+    {
+      "player": "Helio Varela",
+      "team": "Cabo Verde",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 75
     },
     {
       "player": "Jovo Lukic",
@@ -2020,13 +2533,13 @@
       "minutes": 82
     },
     {
-      "player": "Marko Arnautovic",
-      "team": "Austria",
+      "player": "Alexis Saelemaekers",
+      "team": "Belgium",
       "goals": 1,
       "assists": 0,
       "yellowCards": 0,
       "redCards": 0,
-      "minutes": 88
+      "minutes": 89
     },
     {
       "player": "Habib Diarra",
@@ -2074,15 +2587,6 @@
       "minutes": 101
     },
     {
-      "player": "Abdulelah Al-Amri",
-      "team": "Saudi Arabia",
-      "goals": 1,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 102
-    },
-    {
       "player": "Mauricio",
       "team": "Paraguay",
       "goals": 1,
@@ -2090,6 +2594,15 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 104
+    },
+    {
+      "player": "Nikola Vlasic",
+      "team": "Croatia",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 108
     },
     {
       "player": "Petar Musa",
@@ -2101,6 +2614,15 @@
       "minutes": 116
     },
     {
+      "player": "Ante Budimir",
+      "team": "Croatia",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 119
+    },
+    {
       "player": "Auston Trusty",
       "team": "United States",
       "goals": 1,
@@ -2108,6 +2630,15 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 123
+    },
+    {
+      "player": "Mahmoud Trezeguet",
+      "team": "Egypt",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 129
     },
     {
       "player": "Aymen Hussein",
@@ -2119,6 +2650,15 @@
       "minutes": 129
     },
     {
+      "player": "Marcus Rashford",
+      "team": "England",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 137
+    },
+    {
       "player": "Ibrahim Mbaye",
       "team": "Senegal",
       "goals": 1,
@@ -2126,6 +2666,15 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 137
+    },
+    {
+      "player": "Álex Baena",
+      "team": "Spain",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 140
     },
     {
       "player": "Marcus Pedersen",
@@ -2146,6 +2695,15 @@
       "minutes": 142
     },
     {
+      "player": "Oh Hyeon-gyu",
+      "team": "South Korea",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 145
+    },
+    {
       "player": "Nico Schlotterbeck",
       "team": "Germany",
       "goals": 1,
@@ -2153,6 +2711,15 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 145
+    },
+    {
+      "player": "Lamine Yamal",
+      "team": "Spain",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 153
     },
     {
       "player": "Nilson Angulo",
@@ -2164,33 +2731,6 @@
       "minutes": 157
     },
     {
-      "player": "Amine Gouiri",
-      "team": "Algeria",
-      "goals": 1,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 158
-    },
-    {
-      "player": "Agustin Canobbio",
-      "team": "Uruguay",
-      "goals": 1,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 160
-    },
-    {
-      "player": "Abbosbek Fayzullaev",
-      "team": "Uzbekistan",
-      "goals": 1,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 161
-    },
-    {
       "player": "Junya Ito",
       "team": "Japan",
       "goals": 1,
@@ -2200,24 +2740,6 @@
       "minutes": 161
     },
     {
-      "player": "Emam Ashour",
-      "team": "Egypt",
-      "goals": 1,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 163
-    },
-    {
-      "player": "Jude Bellingham",
-      "team": "England",
-      "goals": 1,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 164
-    },
-    {
       "player": "Raul Jimenez",
       "team": "Mexico",
       "goals": 1,
@@ -2225,15 +2747,6 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 164
-    },
-    {
-      "player": "Thapelo Maseko",
-      "team": "South Africa",
-      "goals": 1,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 167
     },
     {
       "player": "Amad Diallo",
@@ -2254,58 +2767,13 @@
       "minutes": 171
     },
     {
-      "player": "Romano Schmid",
-      "team": "Austria",
+      "player": "Lautaro Martinez",
+      "team": "Argentina",
       "goals": 1,
       "assists": 0,
       "yellowCards": 0,
       "redCards": 0,
-      "minutes": 171
-    },
-    {
-      "player": "Mohammad Mohebbi",
-      "team": "Iran",
-      "goals": 1,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 175
-    },
-    {
-      "player": "Kevin Lenini",
-      "team": "Cabo Verde",
-      "goals": 1,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 177
-    },
-    {
-      "player": "Alexandre Nuno Mendes",
-      "team": "Portugal",
-      "goals": 1,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 178
-    },
-    {
-      "player": "Martin Baturina",
-      "team": "Croatia",
-      "goals": 1,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 182
-    },
-    {
-      "player": "Joāo Neves",
-      "team": "Portugal",
-      "goals": 1,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 182
+      "minutes": 195
     },
     {
       "player": "Matías Galaraza",
@@ -2335,24 +2803,6 @@
       "minutes": 201
     },
     {
-      "player": "Yoane Wissa",
-      "team": "DR Congo",
-      "goals": 1,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 202
-    },
-    {
-      "player": "Teboho Mokoena",
-      "team": "South Africa",
-      "goals": 1,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 202
-    },
-    {
       "player": "Kerim Alajbegovic",
       "team": "Bosnia and Herzegovina",
       "goals": 1,
@@ -2360,15 +2810,6 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 202
-    },
-    {
-      "player": "Ali Olwan",
-      "team": "Jordan",
-      "goals": 1,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 203
     },
     {
       "player": "Michal Sadilek",
@@ -2380,13 +2821,13 @@
       "minutes": 204
     },
     {
-      "player": "Finn Surman",
-      "team": "New Zealand",
+      "player": "Emam Ashour",
+      "team": "Egypt",
       "goals": 1,
       "assists": 0,
       "yellowCards": 0,
       "redCards": 0,
-      "minutes": 206
+      "minutes": 208
     },
     {
       "player": "Nestory Irankunda",
@@ -2398,15 +2839,6 @@
       "minutes": 208
     },
     {
-      "player": "Nizar al-Rashdan",
-      "team": "Jordan",
-      "goals": 1,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 209
-    },
-    {
       "player": "Caleb Yirenkyi",
       "team": "Ghana",
       "goals": 1,
@@ -2414,6 +2846,15 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 209
+    },
+    {
+      "player": "Romano Schmid",
+      "team": "Austria",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 216
     },
     {
       "player": "Désiré Doué",
@@ -2425,6 +2866,24 @@
       "minutes": 218
     },
     {
+      "player": "Joāo Neves",
+      "team": "Portugal",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 233
+    },
+    {
+      "player": "Amine Gouiri",
+      "team": "Algeria",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 233
+    },
+    {
       "player": "Jamal Musiala",
       "team": "Germany",
       "goals": 1,
@@ -2432,6 +2891,15 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 237
+    },
+    {
+      "player": "Abbosbek Fayzullaev",
+      "team": "Uzbekistan",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 240
     },
     {
       "player": "Livano Comenencia",
@@ -2452,6 +2920,33 @@
       "minutes": 255
     },
     {
+      "player": "Thapelo Maseko",
+      "team": "South Africa",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 256
+    },
+    {
+      "player": "Agustin Canobbio",
+      "team": "Uruguay",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 262
+    },
+    {
+      "player": "Kevin De Bruyne",
+      "team": "Belgium",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 262
+    },
+    {
       "player": "Leroy Sané",
       "team": "Germany",
       "goals": 1,
@@ -2459,6 +2954,42 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 268
+    },
+    {
+      "player": "Abdulelah Al-Amri",
+      "team": "Saudi Arabia",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 269
+    },
+    {
+      "player": "Martin Baturina",
+      "team": "Croatia",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 272
+    },
+    {
+      "player": "Mohammad Mohebi",
+      "team": "Iran",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 272
+    },
+    {
+      "player": "Alexandre Nuno Mendes",
+      "team": "Portugal",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 273
     },
     {
       "player": "John McGinn",
@@ -2470,6 +3001,24 @@
       "minutes": 278
     },
     {
+      "player": "Rafik Belghali",
+      "team": "Algeria",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 278
+    },
+    {
+      "player": "Kevin Lenini",
+      "team": "Cabo Verde",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 279
+    },
+    {
       "player": "Franck Kessié",
       "team": "Côte d'Ivoire",
       "goals": 1,
@@ -2477,6 +3026,24 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 288
+    },
+    {
+      "player": "Nizar al-Rashdan",
+      "team": "Jordan",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 290
+    },
+    {
+      "player": "Ali Olwan",
+      "team": "Jordan",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 297
     },
     {
       "player": "Jan Paul van Hecke",
@@ -2497,6 +3064,15 @@
       "minutes": 301
     },
     {
+      "player": "Teboho Mokoena",
+      "team": "South Africa",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 302
+    },
+    {
       "player": "Granit Xhaka",
       "team": "Switzerland",
       "goals": 1,
@@ -2515,6 +3091,33 @@
       "minutes": 304
     },
     {
+      "player": "Eldor Shomurodov",
+      "team": "Uzbekistan",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 304
+    },
+    {
+      "player": "Finn Surman",
+      "team": "New Zealand",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 307
+    },
+    {
+      "player": "Marcel Sabitzer",
+      "team": "Austria",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 312
+    },
+    {
       "player": "Arda Guler",
       "team": "Türkiye",
       "goals": 1,
@@ -2522,6 +3125,15 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 314
+    },
+    {
+      "player": "Antunes Stephen Estáquio",
+      "team": "Canada",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 339
     }
   ],
   "playerStatsNote": "Player goals and assists refresh from the Golden Boot table. Yellow and red cards stay at 0 until a reliable card feed is connected."

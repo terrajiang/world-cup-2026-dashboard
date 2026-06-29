@@ -13,7 +13,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
 
-from world_cup_data import GROUPS, PLAYER_STATS, SEED_STANDINGS, seed_payload
+from world_cup_data import GROUPS, KNOCKOUT, PLAYER_STATS, SEED_STANDINGS, seed_payload
 
 
 ROOT = Path(__file__).resolve().parent
@@ -34,6 +34,9 @@ VERIFIED_MATCH_SCORES = {
     ("E", "Ecuador", "Germany"): (2, 1, "FT"),
     ("F", "Tunisia", "Netherlands"): (1, 3, "FT"),
     ("F", "Japan", "Sweden"): (1, 1, "FT"),
+}
+VERIFIED_KNOCKOUT_SCORES = {
+    73: (0, 1, "FT"),
 }
 PLAYER_STATS_NOTE = "Player goals and assists refresh from the Golden Boot table. Yellow and red cards stay at 0 until a reliable card feed is connected."
 MATCH_TIMES_PACIFIC = {
@@ -111,22 +114,22 @@ MATCH_TIMES_PACIFIC = {
     ("L", "Croatia", "Ghana"): "2:00 PM PST",
 }
 KNOCKOUT_TIMES_PACIFIC = {
-    "R32-1": "12:00 PM PST",
-    "R32-2": "5:00 PM PST",
+    "R32-1": "1:30 PM PST",
+    "R32-2": "2:00 PM PST",
     "R32-3": "12:00 PM PST",
-    "R32-4": "5:00 PM PST",
-    "R32-5": "12:00 PM PST",
-    "R32-6": "5:00 PM PST",
-    "R32-7": "9:00 AM PST",
-    "R32-8": "12:00 PM PST",
-    "R32-9": "5:00 PM PST",
-    "R32-10": "9:00 AM PST",
-    "R32-11": "12:00 PM PST",
-    "R32-12": "5:00 PM PST",
-    "R32-13": "9:00 AM PST",
-    "R32-14": "12:00 PM PST",
-    "R32-15": "3:00 PM PST",
-    "R32-16": "5:00 PM PST",
+    "R32-4": "6:00 PM PST",
+    "R32-5": "8:00 PM PST",
+    "R32-6": "12:00 PM PST",
+    "R32-7": "5:00 PM PST",
+    "R32-8": "1:00 PM PST",
+    "R32-9": "10:00 AM PST",
+    "R32-10": "10:00 AM PST",
+    "R32-11": "6:00 PM PST",
+    "R32-12": "9:00 AM PST",
+    "R32-13": "11:00 AM PST",
+    "R32-14": "6:30 PM PST",
+    "R32-15": "4:00 PM PST",
+    "R32-16": "3:00 PM PST",
     "R16-1": "12:00 PM PST",
     "R16-2": "5:00 PM PST",
     "R16-3": "12:00 PM PST",
@@ -161,6 +164,18 @@ LIVE_MATCH_SOURCES = {
 LIVE_SOURCE_ALIASES = {
     "Cabo Verde": ["Cabo Verde", "Cape Verde"],
 }
+THIRD_PLACE_ASSIGNMENT_OVERRIDES = {
+    frozenset({"B", "D", "E", "F", "I", "J", "K", "L"}): {
+        ("R32-1", "away"): "D",
+        ("R32-2", "away"): "F",
+        ("R32-7", "away"): "B",
+        ("R32-8", "away"): "I",
+        ("R32-11", "away"): "E",
+        ("R32-12", "away"): "K",
+        ("R32-15", "away"): "J",
+        ("R32-16", "away"): "L",
+    }
+}
 
 
 def utc_now():
@@ -180,16 +195,19 @@ def load_data():
             merge_player_stats(data)
         apply_verified_overrides(data)
         apply_match_times(data)
+        sync_knockout(data)
         save_data(data)
         return data
     data = seed_payload()
     apply_match_times(data)
+    sync_knockout(data)
     save_data(data)
     return data
 
 
 def save_data(data):
     apply_match_times(data)
+    sync_knockout(data)
     data["imagePath"] = "/world_cup_2026_group_standings.png"
     with CACHE.open("w", encoding="utf-8") as handle:
         json.dump(data, handle, ensure_ascii=False, indent=2)
@@ -216,6 +234,148 @@ def merge_player_stats(data, source_rows=None):
     data["playerStatsNote"] = PLAYER_STATS_NOTE
 
 
+def group_is_complete(rows):
+    return len(rows or []) == 4 and all(row.get("played") == 3 for row in rows)
+
+
+def group_place_team(data, group, place):
+    rows = data.get("groups", {}).get(group, [])
+    if not group_is_complete(rows) or len(rows) < place:
+        return None
+    return rows[place - 1].get("team")
+
+
+def third_place_rankings(data):
+    rows = []
+    for group, group_rows in data.get("groups", {}).items():
+        if group_is_complete(group_rows) and len(group_rows) >= 3:
+            third = dict(group_rows[2])
+            third["group"] = group
+            rows.append(third)
+    return sorted(rows, key=lambda row: (row.get("pts", 0), row.get("gd", 0), row.get("gf", 0), row.get("team", "")), reverse=True)
+
+
+def assign_third_place_slots(data):
+    rankings = third_place_rankings(data)
+    if len(rankings) < 8:
+        return {}
+    rank_index = {row["group"]: index for index, row in enumerate(rankings)}
+    advancing = {row["group"]: row["team"] for row in rankings[:8]}
+    override = THIRD_PLACE_ASSIGNMENT_OVERRIDES.get(frozenset(advancing))
+    if override:
+        return {
+            key: advancing[group]
+            for key, group in override.items()
+            if group in advancing
+        }
+    slots = []
+    for match in KNOCKOUT:
+        for side in ("home", "away"):
+            label = match.get(side, "")
+            slot_match = re.match(r"^3rd Group ([A-L/]+)$", label)
+            if slot_match:
+                candidates = [group for group in slot_match.group(1).split("/") if group in advancing]
+                candidates.sort(key=lambda group: rank_index[group])
+                slots.append((match["slot"], side, candidates))
+
+    ordered_slots = sorted(enumerate(slots), key=lambda item: (len(item[1][2]), item[0]))
+
+    def backtrack(index, used, assignments):
+        if index == len(ordered_slots):
+            return assignments
+        _, (slot, side, candidates) = ordered_slots[index]
+        for group in candidates:
+            if group in used:
+                continue
+            result = backtrack(index + 1, used | {group}, {**assignments, (slot, side): advancing[group]})
+            if result is not None:
+                return result
+        return None
+
+    solved = backtrack(0, set(), {})
+    if solved is not None:
+        return solved
+
+    assignments = {}
+    used = set()
+    for slot, side, candidates in slots:
+        choice = next((group for group in candidates if group not in used), None)
+        if not choice:
+            continue
+        assignments[(slot, side)] = advancing[choice]
+        used.add(choice)
+    return assignments
+
+
+def knockout_result(match):
+    if match.get("status") != "FT" or match.get("homeScore") is None or match.get("awayScore") is None:
+        return None
+    home = match.get("resolvedHome")
+    away = match.get("resolvedAway")
+    if not home or not away:
+        return None
+    home_score = int(match["homeScore"])
+    away_score = int(match["awayScore"])
+    if home_score == away_score:
+        return None
+    return {
+        "winner": home if home_score > away_score else away,
+        "loser": away if home_score > away_score else home,
+    }
+
+
+def resolve_knockout_label(label, data, knockout_by_slot, third_assignments, slot=None, side=None):
+    match = re.match(r"^Winner Group ([A-L])$", label)
+    if match:
+        return group_place_team(data, match.group(1), 1)
+    match = re.match(r"^Runner-up Group ([A-L])$", label)
+    if match:
+        return group_place_team(data, match.group(1), 2)
+    match = re.match(r"^3rd Group ([A-L/]+)$", label)
+    if match:
+        return third_assignments.get((slot, side))
+    match = re.match(r"^(Winner|Loser) ([A-Z0-9-]+)$", label)
+    if match:
+        prior = knockout_by_slot.get(match.group(2))
+        result = knockout_result(prior) if prior else None
+        if result:
+            return result["winner" if match.group(1) == "Winner" else "loser"]
+    return None
+
+
+def sync_knockout(data):
+    existing = {match.get("slot"): match for match in data.get("knockout", [])}
+    knockout = []
+    for template in KNOCKOUT:
+        prior = existing.get(template["slot"], {})
+        knockout.append(
+            {
+                **template,
+                "homeScore": prior.get("homeScore"),
+                "awayScore": prior.get("awayScore"),
+                "status": prior.get("status", "Scheduled"),
+                "resolvedHome": prior.get("resolvedHome"),
+                "resolvedAway": prior.get("resolvedAway"),
+            }
+        )
+    data["knockout"] = knockout
+    apply_match_times(data)
+
+    third_assignments = assign_third_place_slots(data)
+    by_slot = {match["slot"]: match for match in data["knockout"]}
+    for _ in range(4):
+        changed = False
+        for match in data["knockout"]:
+            resolved_home = resolve_knockout_label(match["home"], data, by_slot, third_assignments, match["slot"], "home")
+            resolved_away = resolve_knockout_label(match["away"], data, by_slot, third_assignments, match["slot"], "away")
+            if match.get("resolvedHome") != resolved_home or match.get("resolvedAway") != resolved_away:
+                match["resolvedHome"] = resolved_home
+                match["resolvedAway"] = resolved_away
+                changed = True
+        if not changed:
+            break
+
+
 def apply_match_times(data):
     for match in data.get("matches", []):
         key = (match.get("group"), match.get("home"), match.get("away"))
@@ -237,7 +397,15 @@ def apply_verified_overrides(data):
             match["homeScore"] = home_score
             match["awayScore"] = away_score
             match["status"] = status
+    for match in data.get("knockout", []):
+        match_no = match.get("matchNo")
+        if match_no in VERIFIED_KNOCKOUT_SCORES:
+            home_score, away_score, status = VERIFIED_KNOCKOUT_SCORES[match_no]
+            match["homeScore"] = home_score
+            match["awayScore"] = away_score
+            match["status"] = status
     apply_match_times(data)
+    sync_knockout(data)
 
 
 def parse_guardian_live_score(text, home, away):
@@ -308,6 +476,7 @@ def is_match_in_live_window(match, now=None):
 def apply_live_score_updates(data, now=None):
     changed = 0
     now = now or pacific_now()
+    sync_knockout(data)
     for match in data.get("matches", []):
         key = (match.get("group"), match.get("home"), match.get("away"))
         if key not in LIVE_MATCH_SOURCES:
@@ -344,6 +513,19 @@ def apply_live_score_updates(data, now=None):
             match["awayScore"] = None
         if before != (match.get("homeScore"), match.get("awayScore"), match.get("status")):
             changed += 1
+    for match in data.get("knockout", []):
+        if match.get("status") == "FT":
+            continue
+        in_window = is_match_in_live_window(match, now)
+        before = (match.get("homeScore"), match.get("awayScore"), match.get("status"))
+        if in_window:
+            match["status"] = "Live"
+        elif match.get("status") == "Live":
+            match["status"] = "Scheduled"
+            match["homeScore"] = None
+            match["awayScore"] = None
+        if before != (match.get("homeScore"), match.get("awayScore"), match.get("status")):
+            changed += 1
     return changed
 
 
@@ -363,8 +545,29 @@ def find_schedule_score(text, group, home, away):
     return None
 
 
+def find_knockout_schedule_score(text, home, away):
+    if not home or not away:
+        return None
+    patterns = [
+        (home, away, rf"{re.escape(home)}\s+(\d+),\s*{re.escape(away)}\s+(\d+)"),
+        (away, home, rf"{re.escape(away)}\s+(\d+),\s*{re.escape(home)}\s+(\d+)"),
+        (home, away, rf"{re.escape(home)}\s+(\d+)\s*[-–]\s*(\d+)\s+{re.escape(away)}"),
+        (away, home, rf"{re.escape(away)}\s+(\d+)\s*[-–]\s*(\d+)\s+{re.escape(home)}"),
+    ]
+    for first_team, _, pattern in patterns:
+        match = re.search(pattern, text, flags=re.I)
+        if not match:
+            continue
+        first_score, second_score = map(int, match.groups())
+        if first_team == home:
+            return first_score, second_score
+        return second_score, first_score
+    return None
+
+
 def apply_schedule_score_updates(data, text):
     changed = 0
+    sync_knockout(data)
     for match in data.get("matches", []):
         parsed = find_schedule_score(text, match["group"], match["home"], match["away"])
         if not parsed:
@@ -373,15 +576,33 @@ def apply_schedule_score_updates(data, text):
         match["homeScore"], match["awayScore"], match["status"] = parsed[0], parsed[1], "FT"
         if before != (match.get("homeScore"), match.get("awayScore"), match.get("status")):
             changed += 1
+    for match in data.get("knockout", []):
+        parsed = find_knockout_schedule_score(text, match.get("resolvedHome"), match.get("resolvedAway"))
+        if not parsed:
+            continue
+        before = (match.get("homeScore"), match.get("awayScore"), match.get("status"))
+        match["homeScore"], match["awayScore"], match["status"] = parsed[0], parsed[1], "FT"
+        if before != (match.get("homeScore"), match.get("awayScore"), match.get("status")):
+            changed += 1
+    if changed:
+        sync_knockout(data)
     return changed
 
 
 def load_data_with_live_check():
     data = load_data()
+    schedule_changed = 0
+    has_live_window = any(is_match_in_live_window(match) for match in data.get("matches", []) + data.get("knockout", []))
+    if has_live_window or any(match.get("status") == "Live" for match in data.get("matches", []) + data.get("knockout", [])):
+        try:
+            schedule_changed = apply_schedule_score_updates(data, strip_html(fetch_text(SCHEDULE_URL)))
+        except (urllib.error.URLError, TimeoutError):
+            schedule_changed = 0
     live_changed = apply_live_score_updates(data)
-    if live_changed:
+    if schedule_changed or live_changed:
         recalculate_from_matches(data)
         apply_verified_overrides(data)
+        sync_knockout(data)
         data["lastUpdated"] = utc_now()
         data["sourceNote"] = "Checked live match windows and live score sources on page load."
         save_data(data)
@@ -442,11 +663,13 @@ def refresh_player_stats(data):
 
 def write_dynamic_snapshot(data):
     apply_match_times(data)
+    sync_knockout(data)
     snapshot = {
         "lastUpdated": data.get("lastUpdated"),
         "sourceNote": data.get("sourceNote"),
         "groups": data.get("groups", {}),
         "matches": data.get("matches", []),
+        "knockout": data.get("knockout", []),
         "playerStats": data.get("playerStats", []),
         "playerStatsNote": data.get("playerStatsNote", ""),
     }
@@ -602,14 +825,17 @@ def try_refresh_from_web(data):
     if score_changed or live_changed:
         recalculate_from_matches(data)
         apply_verified_overrides(data)
+        sync_knockout(data)
 
     if changed == 0:
         apply_verified_overrides(data)
+        sync_knockout(data)
         score_changed = apply_schedule_score_updates(data, schedule_text) if schedule_text else 0
         live_changed = apply_live_score_updates(data)
         if score_changed or live_changed:
             recalculate_from_matches(data)
             apply_verified_overrides(data)
+            sync_knockout(data)
         data["lastUpdated"] = utc_now()
         data["sourceNote"] = "Refresh reached the standings source, checked live match pages, and kept verified local corrections where source tables could not be parsed."
         refresh_player_stats(data)
@@ -624,6 +850,7 @@ def try_refresh_from_web(data):
     if score_changed or live_changed:
         recalculate_from_matches(data)
         apply_verified_overrides(data)
+        sync_knockout(data)
     data["lastUpdated"] = utc_now()
     data["sourceNote"] = f"Refreshed {changed} group table(s), checked live match pages, and validated stored score corrections."
     refresh_player_stats(data)

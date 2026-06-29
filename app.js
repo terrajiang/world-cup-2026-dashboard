@@ -16,6 +16,9 @@ const historyCountry = document.querySelector("#historyCountry");
 const historyFilter = document.querySelector("#historyFilter");
 const playerSearch = document.querySelector("#playerSearch");
 const toast = document.querySelector("#toast");
+const LIVE_REFRESH_INTERVAL_MS = 45000;
+let liveRefreshTimer = null;
+let liveRefreshInFlight = false;
 const TEAM_FLAGS = {
   Algeria: "🇩🇿",
   Argentina: "🇦🇷",
@@ -475,6 +478,10 @@ function liveKnockoutMatches() {
   return (state.knockout || []).filter((match) => match.status === "Live");
 }
 
+function allLiveMatches() {
+  return [...liveMatches(), ...liveKnockoutMatches()];
+}
+
 function isTeamLive(team) {
   return liveMatches().some((match) => match.home === team || match.away === team);
 }
@@ -487,8 +494,24 @@ function liveBadge(text = "Live") {
   return `<span class="live-badge">${text}</span>`;
 }
 
+function advancingThirdPlaceTeams() {
+  return Object.values(state.groups)
+    .map((rows) => rows.find((row) => row.status === "third"))
+    .filter(Boolean)
+    .filter((row) => row.played === 3)
+    .sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf || a.team.localeCompare(b.team))
+    .slice(0, 8)
+    .map((row) => row.team);
+}
+
+function groupRowClass(row, advancingThirds) {
+  if (row.status === "third") return advancingThirds.includes(row.team) ? "third advancing-third" : "third-place";
+  return row.status || "";
+}
+
 function renderGroups() {
   const grid = document.querySelector("#groupsGrid");
+  const advancingThirds = advancingThirdPlaceTeams();
   grid.innerHTML = "";
   Object.entries(state.groups).forEach(([group, rows]) => {
     const card = document.createElement("article");
@@ -503,7 +526,7 @@ function renderGroups() {
           ${rows
             .map(
               (row) => `
-                <tr class="${row.status}">
+                <tr class="${groupRowClass(row, advancingThirds)}">
                   <td>${teamLabel(row.team)}${isTeamLive(row.team) ? liveBadge() : ""}</td>
                   <td>${row.gd > 0 ? `+${row.gd}` : row.gd}</td>
                   <td>${row.gf}</td>
@@ -522,8 +545,8 @@ function renderGroups() {
 
 function knockoutTeams(match) {
   return {
-    home: resolveSlot(match.home).text,
-    away: resolveSlot(match.away).text,
+    home: match.resolvedHome || resolveSlot(match.home).text,
+    away: match.resolvedAway || resolveSlot(match.away).text,
   };
 }
 
@@ -543,8 +566,8 @@ function scheduleItems() {
       phase: match.round,
       homeLabel: teams.home,
       awayLabel: teams.away,
-      status: "Pending",
-      score: "Result TBD",
+      status: match.status || "Scheduled",
+      score: scoreText(match),
     };
   });
   return [...groupItems, ...knockoutItems].sort(compareByKickoff);
@@ -674,6 +697,17 @@ function slotHtml(slot) {
   return slot.filled ? teamLabel(slot.text) : slot.text;
 }
 
+function knockoutSideResult(match, side) {
+  if (match.status !== "FT" || match.homeScore === null || match.homeScore === undefined || match.awayScore === null || match.awayScore === undefined) {
+    return "";
+  }
+  const homeScore = Number(match.homeScore);
+  const awayScore = Number(match.awayScore);
+  if (homeScore === awayScore) return "";
+  const homeWon = homeScore > awayScore;
+  return side === "home" ? (homeWon ? "winner" : "loser") : homeWon ? "loser" : "winner";
+}
+
 function treeRow(total, index) {
   const rows = {
     8: [1, 3, 5, 7, 9, 11, 13, 15],
@@ -685,17 +719,22 @@ function treeRow(total, index) {
 }
 
 function cardHtml(match, side = "", row = null) {
-  const home = resolveSlot(match.home);
-  const away = resolveSlot(match.away);
+  const home = match.resolvedHome ? { text: match.resolvedHome, filled: true } : resolveSlot(match.home);
+  const away = match.resolvedAway ? { text: match.resolvedAway, filled: true } : resolveSlot(match.away);
+  const isLive = match.status === "Live";
+  const resultLabel = isLive ? `${liveBadge("Live now")} ${scoreText(match)}` : match.status === "FT" ? `FT ${scoreText(match)}` : "Result: TBD";
+  const homeResult = knockoutSideResult(match, "home");
+  const awayResult = knockoutSideResult(match, "away");
+  const matchLabel = match.matchNo ? `M${match.matchNo}` : match.slot;
   const rowStyle = row ? `style="grid-row: ${row} / span 2"` : "";
   return `
-    <article class="tree-card ${side}" data-slot="${match.slot}" ${rowStyle}>
-      <div class="tree-slot"><span>${match.slot} · ${formatDate(match.date)}</span><span>${pstTime(match, state.knockout)}</span></div>
+    <article class="tree-card ${side} ${isLive ? "live" : ""}" data-slot="${match.slot}" data-status="${match.status || "Scheduled"}" ${rowStyle}>
+      <div class="tree-slot"><span>${matchLabel} · ${formatDate(match.date)}</span><span>${pstTime(match, state.knockout)}</span></div>
       <div class="tree-pair">
-        <div class="tree-team ${home.filled ? "filled" : "pending"}">${slotHtml(home)}</div>
-        <div class="tree-team ${away.filled ? "filled" : "pending"}">${slotHtml(away)}</div>
+        <div class="tree-team ${home.filled ? "filled" : "pending"} ${homeResult}">${slotHtml(home)}</div>
+        <div class="tree-team ${away.filled ? "filled" : "pending"} ${awayResult}">${slotHtml(away)}</div>
       </div>
-      <div class="tree-result">Result: TBD</div>
+      <div class="tree-result">${resultLabel}</div>
     </article>
   `;
 }
@@ -917,6 +956,7 @@ function render() {
   renderPlayerStats();
   renderImagePreview();
   updateLiveTabs();
+  scheduleLiveScoreRefresh();
   if (schedulePanel.classList.contains("active")) {
     setTimeout(scrollScheduleToFocus, 80);
   }
@@ -953,15 +993,37 @@ function activateTab(tabName) {
 function updateLiveTabs() {
   const hasGroupLive = liveMatches().length > 0;
   const hasTreeLive = liveKnockoutMatches().length > 0;
+  const hasAnyLive = hasGroupLive || hasTreeLive;
   tabs.forEach((tab) => {
     const baseLabel = tab.dataset.label || tab.textContent.replace(/\s*Live\s*$/i, "").trim();
     tab.dataset.label = baseLabel;
     const shouldShow =
       (hasGroupLive && ["standings", "schedule"].includes(tab.dataset.tab)) ||
+      (hasAnyLive && tab.dataset.tab === "schedule") ||
       (hasTreeLive && tab.dataset.tab === "tree");
     tab.innerHTML = `${baseLabel}${shouldShow ? ' <span class="tab-live">Live</span>' : ""}`;
     tab.classList.toggle("has-live", shouldShow);
   });
+}
+
+function scheduleLiveScoreRefresh() {
+  if (liveRefreshTimer) {
+    clearInterval(liveRefreshTimer);
+    liveRefreshTimer = null;
+  }
+  if (!allLiveMatches().length) return;
+  liveRefreshTimer = setInterval(async () => {
+    if (liveRefreshInFlight) return;
+    liveRefreshInFlight = true;
+    try {
+      state = await request("/api/data");
+      render();
+    } catch (error) {
+      console.warn("Live refresh failed", error);
+    } finally {
+      liveRefreshInFlight = false;
+    }
+  }, LIVE_REFRESH_INTERVAL_MS);
 }
 
 tabs.forEach((tab) => {

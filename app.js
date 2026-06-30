@@ -377,6 +377,12 @@ function resultTeams(match) {
   if (!match || match.status !== "FT" || match.homeScore === null || match.awayScore === null) return null;
   const teams = knockoutTeams(match);
   if ([teams.home, teams.away].some((team) => /^(Winner|Loser|TBD)/.test(team))) return null;
+  if (match.winner && [teams.home, teams.away].includes(match.winner)) {
+    return {
+      winner: match.winner,
+      loser: match.winner === teams.home ? teams.away : teams.home,
+    };
+  }
   const homeWon = Number(match.homeScore) > Number(match.awayScore);
   return {
     winner: homeWon ? teams.home : teams.away,
@@ -584,7 +590,7 @@ function matchResultHtml(match, compact = false, collection = state.matches) {
       </div>
       <div class="result-main">
         <span>${teamLabel(match.homeLabel || match.home)}</span>
-        <strong>${match.score || scoreText(match)}</strong>
+        <strong>${match.score || scoreText(match)}${match.resultDetail ? ` · ${match.resultDetail}` : ""}</strong>
         <span>${teamLabel(match.awayLabel || match.away)}</span>
       </div>
       ${compact ? "" : `<div class="result-date">${match.date}</div>`}
@@ -701,6 +707,11 @@ function knockoutSideResult(match, side) {
   if (match.status !== "FT" || match.homeScore === null || match.homeScore === undefined || match.awayScore === null || match.awayScore === undefined) {
     return "";
   }
+  const homeTeam = match.resolvedHome || resolveSlot(match.home).text;
+  const awayTeam = match.resolvedAway || resolveSlot(match.away).text;
+  if (match.winner && [homeTeam, awayTeam].includes(match.winner)) {
+    return side === "home" ? (match.winner === homeTeam ? "winner" : "loser") : match.winner === awayTeam ? "winner" : "loser";
+  }
   const homeScore = Number(match.homeScore);
   const awayScore = Number(match.awayScore);
   if (homeScore === awayScore) return "";
@@ -722,7 +733,11 @@ function cardHtml(match, side = "", row = null) {
   const home = match.resolvedHome ? { text: match.resolvedHome, filled: true } : resolveSlot(match.home);
   const away = match.resolvedAway ? { text: match.resolvedAway, filled: true } : resolveSlot(match.away);
   const isLive = match.status === "Live";
-  const resultLabel = isLive ? `${liveBadge("Live now")} ${scoreText(match)}` : match.status === "FT" ? `FT ${scoreText(match)}` : "Result: TBD";
+  const resultLabel = isLive
+    ? `${liveBadge("Live now")} ${scoreText(match)}${match.resultDetail ? ` · ${match.resultDetail}` : ""}`
+    : match.status === "FT"
+      ? `FT ${scoreText(match)}${match.resultDetail ? ` · ${match.resultDetail}` : ""}`
+      : "Result: TBD";
   const homeResult = knockoutSideResult(match, "home");
   const awayResult = knockoutSideResult(match, "away");
   const matchLabel = match.matchNo ? `M${match.matchNo}` : match.slot;

@@ -188,6 +188,12 @@ main {
   display: block;
 }
 
+#treePanel {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  padding-bottom: 10px;
+}
+
 .toolbar {
   flex-wrap: wrap;
   justify-content: space-between;
@@ -923,9 +929,10 @@ td.stage-quarterfinal {
 .tree-map {
   align-items: start;
   display: grid;
-  gap: 24px;
-  grid-template-columns: minmax(1040px, 1fr) 300px minmax(1040px, 1fr);
-  overflow-x: auto;
+  gap: 20px;
+  grid-template-columns: minmax(760px, 1fr) minmax(220px, 0.3fr) minmax(760px, 1fr);
+  min-width: 1780px;
+  overflow-x: visible;
   padding-bottom: 24px;
   position: relative;
 }
@@ -945,12 +952,12 @@ td.stage-quarterfinal {
 .tree-side-grid {
   align-items: stretch;
   display: grid;
-  gap: 40px;
-  grid-template-columns: repeat(4, minmax(220px, 1fr));
+  gap: 20px;
+  grid-template-columns: repeat(4, minmax(170px, 1fr));
 }
 
 .round-column {
-  min-width: 220px;
+  min-width: 170px;
 }
 
 .round-heading {
@@ -971,7 +978,7 @@ td.stage-quarterfinal {
 .tree-card {
   align-self: center;
   min-height: 132px;
-  padding: 12px;
+  padding: 10px;
   position: relative;
   z-index: 2;
 }
@@ -985,7 +992,7 @@ td.stage-quarterfinal {
 }
 
 .final-column {
-  min-width: 280px;
+  min-width: 220px;
 }
 
 .tree-slot {

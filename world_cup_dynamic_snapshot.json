@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-29T05:00:41.638904+00:00",
+  "lastUpdated": "2026-06-30T09:58:57.336893+00:00",
   "sourceNote": "Refreshed 11 group table(s), checked live match pages, and validated stored score corrections.",
   "groups": {
     "A": [
@@ -1405,12 +1405,15 @@
       "matchNo": 74,
       "home": "Winner Group E",
       "away": "3rd Group A/B/C/D/F",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "Scheduled",
+      "timePst": "1:30 PM PST",
+      "timeSource": null,
+      "homeScore": 1,
+      "awayScore": 1,
+      "status": "FT",
+      "winner": "Paraguay",
+      "resultDetail": "Paraguay wins 4-3 on penalties",
       "resolvedHome": "Germany",
-      "resolvedAway": "Paraguay",
-      "timePst": "1:30 PM PST"
+      "resolvedAway": "Paraguay"
     },
     {
       "round": "Round of 32",
@@ -1419,12 +1422,15 @@
       "matchNo": 77,
       "home": "Winner Group I",
       "away": "3rd Group C/D/F/G/H",
+      "timePst": "2:00 PM PST",
+      "timeSource": "refreshed",
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": "France",
-      "resolvedAway": "Sweden",
-      "timePst": "2:00 PM PST"
+      "resolvedAway": "Sweden"
     },
     {
       "round": "Round of 32",
@@ -1433,12 +1439,15 @@
       "matchNo": 73,
       "home": "Runner-up Group A",
       "away": "Runner-up Group B",
+      "timePst": "12:00 PM PST",
+      "timeSource": null,
       "homeScore": 0,
       "awayScore": 1,
       "status": "FT",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": "South Africa",
-      "resolvedAway": "Canada",
-      "timePst": "12:00 PM PST"
+      "resolvedAway": "Canada"
     },
     {
       "round": "Round of 32",
@@ -1447,12 +1456,15 @@
       "matchNo": 75,
       "home": "Winner Group F",
       "away": "Runner-up Group C",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "Scheduled",
+      "timePst": "6:00 PM PST",
+      "timeSource": "refreshed",
+      "homeScore": 1,
+      "awayScore": 1,
+      "status": "FT",
+      "winner": "Morocco",
+      "resultDetail": "Morocco wins 3-2 on penalties",
       "resolvedHome": "Netherlands",
-      "resolvedAway": "Morocco",
-      "timePst": "6:00 PM PST"
+      "resolvedAway": "Morocco"
     },
     {
       "round": "Round of 32",
@@ -1461,12 +1473,15 @@
       "matchNo": 83,
       "home": "Runner-up Group K",
       "away": "Runner-up Group L",
+      "timePst": "4:00 PM PST",
+      "timeSource": "refreshed",
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": "Portugal",
-      "resolvedAway": "Croatia",
-      "timePst": "8:00 PM PST"
+      "resolvedAway": "Croatia"
     },
     {
       "round": "Round of 32",
@@ -1475,12 +1490,15 @@
       "matchNo": 84,
       "home": "Winner Group H",
       "away": "Runner-up Group J",
+      "timePst": "12:00 PM PST",
+      "timeSource": "refreshed",
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": "Spain",
-      "resolvedAway": "Austria",
-      "timePst": "12:00 PM PST"
+      "resolvedAway": "Austria"
     },
     {
       "round": "Round of 32",
@@ -1489,12 +1507,15 @@
       "matchNo": 81,
       "home": "Winner Group D",
       "away": "3rd Group B/E/F/I/J",
+      "timePst": "5:00 PM PST",
+      "timeSource": "refreshed",
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": "United States",
-      "resolvedAway": "Bosnia and Herzegovina",
-      "timePst": "5:00 PM PST"
+      "resolvedAway": "Bosnia and Herzegovina"
     },
     {
       "round": "Round of 32",
@@ -1503,12 +1524,15 @@
       "matchNo": 82,
       "home": "Winner Group G",
       "away": "3rd Group A/E/H/I/J",
+      "timePst": "1:00 PM PST",
+      "timeSource": "refreshed",
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": "Belgium",
-      "resolvedAway": "Senegal",
-      "timePst": "1:00 PM PST"
+      "resolvedAway": "Senegal"
     },
     {
       "round": "Round of 32",
@@ -1517,12 +1541,15 @@
       "matchNo": 76,
       "home": "Winner Group C",
       "away": "Runner-up Group F",
-      "homeScore": null,
-      "awayScore": null,
-      "status": "Scheduled",
+      "timePst": "10:00 AM PST",
+      "timeSource": null,
+      "homeScore": 2,
+      "awayScore": 1,
+      "status": "FT",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": "Brazil",
-      "resolvedAway": "Japan",
-      "timePst": "10:00 AM PST"
+      "resolvedAway": "Japan"
     },
     {
       "round": "Round of 32",
@@ -1531,12 +1558,15 @@
       "matchNo": 78,
       "home": "Runner-up Group E",
       "away": "Runner-up Group I",
+      "timePst": "10:00 AM PST",
+      "timeSource": "refreshed",
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": "Côte d'Ivoire",
-      "resolvedAway": "Norway",
-      "timePst": "10:00 AM PST"
+      "resolvedAway": "Norway"
     },
     {
       "round": "Round of 32",
@@ -1545,12 +1575,15 @@
       "matchNo": 79,
       "home": "Winner Group A",
       "away": "3rd Group C/E/F/H/I",
+      "timePst": "6:00 PM PST",
+      "timeSource": "refreshed",
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": "Mexico",
-      "resolvedAway": "Ecuador",
-      "timePst": "6:00 PM PST"
+      "resolvedAway": "Ecuador"
     },
     {
       "round": "Round of 32",
@@ -1559,12 +1592,15 @@
       "matchNo": 80,
       "home": "Winner Group L",
       "away": "3rd Group E/H/I/J/K",
+      "timePst": "9:00 AM PST",
+      "timeSource": "refreshed",
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": "England",
-      "resolvedAway": "DR Congo",
-      "timePst": "9:00 AM PST"
+      "resolvedAway": "DR Congo"
     },
     {
       "round": "Round of 32",
@@ -1573,12 +1609,15 @@
       "matchNo": 86,
       "home": "Winner Group J",
       "away": "Runner-up Group H",
+      "timePst": "3:00 PM PST",
+      "timeSource": "refreshed",
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": "Argentina",
-      "resolvedAway": "Cabo Verde",
-      "timePst": "11:00 AM PST"
+      "resolvedAway": "Cabo Verde"
     },
     {
       "round": "Round of 32",
@@ -1587,12 +1626,15 @@
       "matchNo": 88,
       "home": "Runner-up Group D",
       "away": "Runner-up Group G",
+      "timePst": "11:00 AM PST",
+      "timeSource": "refreshed",
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": "Australia",
-      "resolvedAway": "Egypt",
-      "timePst": "6:30 PM PST"
+      "resolvedAway": "Egypt"
     },
     {
       "round": "Round of 32",
@@ -1601,12 +1643,15 @@
       "matchNo": 85,
       "home": "Winner Group B",
       "away": "3rd Group E/F/G/I/J",
+      "timePst": "8:00 PM PST",
+      "timeSource": "refreshed",
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": "Switzerland",
-      "resolvedAway": "Algeria",
-      "timePst": "4:00 PM PST"
+      "resolvedAway": "Algeria"
     },
     {
       "round": "Round of 32",
@@ -1615,12 +1660,15 @@
       "matchNo": 87,
       "home": "Winner Group K",
       "away": "3rd Group D/E/I/J/L",
+      "timePst": "6:30 PM PST",
+      "timeSource": "refreshed",
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": "Colombia",
-      "resolvedAway": "Ghana",
-      "timePst": "3:00 PM PST"
+      "resolvedAway": "Ghana"
     },
     {
       "round": "Round of 16",
@@ -1629,12 +1677,15 @@
       "matchNo": 89,
       "home": "Winner R32-1",
       "away": "Winner R32-2",
+      "timePst": "2:00 PM PST",
+      "timeSource": null,
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
-      "resolvedHome": null,
-      "resolvedAway": null,
-      "timePst": "12:00 PM PST"
+      "winner": null,
+      "resultDetail": null,
+      "resolvedHome": "Paraguay",
+      "resolvedAway": null
     },
     {
       "round": "Round of 16",
@@ -1643,68 +1694,83 @@
       "matchNo": 90,
       "home": "Winner R32-3",
       "away": "Winner R32-4",
+      "timePst": "10:00 AM PST",
+      "timeSource": null,
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": "Canada",
-      "resolvedAway": null,
-      "timePst": "5:00 PM PST"
+      "resolvedAway": "Morocco"
     },
     {
       "round": "Round of 16",
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "slot": "R16-3",
       "matchNo": 93,
       "home": "Winner R32-5",
       "away": "Winner R32-6",
+      "timePst": "12:00 PM PST",
+      "timeSource": null,
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": null,
-      "resolvedAway": null,
-      "timePst": "12:00 PM PST"
+      "resolvedAway": null
     },
     {
       "round": "Round of 16",
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "slot": "R16-4",
       "matchNo": 94,
       "home": "Winner R32-7",
       "away": "Winner R32-8",
+      "timePst": "5:00 PM PST",
+      "timeSource": null,
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": null,
-      "resolvedAway": null,
-      "timePst": "5:00 PM PST"
+      "resolvedAway": null
     },
     {
       "round": "Round of 16",
-      "date": "2026-07-06",
+      "date": "2026-07-05",
       "slot": "R16-5",
       "matchNo": 91,
       "home": "Winner R32-9",
       "away": "Winner R32-10",
+      "timePst": "1:00 PM PST",
+      "timeSource": null,
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
-      "resolvedHome": null,
-      "resolvedAway": null,
-      "timePst": "12:00 PM PST"
+      "winner": null,
+      "resultDetail": null,
+      "resolvedHome": "Brazil",
+      "resolvedAway": null
     },
     {
       "round": "Round of 16",
-      "date": "2026-07-06",
+      "date": "2026-07-05",
       "slot": "R16-6",
       "matchNo": 92,
       "home": "Winner R32-11",
       "away": "Winner R32-12",
+      "timePst": "5:00 PM PST",
+      "timeSource": null,
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": null,
-      "resolvedAway": null,
-      "timePst": "5:00 PM PST"
+      "resolvedAway": null
     },
     {
       "round": "Round of 16",
@@ -1713,12 +1779,15 @@
       "matchNo": 95,
       "home": "Winner R32-13",
       "away": "Winner R32-14",
+      "timePst": "9:00 AM PST",
+      "timeSource": null,
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": null,
-      "resolvedAway": null,
-      "timePst": "12:00 PM PST"
+      "resolvedAway": null
     },
     {
       "round": "Round of 16",
@@ -1727,12 +1796,15 @@
       "matchNo": 96,
       "home": "Winner R32-15",
       "away": "Winner R32-16",
+      "timePst": "1:00 PM PST",
+      "timeSource": null,
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": null,
-      "resolvedAway": null,
-      "timePst": "5:00 PM PST"
+      "resolvedAway": null
     },
     {
       "round": "Quarterfinal",
@@ -1741,12 +1813,15 @@
       "matchNo": 97,
       "home": "Winner R16-1",
       "away": "Winner R16-2",
+      "timePst": "1:00 PM PST",
+      "timeSource": null,
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": null,
-      "resolvedAway": null,
-      "timePst": "12:00 PM PST"
+      "resolvedAway": null
     },
     {
       "round": "Quarterfinal",
@@ -1755,12 +1830,15 @@
       "matchNo": 98,
       "home": "Winner R16-3",
       "away": "Winner R16-4",
+      "timePst": "12:00 PM PST",
+      "timeSource": null,
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": null,
-      "resolvedAway": null,
-      "timePst": "5:00 PM PST"
+      "resolvedAway": null
     },
     {
       "round": "Quarterfinal",
@@ -1769,12 +1847,15 @@
       "matchNo": 99,
       "home": "Winner R16-5",
       "away": "Winner R16-6",
+      "timePst": "2:00 PM PST",
+      "timeSource": null,
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": null,
-      "resolvedAway": null,
-      "timePst": "12:00 PM PST"
+      "resolvedAway": null
     },
     {
       "round": "Quarterfinal",
@@ -1783,12 +1864,15 @@
       "matchNo": 100,
       "home": "Winner R16-7",
       "away": "Winner R16-8",
+      "timePst": "6:00 PM PST",
+      "timeSource": null,
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": null,
-      "resolvedAway": null,
-      "timePst": "5:00 PM PST"
+      "resolvedAway": null
     },
     {
       "round": "Semifinal",
@@ -1797,12 +1881,15 @@
       "matchNo": 101,
       "home": "Winner QF-1",
       "away": "Winner QF-2",
+      "timePst": "12:00 PM PST",
+      "timeSource": null,
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": null,
-      "resolvedAway": null,
-      "timePst": "5:00 PM PST"
+      "resolvedAway": null
     },
     {
       "round": "Semifinal",
@@ -1811,12 +1898,15 @@
       "matchNo": 102,
       "home": "Winner QF-3",
       "away": "Winner QF-4",
+      "timePst": "12:00 PM PST",
+      "timeSource": null,
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": null,
-      "resolvedAway": null,
-      "timePst": "5:00 PM PST"
+      "resolvedAway": null
     },
     {
       "round": "Third Place",
@@ -1825,12 +1915,15 @@
       "matchNo": 103,
       "home": "Loser SF-1",
       "away": "Loser SF-2",
+      "timePst": "2:00 PM PST",
+      "timeSource": null,
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": null,
-      "resolvedAway": null,
-      "timePst": "12:00 PM PST"
+      "resolvedAway": null
     },
     {
       "round": "Final",
@@ -1839,12 +1932,15 @@
       "matchNo": 104,
       "home": "Winner SF-1",
       "away": "Winner SF-2",
+      "timePst": "12:00 PM PST",
+      "timeSource": null,
       "homeScore": null,
       "awayScore": null,
       "status": "Scheduled",
+      "winner": null,
+      "resultDetail": null,
       "resolvedHome": null,
-      "resolvedAway": null,
-      "timePst": "12:00 PM PST"
+      "resolvedAway": null
     }
   ],
   "playerStats": [
@@ -1882,7 +1978,7 @@
       "assists": 1,
       "yellowCards": 0,
       "redCards": 0,
-      "minutes": 294
+      "minutes": 398
     },
     {
       "player": "Erling Haaland",
@@ -1900,7 +1996,7 @@
       "assists": 2,
       "yellowCards": 0,
       "redCards": 0,
-      "minutes": 107
+      "minutes": 175
     },
     {
       "player": "Johan Manzambi",
@@ -1936,7 +2032,7 @@
       "assists": 0,
       "yellowCards": 0,
       "redCards": 0,
-      "minutes": 191
+      "minutes": 261
     },
     {
       "player": "Ismael Saibari",
@@ -1982,6 +2078,15 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 371
+    },
+    {
+      "player": "Kai Havertz",
+      "team": "Germany",
+      "goals": 3,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 388
     },
     {
       "player": "Crysencio Summerville",
@@ -2038,15 +2143,6 @@
       "minutes": 238
     },
     {
-      "player": "Ayase Ueda",
-      "team": "Japan",
-      "goals": 2,
-      "assists": 1,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 245
-    },
-    {
       "player": "Cody Gakpo",
       "team": "Netherlands",
       "goals": 2,
@@ -2072,6 +2168,15 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 309
+    },
+    {
+      "player": "Ayase Ueda",
+      "team": "Japan",
+      "goals": 2,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 350
     },
     {
       "player": "Ermin Mahmic",
@@ -2137,15 +2242,6 @@
       "minutes": 216
     },
     {
-      "player": "Kai Havertz",
-      "team": "Germany",
-      "goals": 2,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 256
-    },
-    {
       "player": "Julian Quinones",
       "team": "Mexico",
       "goals": 2,
@@ -2153,15 +2249,6 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 270
-    },
-    {
-      "player": "Daichi Kamada",
-      "team": "Japan",
-      "goals": 2,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 278
     },
     {
       "player": "Leandro Trossard",
@@ -2189,6 +2276,15 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 301
+    },
+    {
+      "player": "Daichi Kamada",
+      "team": "Japan",
+      "goals": 2,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 359
     },
     {
       "player": "Iliman-Cheikh Ndiaye",
@@ -2245,6 +2341,15 @@
       "minutes": 303
     },
     {
+      "player": "Julio Enciso",
+      "team": "Paraguay",
+      "goals": 1,
+      "assists": 2,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 368
+    },
+    {
       "player": "Soufiane Rahimi",
       "team": "Morocco",
       "goals": 1,
@@ -2288,15 +2393,6 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 141
-    },
-    {
-      "player": "Nathaniel Brown",
-      "team": "Germany",
-      "goals": 1,
-      "assists": 1,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 182
     },
     {
       "player": "Sebastian Berhalter",
@@ -2368,16 +2464,7 @@
       "assists": 1,
       "yellowCards": 0,
       "redCards": 0,
-      "minutes": 250
-    },
-    {
-      "player": "Keito Nakamura",
-      "team": "Japan",
-      "goals": 1,
-      "assists": 1,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 261
+      "minutes": 295
     },
     {
       "player": "Virgil van Dijk",
@@ -2398,6 +2485,15 @@
       "minutes": 298
     },
     {
+      "player": "Kaishu Sano",
+      "team": "Japan",
+      "goals": 1,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 304
+    },
+    {
       "player": "Achraf Hakimi",
       "team": "Morocco",
       "goals": 1,
@@ -2405,6 +2501,33 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 309
+    },
+    {
+      "player": "Nathaniel Brown",
+      "team": "Germany",
+      "goals": 1,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 314
+    },
+    {
+      "player": "Keito Nakamura",
+      "team": "Japan",
+      "goals": 1,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 330
+    },
+    {
+      "player": "Matías Galaraza",
+      "team": "Paraguay",
+      "goals": 1,
+      "assists": 1,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 332
     },
     {
       "player": "Kaan Ayhan",
@@ -2569,6 +2692,15 @@
       "minutes": 94
     },
     {
+      "player": "Gabriel Martinelli",
+      "team": "Brazil",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 99
+    },
+    {
       "player": "Thelonious Aasgaard",
       "team": "Norway",
       "goals": 1,
@@ -2585,15 +2717,6 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 101
-    },
-    {
-      "player": "Mauricio",
-      "team": "Paraguay",
-      "goals": 1,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 104
     },
     {
       "player": "Nikola Vlasic",
@@ -2731,15 +2854,6 @@
       "minutes": 157
     },
     {
-      "player": "Junya Ito",
-      "team": "Japan",
-      "goals": 1,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 161
-    },
-    {
       "player": "Raul Jimenez",
       "team": "Mexico",
       "goals": 1,
@@ -2758,13 +2872,13 @@
       "minutes": 169
     },
     {
-      "player": "Daizen Maeda",
-      "team": "Japan",
+      "player": "Mauricio",
+      "team": "Paraguay",
       "goals": 1,
       "assists": 0,
       "yellowCards": 0,
       "redCards": 0,
-      "minutes": 171
+      "minutes": 174
     },
     {
       "player": "Lautaro Martinez",
@@ -2774,15 +2888,6 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 195
-    },
-    {
-      "player": "Matías Galaraza",
-      "team": "Paraguay",
-      "goals": 1,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 199
     },
     {
       "player": "Omar Rekik",
@@ -2884,15 +2989,6 @@
       "minutes": 233
     },
     {
-      "player": "Jamal Musiala",
-      "team": "Germany",
-      "goals": 1,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 237
-    },
-    {
       "player": "Abbosbek Fayzullaev",
       "team": "Uzbekistan",
       "goals": 1,
@@ -2900,6 +2996,15 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 240
+    },
+    {
+      "player": "Junya Ito",
+      "team": "Japan",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 242
     },
     {
       "player": "Livano Comenencia",
@@ -2947,15 +3052,6 @@
       "minutes": 262
     },
     {
-      "player": "Leroy Sané",
-      "team": "Germany",
-      "goals": 1,
-      "assists": 0,
-      "yellowCards": 0,
-      "redCards": 0,
-      "minutes": 268
-    },
-    {
       "player": "Abdulelah Al-Amri",
       "team": "Saudi Arabia",
       "goals": 1,
@@ -2963,6 +3059,15 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 269
+    },
+    {
+      "player": "Daizen Maeda",
+      "team": "Japan",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 271
     },
     {
       "player": "Martin Baturina",
@@ -3055,6 +3160,15 @@
       "minutes": 298
     },
     {
+      "player": "Jamal Musiala",
+      "team": "Germany",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 301
+    },
+    {
       "player": "Ladislav Krejci",
       "team": "Czechia",
       "goals": 1,
@@ -3118,6 +3232,15 @@
       "minutes": 312
     },
     {
+      "player": "Carlos Casemiro",
+      "team": "Brazil",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 314
+    },
+    {
       "player": "Arda Guler",
       "team": "Türkiye",
       "goals": 1,
@@ -3134,6 +3257,15 @@
       "yellowCards": 0,
       "redCards": 0,
       "minutes": 339
+    },
+    {
+      "player": "Leroy Sané",
+      "team": "Germany",
+      "goals": 1,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "minutes": 361
     }
   ],
   "playerStatsNote": "Player goals and assists refresh from the Golden Boot table. Yellow and red cards stay at 0 until a reliable card feed is connected."

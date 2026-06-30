@@ -23,9 +23,11 @@ IMAGE_SCRIPT = ROOT / "make_world_cup_standings_image.py"
 BUNDLED_PYTHON = Path("/Users/terra/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3")
 STANDINGS_URL = "https://www.sbnation.com/soccer/1117905/world-cup-standings-updated-full-list-of-teams"
 SCHEDULE_URL = "https://www.sbnation.com/soccer/1117513/world-cup-schedule-2026-how-to-watch-every-match-scores-and-more"
+KNOCKOUT_SCHEDULE_URL = "https://www.sbnation.com/soccer/1120771/world-cup-schedule-scores-round-32"
 PLAYER_STATS_URL = "https://www.sbnation.com/fifa-world-cup/1118693/world-cup-2026-golden-boot-standings"
 VERIFIED_GROUPS = {"D", "E", "F"}
 PACIFIC_TZ = ZoneInfo("America/Los_Angeles")
+EASTERN_TZ = ZoneInfo("America/New_York")
 LIVE_WINDOW_MINUTES = 150
 VERIFIED_MATCH_SCORES = {
     ("D", "Türkiye", "United States"): (3, 2, "FT"),
@@ -36,7 +38,8 @@ VERIFIED_MATCH_SCORES = {
     ("F", "Japan", "Sweden"): (1, 1, "FT"),
 }
 VERIFIED_KNOCKOUT_SCORES = {
-    73: (0, 1, "FT"),
+    73: (0, 1, "FT", None, None),
+    75: (1, 1, "FT", "Morocco", "Morocco wins 3-2 on penalties"),
 }
 PLAYER_STATS_NOTE = "Player goals and assists refresh from the Golden Boot table. Yellow and red cards stay at 0 until a reliable card feed is connected."
 MATCH_TIMES_PACIFIC = {
@@ -130,21 +133,21 @@ KNOCKOUT_TIMES_PACIFIC = {
     "R32-14": "6:30 PM PST",
     "R32-15": "4:00 PM PST",
     "R32-16": "3:00 PM PST",
-    "R16-1": "12:00 PM PST",
-    "R16-2": "5:00 PM PST",
+    "R16-1": "2:00 PM PST",
+    "R16-2": "10:00 AM PST",
     "R16-3": "12:00 PM PST",
     "R16-4": "5:00 PM PST",
-    "R16-5": "12:00 PM PST",
+    "R16-5": "1:00 PM PST",
     "R16-6": "5:00 PM PST",
-    "R16-7": "12:00 PM PST",
-    "R16-8": "5:00 PM PST",
-    "QF-1": "12:00 PM PST",
-    "QF-2": "5:00 PM PST",
-    "QF-3": "12:00 PM PST",
-    "QF-4": "5:00 PM PST",
-    "SF-1": "5:00 PM PST",
-    "SF-2": "5:00 PM PST",
-    "3P": "12:00 PM PST",
+    "R16-7": "9:00 AM PST",
+    "R16-8": "1:00 PM PST",
+    "QF-1": "1:00 PM PST",
+    "QF-2": "12:00 PM PST",
+    "QF-3": "2:00 PM PST",
+    "QF-4": "6:00 PM PST",
+    "SF-1": "12:00 PM PST",
+    "SF-2": "12:00 PM PST",
+    "3P": "2:00 PM PST",
     "Final": "12:00 PM PST",
 }
 LIVE_MATCH_SOURCES = {
@@ -163,6 +166,7 @@ LIVE_MATCH_SOURCES = {
 }
 LIVE_SOURCE_ALIASES = {
     "Cabo Verde": ["Cabo Verde", "Cape Verde"],
+    "Côte d'Ivoire": ["Côte d'Ivoire", "Ivory Coast"],
 }
 THIRD_PLACE_ASSIGNMENT_OVERRIDES = {
     frozenset({"B", "D", "E", "F", "I", "J", "K", "L"}): {
@@ -314,6 +318,12 @@ def knockout_result(match):
     away = match.get("resolvedAway")
     if not home or not away:
         return None
+    if match.get("winner") in (home, away):
+        winner = match["winner"]
+        return {
+            "winner": winner,
+            "loser": away if winner == home else home,
+        }
     home_score = int(match["homeScore"])
     away_score = int(match["awayScore"])
     if home_score == away_score:
@@ -351,9 +361,14 @@ def sync_knockout(data):
         knockout.append(
             {
                 **template,
+                "date": prior.get("date", template["date"]),
+                "timePst": prior.get("timePst"),
+                "timeSource": prior.get("timeSource"),
                 "homeScore": prior.get("homeScore"),
                 "awayScore": prior.get("awayScore"),
                 "status": prior.get("status", "Scheduled"),
+                "winner": prior.get("winner"),
+                "resultDetail": prior.get("resultDetail"),
                 "resolvedHome": prior.get("resolvedHome"),
                 "resolvedAway": prior.get("resolvedAway"),
             }
@@ -383,7 +398,7 @@ def apply_match_times(data):
             match["timePst"] = MATCH_TIMES_PACIFIC[key]
     for match in data.get("knockout", []):
         slot = match.get("slot")
-        if slot in KNOCKOUT_TIMES_PACIFIC:
+        if slot in KNOCKOUT_TIMES_PACIFIC and match.get("timeSource") != "refreshed":
             match["timePst"] = KNOCKOUT_TIMES_PACIFIC[slot]
 
 
@@ -400,10 +415,12 @@ def apply_verified_overrides(data):
     for match in data.get("knockout", []):
         match_no = match.get("matchNo")
         if match_no in VERIFIED_KNOCKOUT_SCORES:
-            home_score, away_score, status = VERIFIED_KNOCKOUT_SCORES[match_no]
+            home_score, away_score, status, winner, detail = VERIFIED_KNOCKOUT_SCORES[match_no]
             match["homeScore"] = home_score
             match["awayScore"] = away_score
             match["status"] = status
+            match["winner"] = winner
+            match["resultDetail"] = detail
     apply_match_times(data)
     sync_knockout(data)
 
@@ -548,26 +565,112 @@ def find_schedule_score(text, group, home, away):
 def find_knockout_schedule_score(text, home, away):
     if not home or not away:
         return None
+    def source_team_pattern(team):
+        names = LIVE_SOURCE_ALIASES.get(team, [team])
+        return r"(?:%s)" % "|".join(re.escape(name) for name in names)
+
+    home_pattern = source_team_pattern(home)
+    away_pattern = source_team_pattern(away)
+    status_pattern = r"(?:Live|LIVE|HT|Half-time|Extra time|ET|AET|FT|Full-time|Final|[0-9]{1,3}(?:\+[0-9]+)?')"
     patterns = [
-        (home, away, rf"{re.escape(home)}\s+(\d+),\s*{re.escape(away)}\s+(\d+)"),
-        (away, home, rf"{re.escape(away)}\s+(\d+),\s*{re.escape(home)}\s+(\d+)"),
-        (home, away, rf"{re.escape(home)}\s+(\d+)\s*[-–]\s*(\d+)\s+{re.escape(away)}"),
-        (away, home, rf"{re.escape(away)}\s+(\d+)\s*[-–]\s*(\d+)\s+{re.escape(home)}"),
+        (home, away, rf"{home_pattern}\s+(\d+),\s*{away_pattern}\s+(\d+)(?:\s+\(([^)]*)\))?"),
+        (away, home, rf"{away_pattern}\s+(\d+),\s*{home_pattern}\s+(\d+)(?:\s+\(([^)]*)\))?"),
+        (home, away, rf"{home_pattern}\s+(\d+)\s*[-–]\s*(\d+)\s+{away_pattern}(?:\s+\(([^)]*)\))?"),
+        (away, home, rf"{away_pattern}\s+(\d+)\s*[-–]\s*(\d+)\s+{home_pattern}(?:\s+\(([^)]*)\))?"),
+        (home, away, rf"{status_pattern}\s+{home_pattern}\s+(\d+)\s*[-–]\s*(\d+)\s+{away_pattern}(?:\s+\(([^)]*)\))?"),
+        (away, home, rf"{status_pattern}\s+{away_pattern}\s+(\d+)\s*[-–]\s*(\d+)\s+{home_pattern}(?:\s+\(([^)]*)\))?"),
     ]
     for first_team, _, pattern in patterns:
         match = re.search(pattern, text, flags=re.I)
         if not match:
             continue
-        first_score, second_score = map(int, match.groups())
+        first_score, second_score = map(int, match.groups()[:2])
+        detail = match.group(3) if len(match.groups()) >= 3 else None
+        winner = None
+        status = "Live" if re.search(r"\b(Live|HT|Half-time|Extra time|ET|\d{1,3}(?:\+\d+)?')\b", match.group(0), flags=re.I) else "Score"
+        if detail:
+            winner_match = re.search(r"(.+?)\s+wins?\s+\d+\s*[-–]\s*\d+\s+on penalties", detail, flags=re.I)
+            if winner_match:
+                winner = normalize_team_name(winner_match.group(1).strip())
+                status = "FT"
         if first_team == home:
-            return first_score, second_score
-        return second_score, first_score
+            return first_score, second_score, status, winner, detail
+        return second_score, first_score, status, winner, detail
     return None
+
+
+def month_number(month_name):
+    months = {
+        "January": 1,
+        "February": 2,
+        "March": 3,
+        "April": 4,
+        "May": 5,
+        "June": 6,
+        "July": 7,
+        "August": 8,
+        "September": 9,
+        "October": 10,
+        "November": 11,
+        "December": 12,
+    }
+    return months.get(month_name)
+
+
+def format_pacific_time(dt):
+    hour = dt.hour % 12 or 12
+    suffix = "AM" if dt.hour < 12 else "PM"
+    return f"{hour}:{dt.minute:02d} {suffix} PST"
+
+
+def update_knockout_schedule_times(data, text):
+    changed = 0
+    date_pattern = re.compile(r"\b(?:Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday),\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})\b")
+    date_matches = list(date_pattern.finditer(text))
+
+    def source_team_pattern(team):
+        names = LIVE_SOURCE_ALIASES.get(team, [team])
+        return r"(?:%s)" % "|".join(re.escape(name) for name in names)
+
+    for match in data.get("knockout", []):
+        home = match.get("resolvedHome")
+        away = match.get("resolvedAway")
+        if not home or not away:
+            continue
+        fixture = re.search(
+            rf"{source_team_pattern(home)}\s+vs\.?\s+{source_team_pattern(away)}\s+\([^)]*\):\s+(\d{{1,2}}):(\d{{2}})\s*([ap])\.m\.",
+            text,
+            flags=re.I,
+        )
+        if not fixture:
+            continue
+        prior_dates = [date_match for date_match in date_matches if date_match.start() < fixture.start()]
+        if not prior_dates:
+            continue
+        date_match = prior_dates[-1]
+        month = month_number(date_match.group(1))
+        if not month:
+            continue
+        day = int(date_match.group(2))
+        hour = int(fixture.group(1)) % 12
+        minute = int(fixture.group(2))
+        if fixture.group(3).lower() == "p":
+            hour += 12
+        eastern_dt = datetime(2026, month, day, hour, minute, tzinfo=EASTERN_TZ)
+        pacific_dt = eastern_dt.astimezone(PACIFIC_TZ)
+        before = (match.get("date"), match.get("timePst"))
+        match["date"] = pacific_dt.date().isoformat()
+        match["timePst"] = format_pacific_time(pacific_dt)
+        match["timeSource"] = "refreshed"
+        if before != (match.get("date"), match.get("timePst")):
+            changed += 1
+    return changed
 
 
 def apply_schedule_score_updates(data, text):
     changed = 0
     sync_knockout(data)
+    changed += update_knockout_schedule_times(data, text)
     for match in data.get("matches", []):
         parsed = find_schedule_score(text, match["group"], match["home"], match["away"])
         if not parsed:
@@ -580,9 +683,12 @@ def apply_schedule_score_updates(data, text):
         parsed = find_knockout_schedule_score(text, match.get("resolvedHome"), match.get("resolvedAway"))
         if not parsed:
             continue
-        before = (match.get("homeScore"), match.get("awayScore"), match.get("status"))
-        match["homeScore"], match["awayScore"], match["status"] = parsed[0], parsed[1], "FT"
-        if before != (match.get("homeScore"), match.get("awayScore"), match.get("status")):
+        before = (match.get("homeScore"), match.get("awayScore"), match.get("status"), match.get("winner"), match.get("resultDetail"))
+        home_score, away_score, status, winner, detail = parsed
+        if status == "Score":
+            status = "Live" if is_match_in_live_window(match) else "FT"
+        match["homeScore"], match["awayScore"], match["status"], match["winner"], match["resultDetail"] = home_score, away_score, status, winner, detail
+        if before != (match.get("homeScore"), match.get("awayScore"), match.get("status"), match.get("winner"), match.get("resultDetail")):
             changed += 1
     if changed:
         sync_knockout(data)
@@ -598,6 +704,10 @@ def load_data_with_live_check():
             schedule_changed = apply_schedule_score_updates(data, strip_html(fetch_text(SCHEDULE_URL)))
         except (urllib.error.URLError, TimeoutError):
             schedule_changed = 0
+        try:
+            schedule_changed += apply_schedule_score_updates(data, strip_html(fetch_text(KNOCKOUT_SCHEDULE_URL)))
+        except (urllib.error.URLError, TimeoutError):
+            pass
     live_changed = apply_live_score_updates(data)
     if schedule_changed or live_changed:
         recalculate_from_matches(data)
@@ -778,6 +888,11 @@ def try_refresh_from_web(data):
         schedule_text = strip_html(fetch_text(SCHEDULE_URL))
     except (urllib.error.URLError, TimeoutError):
         schedule_text = ""
+    knockout_schedule_text = ""
+    try:
+        knockout_schedule_text = strip_html(fetch_text(KNOCKOUT_SCHEDULE_URL))
+    except (urllib.error.URLError, TimeoutError):
+        knockout_schedule_text = ""
     changed = 0
 
     for group, teams in GROUPS.items():
@@ -821,6 +936,7 @@ def try_refresh_from_web(data):
             changed += 1
 
     score_changed = apply_schedule_score_updates(data, schedule_text) if schedule_text else 0
+    score_changed += apply_schedule_score_updates(data, knockout_schedule_text) if knockout_schedule_text else 0
     live_changed = apply_live_score_updates(data)
     if score_changed or live_changed:
         recalculate_from_matches(data)
@@ -831,6 +947,7 @@ def try_refresh_from_web(data):
         apply_verified_overrides(data)
         sync_knockout(data)
         score_changed = apply_schedule_score_updates(data, schedule_text) if schedule_text else 0
+        score_changed += apply_schedule_score_updates(data, knockout_schedule_text) if knockout_schedule_text else 0
         live_changed = apply_live_score_updates(data)
         if score_changed or live_changed:
             recalculate_from_matches(data)
@@ -846,6 +963,7 @@ def try_refresh_from_web(data):
 
     apply_verified_overrides(data)
     score_changed = apply_schedule_score_updates(data, schedule_text) if schedule_text else 0
+    score_changed += apply_schedule_score_updates(data, knockout_schedule_text) if knockout_schedule_text else 0
     live_changed = apply_live_score_updates(data)
     if score_changed or live_changed:
         recalculate_from_matches(data)

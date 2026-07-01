@@ -36,6 +36,10 @@ VERIFIED_KNOCKOUT_SCORES = {
     73: (0, 1, "FT", None, None),
     75: (1, 1, "FT", "Morocco", "Morocco wins 3-2 on penalties"),
 }
+KNOCKOUT_TIME_OVERRIDES = {
+    # Delayed kickoff: Mexico vs Ecuador moved from 6 PM to 7 PM Pacific on June 30.
+    "R32-11": "7:00 PM PST",
+}
 PLAYER_STATS_NOTE = "Player goals and assists refresh from the Golden Boot table. Yellow and red cards stay at 0 until a reliable card feed is connected."
 MATCH_TIMES_PACIFIC = {
     ("A", "Mexico", "South Africa"): "12:00 PM PST",
@@ -122,7 +126,7 @@ KNOCKOUT_TIMES_PACIFIC = {
     "R32-8": "1:00 PM PST",
     "R32-9": "10:00 AM PST",
     "R32-10": "10:00 AM PST",
-    "R32-11": "6:00 PM PST",
+    "R32-11": "7:00 PM PST",
     "R32-12": "9:00 AM PST",
     "R32-13": "11:00 AM PST",
     "R32-14": "6:30 PM PST",
@@ -392,7 +396,9 @@ def apply_match_times(data):
             match["timePst"] = MATCH_TIMES_PACIFIC[key]
     for match in data.get("knockout", []):
         slot = match.get("slot")
-        if slot in KNOCKOUT_TIMES_PACIFIC and match.get("timeSource") != "refreshed":
+        if slot in KNOCKOUT_TIME_OVERRIDES:
+            match["timePst"] = KNOCKOUT_TIME_OVERRIDES[slot]
+        elif slot in KNOCKOUT_TIMES_PACIFIC and match.get("timeSource") != "refreshed":
             match["timePst"] = KNOCKOUT_TIMES_PACIFIC[slot]
 
 

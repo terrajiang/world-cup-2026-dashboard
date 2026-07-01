@@ -121,6 +121,55 @@ If that still does not work, restart the computer and try again.
 - Team flags in standings, player stats, and knockout tree
 - Split knockout tree centered around the Final
 
+## Data Sources
+
+The dashboard is fan-made and uses multiple sources. Refresh prefers a free public scoreboard feed, then falls back to optional structured API data, public article/live pages, and local verified corrections.
+
+### Primary structured source
+
+- **ESPN public FIFA World Cup scoreboard feed**: primary free/no-key source for match status, kickoff time, live/finished state, and scores.
+  - <https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard>
+  - The dashboard calls the scoreboard by match date so it can refresh group-stage and knockout matches across the tournament.
+
+### Optional structured source
+
+- **football-data.org API**: optional fallback source for match status, kickoff time, live/finished state, and scores when `FOOTBALL_DATA_API_KEY` is set.
+  - Documentation: <https://www.football-data.org/documentation/quickstart>
+  - The dashboard calls `/v4/competitions/{competition}/matches`.
+  - Free tier access exists, but live scores require a paid plan, so ESPN remains the default no-key live source.
+  - Defaults:
+    - `FOOTBALL_DATA_COMPETITION=WC`
+    - `FOOTBALL_DATA_SEASON=2026`
+  - To enable it as an additional fallback:
+
+```bash
+export FOOTBALL_DATA_API_KEY="your_api_key_here"
+python3 server.py
+```
+
+### Fallback public article sources
+
+- **SB Nation World Cup standings**: fallback source for group standings.
+  - <https://www.sbnation.com/soccer/1117905/world-cup-standings-updated-full-list-of-teams>
+- **SB Nation World Cup schedule**: fallback source for group-stage schedule and scores.
+  - <https://www.sbnation.com/soccer/1117513/world-cup-schedule-2026-how-to-watch-every-match-scores-and-more>
+- **SB Nation Round of 32 schedule/scores**: fallback source for knockout schedule, times, and scores.
+  - <https://www.sbnation.com/soccer/1120771/world-cup-schedule-scores-round-32>
+- **SB Nation Golden Boot table**: source for player goals, assists, and minutes.
+  - <https://www.sbnation.com/fifa-world-cup/1118693/world-cup-2026-golden-boot-standings>
+
+### Live blog sources
+
+- **The Guardian live blogs**: used for a hardcoded set of late group-stage live-score checks when those pages are configured in `server.py`.
+  - Examples include Guardian live pages for New Zealand-Belgium, Egypt-Iran, Cabo Verde-Saudi Arabia, Uruguay-Spain, Norway-France, Senegal-Iraq, Algeria-Austria, Jordan-Argentina, Colombia-Portugal, DR Congo-Uzbekistan, Panama-England, and Croatia-Ghana.
+
+### Local sources and corrections
+
+- `world_cup_data.py`: seed data, local match schedule, initial standings, player stat seed rows, and verified local corrections.
+- `world_cup_cache.json`: runtime cache written by the local server.
+- `world_cup_dynamic_snapshot.json`: refreshed snapshot written after successful refreshes so the repo can preserve the latest local data state.
+- Verified local overrides in `server.py`: trusted corrections for selected group-stage scores, knockout scores, third-place assignment, and known kickoff-time changes.
+
 ## Notes
 
 Disclaimer: this is a fan-made local dashboard, not an official FIFA product. The standings, projections, player stats, schedules, and historical summaries are provided for personal analysis and may contain assumptions or stale data. Verify against official FIFA sources before relying on the information publicly.

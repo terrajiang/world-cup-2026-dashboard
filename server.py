@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import ssl
 import urllib.error
@@ -8,7 +9,7 @@ import urllib.request
 from datetime import date, datetime, time, timedelta, timezone
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import urlencode, urlparse
 from zoneinfo import ZoneInfo
 
 from world_cup_data import GROUPS, KNOCKOUT, PLAYER_STATS, SEED_STANDINGS, seed_payload
@@ -20,6 +21,10 @@ STANDINGS_URL = "https://www.sbnation.com/soccer/1117905/world-cup-standings-upd
 SCHEDULE_URL = "https://www.sbnation.com/soccer/1117513/world-cup-schedule-2026-how-to-watch-every-match-scores-and-more"
 KNOCKOUT_SCHEDULE_URL = "https://www.sbnation.com/soccer/1120771/world-cup-schedule-scores-round-32"
 PLAYER_STATS_URL = "https://www.sbnation.com/fifa-world-cup/1118693/world-cup-2026-golden-boot-standings"
+ESPN_SCOREBOARD_URL = "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard"
+FOOTBALL_DATA_API_BASE = "https://api.football-data.org/v4"
+FOOTBALL_DATA_COMPETITION = os.environ.get("FOOTBALL_DATA_COMPETITION", "WC")
+FOOTBALL_DATA_SEASON = os.environ.get("FOOTBALL_DATA_SEASON", "2026")
 VERIFIED_GROUPS = {"D", "E", "F"}
 PACIFIC_TZ = ZoneInfo("America/Los_Angeles")
 EASTERN_TZ = ZoneInfo("America/New_York")
@@ -791,6 +796,287 @@ def update_project_data_files(data):
     write_dynamic_snapshot(data)
 
 
+def football_data_headers():
+    token = os.environ.get("FOOTBALL_DATA_API_KEY")
+    if not token:
+        return None
+    return {
+        "User-Agent": "Mozilla/5.0 WorldCupLocal/1.0",
+        "X-Auth-Token": token,
+    }
+
+
+def football_data_get(path, params=None):
+    headers = football_data_headers()
+    if not headers:
+        return None
+    query = f"?{urlencode(params)}" if params else ""
+    return fetch_json(f"{FOOTBALL_DATA_API_BASE}{path}{query}", headers=headers)
+
+
+def espn_scoreboard_get(match_date):
+    query = urlencode({"dates": match_date.replace("-", "")})
+    return fetch_json(f"{ESPN_SCOREBOARD_URL}?{query}")
+
+
+def normalize_api_team_name(name):
+    aliases = {
+        "Cape Verde": "Cabo Verde",
+        "Congo DR": "DR Congo",
+        "DR Congo": "DR Congo",
+        "Czech Republic": "Czechia",
+        "Iran": "Iran",
+        "IR Iran": "Iran",
+        "Ivory Coast": "Côte d'Ivoire",
+        "Korea Republic": "South Korea",
+        "South Korea": "South Korea",
+        "Türkiye": "Türkiye",
+        "Turkey": "Türkiye",
+        "United States": "United States",
+        "United States of America": "United States",
+        "USA": "United States",
+    }
+    return aliases.get((name or "").strip(), (name or "").strip())
+
+
+def scoreboard_dates(data):
+    dates = {match.get("date") for match in data.get("matches", []) + data.get("knockout", []) if match.get("date")}
+    dates.add(pacific_now().date().isoformat())
+    return sorted(dates)
+
+
+def espn_event_team(event, home_away):
+    competition = (event.get("competitions") or [{}])[0]
+    return next((item for item in competition.get("competitors", []) if item.get("homeAway") == home_away), None)
+
+
+def espn_event_to_api_match(event):
+    competition = (event.get("competitions") or [{}])[0]
+    home = espn_event_team(event, "home")
+    away = espn_event_team(event, "away")
+    if not home or not away:
+        return None
+    status_type = ((competition.get("status") or {}).get("type") or {})
+    state = (status_type.get("state") or "").lower()
+    completed = bool(status_type.get("completed"))
+    if completed or state == "post":
+        status = "FINISHED"
+    elif state == "in":
+        status = "IN_PLAY"
+    else:
+        status = "SCHEDULED"
+    has_real_score = status in {"FINISHED", "IN_PLAY"}
+    home_score = int(home.get("score", 0)) if has_real_score and home.get("score") not in (None, "") else None
+    away_score = int(away.get("score", 0)) if has_real_score and away.get("score") not in (None, "") else None
+    winner = None
+    if home.get("winner"):
+        winner = "HOME_TEAM"
+    elif away.get("winner"):
+        winner = "AWAY_TEAM"
+    return {
+        "utcDate": competition.get("date") or event.get("date"),
+        "status": status,
+        "homeTeam": {"name": (home.get("team") or {}).get("displayName") or (home.get("team") or {}).get("name")},
+        "awayTeam": {"name": (away.get("team") or {}).get("displayName") or (away.get("team") or {}).get("name")},
+        "score": {
+            "winner": winner,
+            "fullTime": {
+                "home": home_score,
+                "away": away_score,
+            },
+        },
+    }
+
+
+def fetch_espn_scoreboard_matches(data):
+    matches = []
+    seen = set()
+    for match_date in scoreboard_dates(data):
+        try:
+            payload = espn_scoreboard_get(match_date)
+        except (urllib.error.URLError, TimeoutError, json.JSONDecodeError):
+            continue
+        for event in (payload or {}).get("events", []):
+            event_id = event.get("id")
+            if event_id in seen:
+                continue
+            seen.add(event_id)
+            api_match = espn_event_to_api_match(event)
+            if api_match:
+                matches.append(api_match)
+    return matches
+
+
+def team_names_match(left, right):
+    return normalize_api_team_name(left) == normalize_api_team_name(right)
+
+
+def api_match_status(api_match):
+    status = (api_match.get("status") or "").upper()
+    if status in {"FINISHED", "AWARDED"}:
+        return "FT"
+    if status in {"IN_PLAY", "PAUSED", "LIVE", "EXTRA_TIME", "PENALTY_SHOOTOUT"}:
+        return "Live"
+    return "Scheduled"
+
+
+def api_match_score(api_match):
+    score = api_match.get("score") or {}
+    for key in ("fullTime", "regularTime", "halfTime"):
+        value = score.get(key) or {}
+        home = value.get("home")
+        away = value.get("away")
+        if home is not None and away is not None:
+            return int(home), int(away)
+    return None, None
+
+
+def api_match_winner(api_match, local_match, home_score, away_score):
+    winner = ((api_match.get("score") or {}).get("winner") or "").upper()
+    if winner == "HOME_TEAM":
+        return local_match.get("resolvedHome") or local_match.get("home")
+    if winner == "AWAY_TEAM":
+        return local_match.get("resolvedAway") or local_match.get("away")
+    if home_score is not None and away_score is not None and home_score != away_score:
+        return (local_match.get("resolvedHome") or local_match.get("home")) if home_score > away_score else (local_match.get("resolvedAway") or local_match.get("away"))
+    return None
+
+
+def api_match_detail(api_match):
+    score = api_match.get("score") or {}
+    penalties = score.get("penalties") or {}
+    home_penalties = penalties.get("home")
+    away_penalties = penalties.get("away")
+    if home_penalties is not None and away_penalties is not None:
+        return f"Penalties {home_penalties}-{away_penalties}"
+    return None
+
+
+def apply_api_kickoff(local_match, api_match):
+    utc_date = api_match.get("utcDate")
+    if not utc_date:
+        return 0
+    try:
+        api_dt = datetime.fromisoformat(utc_date.replace("Z", "+00:00")).astimezone(PACIFIC_TZ)
+    except ValueError:
+        return 0
+    before = (local_match.get("date"), local_match.get("timePst"))
+    local_match["date"] = api_dt.date().isoformat()
+    local_match["timePst"] = format_pacific_time(api_dt)
+    local_match["timeSource"] = "structured-api"
+    return int(before != (local_match.get("date"), local_match.get("timePst")))
+
+
+def local_match_teams(match):
+    return match.get("resolvedHome") or match.get("home"), match.get("resolvedAway") or match.get("away")
+
+
+def find_local_match_for_api(data, api_match):
+    home = normalize_api_team_name((api_match.get("homeTeam") or {}).get("name"))
+    away = normalize_api_team_name((api_match.get("awayTeam") or {}).get("name"))
+    if not home or not away:
+        return None
+    for match in data.get("matches", []):
+        local_home, local_away = local_match_teams(match)
+        if team_names_match(local_home, home) and team_names_match(local_away, away):
+            return match
+        if team_names_match(local_home, away) and team_names_match(local_away, home):
+            return match
+    sync_knockout(data)
+    for match in data.get("knockout", []):
+        local_home, local_away = local_match_teams(match)
+        if team_names_match(local_home, home) and team_names_match(local_away, away):
+            return match
+        if team_names_match(local_home, away) and team_names_match(local_away, home):
+            return match
+    return None
+
+
+def apply_structured_match_updates(data, api_matches):
+    changed = 0
+    for api_match in api_matches:
+        local = find_local_match_for_api(data, api_match)
+        if not local:
+            continue
+        api_home = normalize_api_team_name((api_match.get("homeTeam") or {}).get("name"))
+        local_home, local_away = local_match_teams(local)
+        reverse = team_names_match(local_home, normalize_api_team_name((api_match.get("awayTeam") or {}).get("name"))) and team_names_match(local_away, api_home)
+        home_score, away_score = api_match_score(api_match)
+        if reverse:
+            home_score, away_score = away_score, home_score
+        status = api_match_status(api_match)
+        before = (
+            local.get("date"),
+            local.get("timePst"),
+            local.get("homeScore"),
+            local.get("awayScore"),
+            local.get("status"),
+            local.get("winner"),
+            local.get("resultDetail"),
+        )
+        changed += apply_api_kickoff(local, api_match)
+        if home_score is not None and away_score is not None:
+            local["homeScore"] = home_score
+            local["awayScore"] = away_score
+        preserve_finished = status == "Scheduled" and local.get("status") == "FT" and home_score is None and away_score is None
+        if not preserve_finished:
+            local["status"] = status
+        if local in data.get("knockout", []) and not preserve_finished:
+            local["winner"] = api_match_winner(api_match, local, home_score, away_score)
+            local["resultDetail"] = api_match_detail(api_match)
+        if before != (
+            local.get("date"),
+            local.get("timePst"),
+            local.get("homeScore"),
+            local.get("awayScore"),
+            local.get("status"),
+            local.get("winner"),
+            local.get("resultDetail"),
+        ):
+            changed += 1
+    if changed:
+        sync_knockout(data)
+    return changed
+
+
+def try_refresh_from_structured_api(data):
+    if not football_data_headers():
+        return None
+    payload = football_data_get(
+        f"/competitions/{FOOTBALL_DATA_COMPETITION}/matches",
+        {"season": FOOTBALL_DATA_SEASON},
+    )
+    matches = (payload or {}).get("matches", [])
+    if not matches:
+        return None
+    changed = apply_structured_match_updates(data, matches)
+    if changed:
+        recalculate_from_matches(data)
+        sync_knockout(data)
+    data["lastUpdated"] = utc_now()
+    data["sourceNote"] = f"Primary refresh used football-data.org structured match data ({len(matches)} match records); SB Nation remains the fallback for article-based standings/schedule parsing."
+    refresh_player_stats(data)
+    update_project_data_files(data)
+    save_data(data)
+    return data
+
+
+def try_refresh_from_espn_scoreboard(data):
+    matches = fetch_espn_scoreboard_matches(data)
+    if not matches:
+        return None
+    changed = apply_structured_match_updates(data, matches)
+    if changed:
+        recalculate_from_matches(data)
+        sync_knockout(data)
+    data["lastUpdated"] = utc_now()
+    data["sourceNote"] = f"Primary refresh used ESPN's free public FIFA World Cup scoreboard feed ({len(matches)} match records); football-data.org and SB Nation remain fallbacks."
+    refresh_player_stats(data)
+    update_project_data_files(data)
+    save_data(data)
+    return data
+
+
 def recalculate_from_matches(data):
     table = {
         group: {
@@ -860,7 +1146,31 @@ def fetch_text(url):
         return response.read().decode("utf-8", errors="replace")
 
 
+def fetch_json(url, headers=None):
+    request = urllib.request.Request(url, headers=headers or {"User-Agent": "Mozilla/5.0 WorldCupLocal/1.0"})
+    context = ssl._create_unverified_context()
+    with urllib.request.urlopen(request, timeout=12, context=context) as response:
+        return json.loads(response.read().decode("utf-8", errors="replace"))
+
+
 def try_refresh_from_web(data):
+    espn_error = None
+    structured_error = None
+    structured_configured = bool(football_data_headers())
+    try:
+        espn_data = try_refresh_from_espn_scoreboard(data)
+        if espn_data is not None:
+            return espn_data
+    except (urllib.error.URLError, TimeoutError, RuntimeError, json.JSONDecodeError) as exc:
+        espn_error = exc
+
+    try:
+        structured_data = try_refresh_from_structured_api(data)
+        if structured_data is not None:
+            return structured_data
+    except (urllib.error.URLError, TimeoutError, RuntimeError, json.JSONDecodeError) as exc:
+        structured_error = exc
+
     html = fetch_text(STANDINGS_URL)
     text = strip_html(html)
     schedule_text = ""
@@ -934,7 +1244,15 @@ def try_refresh_from_web(data):
             apply_verified_overrides(data)
             sync_knockout(data)
         data["lastUpdated"] = utc_now()
-        data["sourceNote"] = "Refresh reached the standings source, checked live match pages, and kept verified local corrections where source tables could not be parsed."
+        if espn_error:
+            api_note = f" ESPN scoreboard unavailable ({espn_error}); used SB Nation fallback."
+        elif structured_error:
+            api_note = f" Structured API unavailable ({structured_error}); used SB Nation fallback."
+        elif structured_configured:
+            api_note = " ESPN returned no usable match records and structured API returned no usable match records; used SB Nation fallback."
+        else:
+            api_note = " ESPN returned no usable match records and structured API not configured; used SB Nation fallback."
+        data["sourceNote"] = "Refresh reached the standings source, checked live match pages, and kept verified local corrections where source tables could not be parsed." + api_note
         refresh_player_stats(data)
         update_project_data_files(data)
         save_data(data)
@@ -949,7 +1267,15 @@ def try_refresh_from_web(data):
         apply_verified_overrides(data)
         sync_knockout(data)
     data["lastUpdated"] = utc_now()
-    data["sourceNote"] = f"Refreshed {changed} group table(s), checked live match pages, and validated stored score corrections."
+    if espn_error:
+        api_note = f" ESPN scoreboard unavailable ({espn_error}); used SB Nation fallback."
+    elif structured_error:
+        api_note = f" Structured API unavailable ({structured_error}); used SB Nation fallback."
+    elif structured_configured:
+        api_note = " ESPN returned no usable match records and structured API returned no usable match records; used SB Nation fallback."
+    else:
+        api_note = " ESPN returned no usable match records and structured API not configured; used SB Nation fallback."
+    data["sourceNote"] = f"Refreshed {changed} group table(s), checked live match pages, and validated stored score corrections." + api_note
     refresh_player_stats(data)
     update_project_data_files(data)
     save_data(data)

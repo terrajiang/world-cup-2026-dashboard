@@ -11,6 +11,7 @@ const playersPanel = document.querySelector("#playersPanel");
 const refreshBtn = document.querySelector("#refreshBtn");
 const countryLookup = document.querySelector("#countryLookup");
 const dateLookup = document.querySelector("#dateLookup");
+const gameLogCountry = document.querySelector("#gameLogCountry");
 const historyCountry = document.querySelector("#historyCountry");
 const historyFilter = document.querySelector("#historyFilter");
 const playerSearch = document.querySelector("#playerSearch");
@@ -294,6 +295,16 @@ function countryOptions() {
     .sort((a, b) => a.localeCompare(b));
 }
 
+function gameLogCountryOptions() {
+  const countries = new Set(countryOptions());
+  scheduleItems().forEach((match) => {
+    [match.homeLabel, match.awayLabel].forEach((team) => {
+      if (TEAM_FLAGS[team]) countries.add(team);
+    });
+  });
+  return [...countries].sort((a, b) => a.localeCompare(b));
+}
+
 function gameDates() {
   return [...new Set(state.matches.map((match) => match.date))].sort();
 }
@@ -309,6 +320,14 @@ function renderLookupControls() {
     .join("")}`;
   countryLookup.value = selectedCountry;
   dateLookup.value = selectedDate;
+}
+
+function renderGameLogControls() {
+  const selectedCountry = gameLogCountry.value;
+  gameLogCountry.innerHTML = `<option value="">Select a country</option>${gameLogCountryOptions()
+    .map((team) => `<option value="${team}">${optionLabel(team)}</option>`)
+    .join("")}`;
+  gameLogCountry.value = selectedCountry;
 }
 
 function renderHistoryControls() {
@@ -658,6 +677,25 @@ function renderSchedule() {
     .join("");
 }
 
+function renderGameLogQuery() {
+  const country = gameLogCountry.value;
+  const summary = document.querySelector("#gameLogQuerySummary");
+  const results = document.querySelector("#gameLogQueryResults");
+  if (!country) {
+    summary.textContent = "Choose a country to trace its tournament path.";
+    results.innerHTML = `<div class="empty-state">Past group games and resolved knockout games will appear here. Future knockout games appear once that team advances into the bracket slot.</div>`;
+    return;
+  }
+  const items = scheduleItems().filter((match) => match.homeLabel === country || match.awayLabel === country);
+  const finishedCount = items.filter((match) => match.status === "FT").length;
+  const liveCount = items.filter((match) => match.status === "Live").length;
+  const futureCount = items.length - finishedCount - liveCount;
+  summary.textContent = `${items.length} match${items.length === 1 ? "" : "es"}: ${finishedCount} played, ${liveCount} live, ${futureCount} upcoming.`;
+  results.innerHTML = items.length
+    ? items.map((match) => matchResultHtml(match, true, items)).join("")
+    : `<div class="empty-state">${country} does not have resolved games in the current log yet.</div>`;
+}
+
 function scheduleFocusMatch() {
   const items = scheduleItems();
   const live = items.find((match) => match.status === "Live");
@@ -955,26 +993,36 @@ function renderPlayerStats() {
       acc.assists += row.assists;
       acc.yellowCards += row.yellowCards;
       acc.redCards += row.redCards;
+      acc.minutes += row.minutes || 0;
       return acc;
     },
-    { goals: 0, assists: 0, yellowCards: 0, redCards: 0 },
+    { goals: 0, assists: 0, yellowCards: 0, redCards: 0, minutes: 0 },
   );
+  const topContributor = rows.reduce((best, row) => {
+    if (!best) return row;
+    const rowTotal = row.goals + row.assists;
+    const bestTotal = best.goals + best.assists;
+    return rowTotal > bestTotal || (rowTotal === bestTotal && row.goals > best.goals) ? row : best;
+  }, null);
   document.querySelector("#playerStatsNote").textContent = state.playerStatsNote || "";
   summary.innerHTML = `
     <div><strong>${rows.length}</strong><span>Players</span></div>
     <div><strong>${totals.goals}</strong><span>Goals</span></div>
     <div><strong>${totals.assists}</strong><span>Assists</span></div>
-    <div><strong>${totals.yellowCards}</strong><span>Yellow cards</span></div>
-    <div><strong>${totals.redCards}</strong><span>Red cards</span></div>
+    <div><strong>${totals.minutes.toLocaleString()}</strong><span>Minutes</span></div>
+    <div><strong>${topContributor ? topContributor.player.split(" ").slice(-1)[0] : "—"}</strong><span>Top G+A</span></div>
   `;
   body.innerHTML = rows
     .map(
-      (row) => `
+      (row, index) => `
         <tr class="${FEATURED_PLAYERS.has(row.player) ? "featured-player" : ""}">
+          <td>${index + 1}</td>
           <td>${row.player}</td>
           <td>${teamLabel(row.team)}</td>
           <td>${row.goals}</td>
           <td>${row.assists}</td>
+          <td>${row.goals + row.assists}</td>
+          <td>${row.minutes || "—"}</td>
           <td>${row.yellowCards}</td>
           <td>${row.redCards}</td>
         </tr>
@@ -986,10 +1034,12 @@ function renderPlayerStats() {
 function render() {
   renderMeta();
   renderLookupControls();
+  renderGameLogControls();
   renderHistoryControls();
   renderGroups();
   renderMatchLookup();
   renderSchedule();
+  renderGameLogQuery();
   renderHistory();
   renderMatches();
   renderBracket();
@@ -1026,6 +1076,11 @@ function activateTab(tabName) {
   }
   if (tabName === "schedule") {
     setTimeout(scrollScheduleToFocus, 80);
+  }
+  if (tabName === "players") {
+    setTimeout(() => {
+      document.querySelector(".stats-table-wrap")?.scrollTo({ top: 0, left: 0 });
+    }, 80);
   }
 }
 
@@ -1091,6 +1146,7 @@ refreshBtn.addEventListener("click", async () => {
 
 countryLookup.addEventListener("change", renderMatchLookup);
 dateLookup.addEventListener("change", renderMatchLookup);
+gameLogCountry.addEventListener("change", renderGameLogQuery);
 historyCountry.addEventListener("change", renderHistory);
 historyFilter.addEventListener("change", renderHistory);
 playerSearch.addEventListener("input", renderPlayerStats);

@@ -84,7 +84,19 @@
           <h2>Game Log</h2>
           <span>Group results and knockout dates in PST</span>
         </div>
-        <div class="match-list timeline" id="scheduleList"></div>
+        <div class="schedule-layout">
+          <div class="match-list timeline" id="scheduleList"></div>
+          <aside class="game-log-query" aria-label="Team game log query">
+            <div class="section-title compact-title">
+              <h2>Team Query</h2>
+              <span>Past and future games</span>
+            </div>
+            <label for="gameLogCountry">Country</label>
+            <select id="gameLogCountry"></select>
+            <div class="game-log-query-summary" id="gameLogQuerySummary"></div>
+            <div class="game-log-query-results" id="gameLogQueryResults"></div>
+          </aside>
+        </div>
       </section>
 
       <section class="panel" id="rulesPanel">
@@ -237,10 +249,13 @@
           <table class="stats-table">
             <thead>
               <tr>
+                <th>Rank</th>
                 <th>Player</th>
                 <th>Team</th>
                 <th>Goals</th>
                 <th>Assists</th>
+                <th>G+A</th>
+                <th>Minutes</th>
                 <th>Yellow Cards</th>
                 <th>Red Cards</th>
               </tr>

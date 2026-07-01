@@ -4,6 +4,8 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 
+# Deprecated manual utility: the dashboard no longer exposes an Image tab.
+# Run this file directly to regenerate the standings PNG from local cache data.
 ROOT = Path(__file__).resolve().parent
 OUT = "world_cup_2026_group_standings.png"
 

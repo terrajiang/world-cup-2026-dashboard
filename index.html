@@ -8,14 +8,17 @@
   </head>
   <body>
     <header class="app-header">
-      <div>
+      <div class="header-title-panel">
         <p class="eyebrow">FIFA World Cup 2026</p>
         <h1>Live Scores, Standings & Match Tree</h1>
       </div>
-      <div class="header-actions">
-        <div class="status-pill" id="lastUpdated">Loading...</div>
-        <div class="refresh-stack">
+      <div class="scoreboard-panel">
+        <div class="scoreboard-strip" id="liveScoreboardBar">Loading scoreboard...</div>
+        <div class="header-actions">
+          <div class="status-pill" id="lastUpdated">Loading...</div>
           <button class="icon-button" id="refreshBtn" title="Refresh latest data">Refresh</button>
+        </div>
+        <div class="refresh-stack">
           <span>Built by Terra Jiang · fan-made dashboard</span>
         </div>
       </div>
@@ -27,7 +30,6 @@
       <button class="tab" data-tab="schedule">Game Log</button>
       <button class="tab" data-tab="players">Player Stats</button>
       <button class="tab" data-tab="history">Top 4 History</button>
-      <button class="tab" data-tab="image">Image</button>
       <button class="tab" data-tab="rules">Rules</button>
     </nav>
 
@@ -262,18 +264,6 @@
         <div class="tree-map" id="bracket"></div>
       </section>
 
-      <section class="panel" id="imagePanel">
-        <div class="image-head">
-          <div>
-            <h2>Standings Image</h2>
-            <p>Generate or overwrite the local PNG from the latest refreshed data.</p>
-          </div>
-          <button class="icon-button" id="generateImageBtn">Generate Image</button>
-        </div>
-        <div class="image-preview-wrap">
-          <img id="standingsImage" alt="Generated World Cup 2026 group standings image" />
-        </div>
-      </section>
     </main>
 
     <div class="toast" id="toast" hidden></div>

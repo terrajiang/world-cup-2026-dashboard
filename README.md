@@ -120,12 +120,13 @@ If that still does not work, restart the computer and try again.
 - Player stats table with goals, assists, yellow cards, and red cards
 - Team flags in standings, player stats, and knockout tree
 - Split knockout tree centered around the Final
-- Image tab that overwrites and previews `world_cup_2026_group_standings.png`
 
 ## Notes
 
-Disclaimer: this is a fan-made local dashboard, not an official FIFA product. The standings, projections, player stats, schedules, historical summaries, and generated images are provided for personal analysis and may contain assumptions or stale data. Verify against official FIFA sources before relying on the information publicly.
+Disclaimer: this is a fan-made local dashboard, not an official FIFA product. The standings, projections, player stats, schedules, and historical summaries are provided for personal analysis and may contain assumptions or stale data. Verify against official FIFA sources before relying on the information publicly.
 
-The dashboard uses local seed data plus public refresh attempts for standings, live scores, and player goals/assists. Refresh writes `world_cup_dynamic_snapshot.json`, so `world_cup_data.py` can load the latest refreshed snapshot instead of falling back to the original seed. Refresh also regenerates the standings PNG.
+The dashboard uses local seed data plus public refresh attempts for standings, live scores, and player goals/assists. Refresh writes `world_cup_dynamic_snapshot.json`, so `world_cup_data.py` can load the latest refreshed snapshot instead of falling back to the original seed.
+
+`make_world_cup_standings_image.py` is kept as a deprecated manual utility. Run it directly if you want to regenerate `world_cup_2026_group_standings.png` from the latest local cache.
 
 Player stats refresh from the current Golden Boot table when the online source is reachable. Yellow and red cards stay at 0 until a reliable card feed is connected.

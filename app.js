@@ -1,15 +1,14 @@
 let state = null;
 
 const tabs = document.querySelectorAll(".tab");
+const liveScoreboardBar = document.querySelector("#liveScoreboardBar");
 const standingsPanel = document.querySelector("#standingsPanel");
 const schedulePanel = document.querySelector("#schedulePanel");
 const rulesPanel = document.querySelector("#rulesPanel");
 const historyPanel = document.querySelector("#historyPanel");
 const treePanel = document.querySelector("#treePanel");
 const playersPanel = document.querySelector("#playersPanel");
-const imagePanel = document.querySelector("#imagePanel");
 const refreshBtn = document.querySelector("#refreshBtn");
-const generateImageBtn = document.querySelector("#generateImageBtn");
 const countryLookup = document.querySelector("#countryLookup");
 const dateLookup = document.querySelector("#dateLookup");
 const historyCountry = document.querySelector("#historyCountry");
@@ -288,15 +287,6 @@ function renderMeta() {
   if (sourceNote) sourceNote.textContent = "";
 }
 
-function renderImagePreview() {
-  const image = document.querySelector("#standingsImage");
-  if (state.imagePath) {
-    image.src = `${state.imagePath}?v=${encodeURIComponent(state.lastUpdated || Date.now())}`;
-  } else {
-    image.removeAttribute("src");
-  }
-}
-
 function countryOptions() {
   return Object.values(state.groups)
     .flat()
@@ -498,6 +488,41 @@ function isGroupLive(group) {
 
 function liveBadge(text = "Live") {
   return `<span class="live-badge">${text}</span>`;
+}
+
+function scoreboardTeam(match, side) {
+  if (match.phase) return match[`${side}Label`] || match[side];
+  if (match.round) return knockoutTeams(match)[side];
+  return match[side];
+}
+
+function renderLiveScoreboard() {
+  if (!liveScoreboardBar) return;
+  const live = allLiveMatches();
+  if (!live.length) {
+    liveScoreboardBar.innerHTML = `
+      <span class="scoreboard-kicker">Scoreboard</span>
+      <strong>No live games right now</strong>
+      <span>Refresh checks for new live status and score changes.</span>
+    `;
+    liveScoreboardBar.classList.remove("has-live");
+    return;
+  }
+  liveScoreboardBar.classList.add("has-live");
+  liveScoreboardBar.innerHTML = `
+    <span class="scoreboard-kicker">Live</span>
+    ${live
+      .map(
+        (match) => `
+          <span class="scoreboard-game">
+            <span>${teamLabel(scoreboardTeam(match, "home"))}</span>
+            <strong>${scoreText(match)}</strong>
+            <span>${teamLabel(scoreboardTeam(match, "away"))}</span>
+          </span>
+        `,
+      )
+      .join("")}
+  `;
 }
 
 function advancingThirdPlaceTeams() {
@@ -969,7 +994,7 @@ function render() {
   renderMatches();
   renderBracket();
   renderPlayerStats();
-  renderImagePreview();
+  renderLiveScoreboard();
   updateLiveTabs();
   scheduleLiveScoreRefresh();
   if (schedulePanel.classList.contains("active")) {
@@ -995,7 +1020,6 @@ function activateTab(tabName) {
   schedulePanel.classList.toggle("active", tabName === "schedule");
   playersPanel.classList.toggle("active", tabName === "players");
   historyPanel.classList.toggle("active", tabName === "history");
-  imagePanel.classList.toggle("active", tabName === "image");
   rulesPanel.classList.toggle("active", tabName === "rules");
   if (tabName === "tree") {
     requestAnimationFrame(drawBracketConnectors);
@@ -1062,21 +1086,6 @@ refreshBtn.addEventListener("click", async () => {
   } finally {
     refreshBtn.disabled = false;
     refreshBtn.textContent = "Refresh";
-  }
-});
-
-generateImageBtn.addEventListener("click", async () => {
-  generateImageBtn.disabled = true;
-  generateImageBtn.textContent = "Generating";
-  try {
-    state = await request("/api/generate-image", { method: "POST" });
-    render();
-    showToast("Standings image generated");
-  } catch (error) {
-    showToast(`Image generation failed: ${error.message}`);
-  } finally {
-    generateImageBtn.disabled = false;
-    generateImageBtn.textContent = "Generate Image";
   }
 });
 

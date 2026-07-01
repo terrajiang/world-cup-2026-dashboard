@@ -3,8 +3,6 @@ from __future__ import annotations
 import json
 import re
 import ssl
-import subprocess
-import sys
 import urllib.error
 import urllib.request
 from datetime import date, datetime, time, timedelta, timezone
@@ -18,9 +16,6 @@ from world_cup_data import GROUPS, KNOCKOUT, PLAYER_STATS, SEED_STANDINGS, seed_
 
 ROOT = Path(__file__).resolve().parent
 CACHE = ROOT / "world_cup_cache.json"
-IMAGE_PATH = ROOT / "world_cup_2026_group_standings.png"
-IMAGE_SCRIPT = ROOT / "make_world_cup_standings_image.py"
-BUNDLED_PYTHON = Path("/Users/terra/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3")
 STANDINGS_URL = "https://www.sbnation.com/soccer/1117905/world-cup-standings-updated-full-list-of-teams"
 SCHEDULE_URL = "https://www.sbnation.com/soccer/1117513/world-cup-schedule-2026-how-to-watch-every-match-scores-and-more"
 KNOCKOUT_SCHEDULE_URL = "https://www.sbnation.com/soccer/1120771/world-cup-schedule-scores-round-32"
@@ -212,7 +207,6 @@ def load_data():
 def save_data(data):
     apply_match_times(data)
     sync_knockout(data)
-    data["imagePath"] = "/world_cup_2026_group_standings.png"
     with CACHE.open("w", encoding="utf-8") as handle:
         json.dump(data, handle, ensure_ascii=False, indent=2)
 
@@ -791,26 +785,6 @@ def update_project_data_files(data):
     write_dynamic_snapshot(data)
 
 
-def generate_standings_image(data=None):
-    if data is None:
-        data = load_data()
-    save_data(data)
-    python = BUNDLED_PYTHON if BUNDLED_PYTHON.exists() else Path(sys.executable)
-    result = subprocess.run(
-        [str(python), str(IMAGE_SCRIPT)],
-        cwd=str(ROOT),
-        capture_output=True,
-        text=True,
-        timeout=30,
-        check=False,
-    )
-    if result.returncode != 0:
-        raise RuntimeError((result.stderr or result.stdout or "Image generator failed").strip())
-    data["imagePath"] = "/world_cup_2026_group_standings.png"
-    save_data(data)
-    return data
-
-
 def recalculate_from_matches(data):
     table = {
         group: {
@@ -957,7 +931,6 @@ def try_refresh_from_web(data):
         data["sourceNote"] = "Refresh reached the standings source, checked live match pages, and kept verified local corrections where source tables could not be parsed."
         refresh_player_stats(data)
         update_project_data_files(data)
-        generate_standings_image(data)
         save_data(data)
         return data
 
@@ -973,7 +946,6 @@ def try_refresh_from_web(data):
     data["sourceNote"] = f"Refreshed {changed} group table(s), checked live match pages, and validated stored score corrections."
     refresh_player_stats(data)
     update_project_data_files(data)
-    generate_standings_image(data)
     save_data(data)
     return data
 
@@ -1010,10 +982,6 @@ class Handler(SimpleHTTPRequestHandler):
             if path == "/api/refresh":
                 data = load_data()
                 self.send_json(try_refresh_from_web(data))
-                return
-            if path == "/api/generate-image":
-                data = generate_standings_image(load_data())
-                self.send_json(data)
                 return
             if path == "/api/update-match":
                 body = self.read_json()
